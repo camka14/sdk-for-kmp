@@ -7,7 +7,7 @@ import kotlinx.coroutines.Job
 actual class Client : BaseClient<Client>() {
     override val coroutineContext = Job() + Dispatchers.Default
 
-    actual companion object {
+    actual companion object: PlatformConfiguration {
         private var androidContext: Context? = null
 
         override fun androidContext(context: Any) {
