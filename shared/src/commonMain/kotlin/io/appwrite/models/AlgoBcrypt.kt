@@ -14,18 +14,4 @@ data class AlgoBcrypt(
     @SerialName("type")
     val type: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "type" to type as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = AlgoBcrypt(
-            type = map["type"] as String,
-        )
-    }
-}
+)

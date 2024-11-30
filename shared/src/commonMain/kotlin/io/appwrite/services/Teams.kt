@@ -4,7 +4,6 @@ import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.enums.*
 import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.classOf
 import io.appwrite.models.*
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmOverloads
@@ -13,6 +12,7 @@ import kotlin.reflect.KClass
 /**
  * The Teams service allows you to group users of your project and to enable them to share read and write access to your project resources
 **/
+@Suppress("UNCHECKED_CAST")
 class Teams(client: Client) : Service(client) {
 
     /**
@@ -28,7 +28,6 @@ class Teams(client: Client) : Service(client) {
     suspend fun <T : Any> list(
         queries: List<String>? = null,
         search: String? = null,
-        nestedType: KClass<T>,
     ): TeamList<T> {
         val apiPath = "/teams"
 
@@ -39,39 +38,14 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> TeamList<T> = {
-            @Suppress("UNCHECKED_CAST")
-            TeamList.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = TeamList::class as KClass<TeamList<T>>,
         )
     }
-
-    /**
-     * List teams
-     *
-     * Get a list of all the teams in which the current user is a member. You can use the parameters to filter your results.
-     *
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, total, billingPlan
-     * @param search Search term to filter your list results. Max length: 256 chars.
-     * @return [TeamList<T>]
-     */
-    @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun list(
-        queries: List<String>? = null,
-        search: String? = null,
-    ): TeamList<Map<String, Any>> = list(
-        queries,
-        search,
-        nestedType = classOf(),
-    )
 
     /**
      * Create team
@@ -84,11 +58,10 @@ class Teams(client: Client) : Service(client) {
      * @return [Team<T>]
      */
     @JvmOverloads
-    suspend fun <T: Any> create(
+    suspend inline fun <reified T: Any> create(
         teamId: String,
         name: String,
         roles: List<String>? = null,
-        nestedType: KClass<T>,
     ): Team<T> {
         val apiPath = "/teams"
 
@@ -100,42 +73,14 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Team<T> = {
-            @Suppress("UNCHECKED_CAST")
-            Team.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = Team::class as KClass<Team<T>>,
         )
     }
-
-    /**
-     * Create team
-     *
-     * Create a new team. The user who creates the team will automatically be assigned as the owner of the team. Only the users with the owner role can invite new members, add new owners and delete or update the team.
-     *
-     * @param teamId Team ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
-     * @param name Team name. Max length: 128 chars.
-     * @param roles Array of strings. Use this param to set the roles in the team for the user who created it. The default role is **owner**. A role can be any string. Learn more about [roles and permissions](https://appwrite.io/docs/permissions). Maximum of 100 roles are allowed, each 32 characters long.
-     * @return [Team<T>]
-     */
-    @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun create(
-        teamId: String,
-        name: String,
-        roles: List<String>? = null,
-    ): Team<Map<String, Any>> = create(
-        teamId,
-        name,
-        roles,
-        nestedType = classOf(),
-    )
 
     /**
      * Get team
@@ -145,9 +90,8 @@ class Teams(client: Client) : Service(client) {
      * @param teamId Team ID.
      * @return [Team<T>]
      */
-    suspend fun <T: Any> get(
+    suspend inline fun <reified T: Any> get(
         teamId: String,
-        nestedType: KClass<T>,
     ): Team<T> {
         val apiPath = "/teams/{teamId}"
             .replace("{teamId}", teamId)
@@ -157,35 +101,14 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Team<T> = {
-            @Suppress("UNCHECKED_CAST")
-            Team.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = Team::class as KClass<Team<T>>,
         )
     }
-
-    /**
-     * Get team
-     *
-     * Get a team by its ID. All team members have read access for this resource.
-     *
-     * @param teamId Team ID.
-     * @return [Team<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun get(
-        teamId: String,
-    ): Team<Map<String, Any>> = get(
-        teamId,
-        nestedType = classOf(),
-    )
 
     /**
      * Update name
@@ -196,10 +119,9 @@ class Teams(client: Client) : Service(client) {
      * @param name New team name. Max length: 128 chars.
      * @return [Team<T>]
      */
-    suspend fun <T: Any> updateName(
+    suspend inline fun <reified T: Any> updateName(
         teamId: String,
         name: String,
-        nestedType: KClass<T>,
     ): Team<T> {
         val apiPath = "/teams/{teamId}"
             .replace("{teamId}", teamId)
@@ -210,38 +132,14 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Team<T> = {
-            @Suppress("UNCHECKED_CAST")
-            Team.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = Team::class as KClass<Team<T>>,
         )
     }
-
-    /**
-     * Update name
-     *
-     * Update the team&#039;s name by its unique ID.
-     *
-     * @param teamId Team ID.
-     * @param name New team name. Max length: 128 chars.
-     * @return [Team<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updateName(
-        teamId: String,
-        name: String,
-    ): Team<Map<String, Any>> = updateName(
-        teamId,
-        name,
-        nestedType = classOf(),
-    )
 
     /**
      * Delete team
@@ -298,17 +196,12 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MembershipList = {
-            @Suppress("UNCHECKED_CAST")
-            MembershipList.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MembershipList::class,
-            converter,
         )
     }
 
@@ -351,17 +244,12 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Membership = {
-            @Suppress("UNCHECKED_CAST")
-            Membership.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Membership::class,
-            converter,
         )
     }
 
@@ -388,17 +276,12 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Membership = {
-            @Suppress("UNCHECKED_CAST")
-            Membership.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Membership::class,
-            converter,
         )
     }
 
@@ -428,17 +311,12 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Membership = {
-            @Suppress("UNCHECKED_CAST")
-            Membership.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Membership::class,
-            converter,
         )
     }
 
@@ -503,17 +381,12 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Membership = {
-            @Suppress("UNCHECKED_CAST")
-            Membership.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Membership::class,
-            converter,
         )
     }
 
@@ -526,9 +399,8 @@ class Teams(client: Client) : Service(client) {
      * @param teamId Team ID.
      * @return [Preferences<T>]
      */
-    suspend fun <T: Any> getPrefs(
+    suspend inline fun <reified T: Any> getPrefs(
         teamId: String,
-        nestedType: KClass<T>,
     ): Preferences<T> {
         val apiPath = "/teams/{teamId}/prefs"
             .replace("{teamId}", teamId)
@@ -538,35 +410,14 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Preferences<T> = {
-            @Suppress("UNCHECKED_CAST")
-            Preferences.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = Preferences::class as KClass<Preferences<T>>,
         )
     }
-
-    /**
-     * Get team preferences
-     *
-     * Get the team&#039;s shared preferences by its unique ID. If a preference doesn&#039;t need to be shared by all team members, prefer storing them in [user preferences](https://appwrite.io/docs/references/cloud/client-web/account#getPrefs).
-     *
-     * @param teamId Team ID.
-     * @return [Preferences<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun getPrefs(
-        teamId: String,
-    ): Preferences<Map<String, Any>> = getPrefs(
-        teamId,
-        nestedType = classOf(),
-    )
 
     /**
      * Update preferences
@@ -577,10 +428,9 @@ class Teams(client: Client) : Service(client) {
      * @param prefs Prefs key-value JSON object.
      * @return [Preferences<T>]
      */
-    suspend fun <T: Any> updatePrefs(
+    suspend inline fun <reified T: Any> updatePrefs(
         teamId: String,
         prefs: Any,
-        nestedType: KClass<T>,
     ): Preferences<T> {
         val apiPath = "/teams/{teamId}/prefs"
             .replace("{teamId}", teamId)
@@ -591,37 +441,14 @@ class Teams(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Preferences<T> = {
-            @Suppress("UNCHECKED_CAST")
-            Preferences.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = Preferences::class as KClass<Preferences<T>>,
         )
     }
 
-    /**
-     * Update preferences
-     *
-     * Update the team&#039;s preferences by its unique ID. The object you pass is stored as is and replaces any previous value. The maximum allowed prefs size is 64kB and throws an error if exceeded.
-     *
-     * @param teamId Team ID.
-     * @param prefs Prefs key-value JSON object.
-     * @return [Preferences<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updatePrefs(
-        teamId: String,
-        prefs: Any,
-    ): Preferences<Map<String, Any>> = updatePrefs(
-        teamId,
-        prefs,
-        nestedType = classOf(),
-    )
 
 }

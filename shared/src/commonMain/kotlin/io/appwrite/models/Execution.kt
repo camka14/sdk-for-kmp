@@ -1,8 +1,7 @@
-package io.appwrite.models
-
+import io.appwrite.models.Headers
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
 
 /**
  * Execution
@@ -31,7 +30,8 @@ data class Execution(
      * Execution roles.
      */
     @SerialName("\$permissions")
-    val permissions: List<Any>,
+    @Contextual
+    val permissions: List<@Contextual Any>,
 
     /**
      * Function ID.
@@ -110,51 +110,4 @@ data class Execution(
      */
     @SerialName("scheduledAt")
     var scheduledAt: String?,
-
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "\$id" to id as Any,
-        "\$createdAt" to createdAt as Any,
-        "\$updatedAt" to updatedAt as Any,
-        "\$permissions" to permissions as Any,
-        "functionId" to functionId as Any,
-        "trigger" to trigger as Any,
-        "status" to status as Any,
-        "requestMethod" to requestMethod as Any,
-        "requestPath" to requestPath as Any,
-        "requestHeaders" to requestHeaders.map { it.toMap() } as Any,
-        "responseStatusCode" to responseStatusCode as Any,
-        "responseBody" to responseBody as Any,
-        "responseHeaders" to responseHeaders.map { it.toMap() } as Any,
-        "logs" to logs as Any,
-        "errors" to errors as Any,
-        "duration" to duration as Any,
-        "scheduledAt" to scheduledAt as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = Execution(
-            id = map["\$id"] as String,
-            createdAt = map["\$createdAt"] as String,
-            updatedAt = map["\$updatedAt"] as String,
-            permissions = map["\$permissions"] as List<Any>,
-            functionId = map["functionId"] as String,
-            trigger = map["trigger"] as String,
-            status = map["status"] as String,
-            requestMethod = map["requestMethod"] as String,
-            requestPath = map["requestPath"] as String,
-            requestHeaders = (map["requestHeaders"] as List<Map<String, Any>>).map { Headers.from(map = it) },
-            responseStatusCode = (map["responseStatusCode"] as Number).toLong(),
-            responseBody = map["responseBody"] as String,
-            responseHeaders = (map["responseHeaders"] as List<Map<String, Any>>).map { Headers.from(map = it) },
-            logs = map["logs"] as String,
-            errors = map["errors"] as String,
-            duration = (map["duration"] as Number).toDouble(),
-            scheduledAt = map["scheduledAt"] as? String?,
-        )
-    }
-}
+)

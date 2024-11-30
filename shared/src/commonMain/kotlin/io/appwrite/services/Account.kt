@@ -4,7 +4,6 @@ import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.enums.*
 import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.classOf
 import io.appwrite.WebAuthComponent
 import io.appwrite.models.IdentityList
 import io.appwrite.models.Jwt
@@ -30,7 +29,8 @@ import kotlin.jvm.JvmOverloads
 /**
  * The Account service allows you to authenticate and manage a user account.
  **/
-abstract class Account(client: Client) : Service(client) {
+@Suppress("UNCHECKED_CAST")
+class Account(client: Client) : Service(client) {
 
     /**
      * Get account
@@ -39,42 +39,20 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [User<T>]
      */
-    suspend fun <T: Any> get(
-        nestedType: KClass<T>,
-    ): User<T> {
+    suspend inline fun <reified T: Any> get(): User<T> {
         val apiPath = "/account"
-
-        val apiParams = mutableMapOf<String, Any?>(
-        )
+        val apiParams = mutableMapOf<String, Any?>()
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Get account
-     *
-     * Get the currently logged in user.
-     *
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun get(
-    ): User<Map<String, Any>> = get(
-        nestedType = classOf(),
-    )
 
     /**
      * Create account
@@ -88,12 +66,11 @@ abstract class Account(client: Client) : Service(client) {
      * @return [User<T>]
      */
     @JvmOverloads
-    suspend fun <T: Any> create(
+    suspend inline fun <reified T: Any> create(
         userId: String,
         email: String,
         password: String,
         name: String? = null,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account"
 
@@ -106,45 +83,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Create account
-     *
-     * Use this endpoint to allow a new user to register a new account in your project. After the user registration completes successfully, you can use the [/account/verfication](https://appwrite.io/docs/references/cloud/client-web/account#createVerification) route to start verifying the user email address. To allow the new user to login to their new account, you need to create a new [account session](https://appwrite.io/docs/references/cloud/client-web/account#createEmailSession).
-     *
-     * @param userId User ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
-     * @param email User email.
-     * @param password New user password. Must be between 8 and 256 chars.
-     * @param name User name. Max length: 128 chars.
-     * @return [User<T>]
-     */
-    @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun create(
-        userId: String,
-        email: String,
-        password: String,
-        name: String? = null,
-    ): User<Map<String, Any>> = create(
-        userId,
-        email,
-        password,
-        name,
-        nestedType = classOf(),
-    )
 
     /**
      * Update email
@@ -155,10 +101,9 @@ abstract class Account(client: Client) : Service(client) {
      * @param password User password. Must be at least 8 chars.
      * @return [User<T>]
      */
-    suspend fun <T: Any> updateEmail(
+    suspend inline fun <reified T: Any> updateEmail(
         email: String,
         password: String,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/email"
 
@@ -169,38 +114,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update email
-     *
-     * Update currently logged in user account email address. After changing user address, the user confirmation status will get reset. A new confirmation email is not sent automatically however you can use the send confirmation email endpoint again to send the confirmation email. For security measures, user password is required to complete this request.This endpoint can also be used to convert an anonymous account to a normal one, by passing an email address and a new password.
-     *
-     * @param email User email.
-     * @param password User password. Must be at least 8 chars.
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updateEmail(
-        email: String,
-        password: String,
-    ): User<Map<String, Any>> = updateEmail(
-        email,
-        password,
-        nestedType = classOf(),
-    )
 
     /**
      * List Identities
@@ -222,17 +143,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> IdentityList = {
-            @Suppress("UNCHECKED_CAST")
-            IdentityList.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = IdentityList::class,
-            converter,
         )
     }
 
@@ -282,17 +198,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Jwt = {
-            @Suppress("UNCHECKED_CAST")
-            Jwt.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Jwt::class,
-            converter,
         )
     }
 
@@ -317,17 +228,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> LogList = {
-            @Suppress("UNCHECKED_CAST")
-            LogList.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = LogList::class,
-            converter,
         )
     }
 
@@ -340,9 +246,8 @@ abstract class Account(client: Client) : Service(client) {
      * @param mfa Enable or disable MFA.
      * @return [User<T>]
      */
-    suspend fun <T: Any> updateMFA(
+    suspend inline fun <reified T: Any> updateMFA(
         mfa: Boolean,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/mfa"
 
@@ -352,35 +257,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update MFA
-     *
-     * Enable or disable MFA on an account.
-     *
-     * @param mfa Enable or disable MFA.
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updateMFA(
-        mfa: Boolean,
-    ): User<Map<String, Any>> = updateMFA(
-        mfa,
-        nestedType = classOf(),
-    )
 
     /**
      * Create Authenticator
@@ -391,7 +275,7 @@ abstract class Account(client: Client) : Service(client) {
      * @return [MfaType]
      */
     suspend fun createMfaAuthenticator(
-        type: io.appwrite.enums.AuthenticatorType,
+        type: AuthenticatorType,
     ): MfaType {
         val apiPath = "/account/mfa/authenticators/{type}"
             .replace("{type}", type.value)
@@ -401,17 +285,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MfaType = {
-            @Suppress("UNCHECKED_CAST")
-            MfaType.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MfaType::class,
-            converter,
         )
     }
 
@@ -425,10 +304,9 @@ abstract class Account(client: Client) : Service(client) {
      * @param otp Valid verification token.
      * @return [User<T>]
      */
-    suspend fun <T: Any> updateMfaAuthenticator(
-        type: io.appwrite.enums.AuthenticatorType,
+    suspend inline fun <reified T: Any> updateMfaAuthenticator(
+        type: AuthenticatorType,
         otp: String,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/mfa/authenticators/{type}"
             .replace("{type}", type.value)
@@ -439,38 +317,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Verify Authenticator
-     *
-     * Verify an authenticator app after adding it using the [add authenticator](/docs/references/cloud/client-web/account#createMfaAuthenticator) method.
-     *
-     * @param type Type of authenticator.
-     * @param otp Valid verification token.
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updateMfaAuthenticator(
-        type: io.appwrite.enums.AuthenticatorType,
-        otp: String,
-    ): User<Map<String, Any>> = updateMfaAuthenticator(
-        type,
-        otp,
-        nestedType = classOf(),
-    )
 
     /**
      * Delete Authenticator
@@ -481,7 +335,7 @@ abstract class Account(client: Client) : Service(client) {
      * @return [Any]
      */
     suspend fun deleteMfaAuthenticator(
-        type: io.appwrite.enums.AuthenticatorType,
+        type: AuthenticatorType,
     ): Any {
         val apiPath = "/account/mfa/authenticators/{type}"
             .replace("{type}", type.value)
@@ -520,17 +374,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MfaChallenge = {
-            @Suppress("UNCHECKED_CAST")
-            MfaChallenge.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MfaChallenge::class,
-            converter,
         )
     }
 
@@ -574,8 +423,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [MfaFactors]
      */
-    suspend fun listMfaFactors(
-    ): MfaFactors {
+    suspend fun listMfaFactors(): MfaFactors {
         val apiPath = "/account/mfa/factors"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -583,17 +431,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MfaFactors = {
-            @Suppress("UNCHECKED_CAST")
-            MfaFactors.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MfaFactors::class,
-            converter,
         )
     }
 
@@ -605,8 +448,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [MfaRecoveryCodes]
      */
-    suspend fun getMfaRecoveryCodes(
-    ): MfaRecoveryCodes {
+    suspend fun getMfaRecoveryCodes(): MfaRecoveryCodes {
         val apiPath = "/account/mfa/recovery-codes"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -614,17 +456,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MfaRecoveryCodes = {
-            @Suppress("UNCHECKED_CAST")
-            MfaRecoveryCodes.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MfaRecoveryCodes::class,
-            converter,
         )
     }
 
@@ -636,8 +473,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [MfaRecoveryCodes]
      */
-    suspend fun createMfaRecoveryCodes(
-    ): MfaRecoveryCodes {
+    suspend fun createMfaRecoveryCodes(): MfaRecoveryCodes {
         val apiPath = "/account/mfa/recovery-codes"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -645,17 +481,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MfaRecoveryCodes = {
-            @Suppress("UNCHECKED_CAST")
-            MfaRecoveryCodes.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MfaRecoveryCodes::class,
-            converter,
         )
     }
 
@@ -667,8 +498,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [MfaRecoveryCodes]
      */
-    suspend fun updateMfaRecoveryCodes(
-    ): MfaRecoveryCodes {
+    suspend fun updateMfaRecoveryCodes(): MfaRecoveryCodes {
         val apiPath = "/account/mfa/recovery-codes"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -676,17 +506,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> MfaRecoveryCodes = {
-            @Suppress("UNCHECKED_CAST")
-            MfaRecoveryCodes.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = MfaRecoveryCodes::class,
-            converter,
         )
     }
 
@@ -699,9 +524,8 @@ abstract class Account(client: Client) : Service(client) {
      * @param name User name. Max length: 128 chars.
      * @return [User<T>]
      */
-    suspend fun <T: Any> updateName(
+    suspend inline fun <reified T: Any> updateName(
         name: String,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/name"
 
@@ -711,35 +535,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update name
-     *
-     * Update currently logged in user account name.
-     *
-     * @param name User name. Max length: 128 chars.
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updateName(
-        name: String,
-    ): User<Map<String, Any>> = updateName(
-        name,
-        nestedType = classOf(),
-    )
 
     /**
      * Update password
@@ -751,10 +554,9 @@ abstract class Account(client: Client) : Service(client) {
      * @return [User<T>]
      */
     @JvmOverloads
-    suspend fun <T: Any> updatePassword(
+    suspend inline fun <reified T: Any> updatePassword(
         password: String,
         oldPassword: String? = null,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/password"
 
@@ -765,39 +567,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update password
-     *
-     * Update currently logged in user password. For validation, user is required to pass in the new password, and the old password. For users created with OAuth, Team Invites and Magic URL, oldPassword is optional.
-     *
-     * @param password New user password. Must be at least 8 chars.
-     * @param oldPassword Current user password. Must be at least 8 chars.
-     * @return [User<T>]
-     */
-    @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updatePassword(
-        password: String,
-        oldPassword: String? = null,
-    ): User<Map<String, Any>> = updatePassword(
-        password,
-        oldPassword,
-        nestedType = classOf(),
-    )
 
     /**
      * Update phone
@@ -808,10 +585,9 @@ abstract class Account(client: Client) : Service(client) {
      * @param password User password. Must be at least 8 chars.
      * @return [User<T>]
      */
-    suspend fun <T: Any> updatePhone(
+    suspend inline fun <reified T: Any> updatePhone(
         phone: String,
         password: String,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/phone"
 
@@ -822,38 +598,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update phone
-     *
-     * Update the currently logged in user&#039;s phone number. After updating the phone number, the phone verification status will be reset. A confirmation SMS is not sent automatically, however you can use the [POST /account/verification/phone](https://appwrite.io/docs/references/cloud/client-web/account#createPhoneVerification) endpoint to send a confirmation SMS.
-     *
-     * @param phone Phone number. Format this number with a leading '+' and a country code, e.g., +16175551212.
-     * @param password User password. Must be at least 8 chars.
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updatePhone(
-        phone: String,
-        password: String,
-    ): User<Map<String, Any>> = updatePhone(
-        phone,
-        password,
-        nestedType = classOf(),
-    )
 
     /**
      * Get account preferences
@@ -862,9 +614,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [Preferences<T>]
      */
-    suspend fun <T: Any> getPrefs(
-        nestedType: KClass<T>,
-    ): Preferences<T> {
+    suspend inline fun <reified T: Any> getPrefs(): Preferences<T> {
         val apiPath = "/account/prefs"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -872,32 +622,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Preferences<T> = {
-            @Suppress("UNCHECKED_CAST")
-            Preferences.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = Preferences::class as KClass<Preferences<T>>,
         )
     }
-
-    /**
-     * Get account preferences
-     *
-     * Get the preferences as a key-value object for the currently logged in user.
-     *
-     * @return [Preferences<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun getPrefs(
-    ): Preferences<Map<String, Any>> = getPrefs(
-        nestedType = classOf(),
-    )
 
     /**
      * Update preferences
@@ -907,9 +639,8 @@ abstract class Account(client: Client) : Service(client) {
      * @param prefs Prefs key-value JSON object.
      * @return [User<T>]
      */
-    suspend fun <T: Any> updatePrefs(
+    suspend inline fun <reified T: Any> updatePrefs(
         prefs: Any,
-        nestedType: KClass<T>,
     ): User<T> {
         val apiPath = "/account/prefs"
 
@@ -919,35 +650,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update preferences
-     *
-     * Update currently logged in user account preferences. The object you pass is stored as is, and replaces any previous value. The maximum allowed prefs size is 64kB and throws error if exceeded.
-     *
-     * @param prefs Prefs key-value JSON object.
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updatePrefs(
-        prefs: Any,
-    ): User<Map<String, Any>> = updatePrefs(
-        prefs,
-        nestedType = classOf(),
-    )
 
     /**
      * Create password recovery
@@ -971,17 +681,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1011,17 +716,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1042,17 +742,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> SessionList = {
-            @Suppress("UNCHECKED_CAST")
-            SessionList.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = SessionList::class,
-            converter,
         )
     }
 
@@ -1064,8 +759,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [Any]
      */
-    suspend fun deleteSessions(
-    ): Any {
+    suspend fun deleteSessions(): Any {
         val apiPath = "/account/sessions"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -1091,7 +785,7 @@ abstract class Account(client: Client) : Service(client) {
      * @return [Session]
      */
     suspend fun createAnonymousSession(
-    ): Session {
+): Session {
         val apiPath = "/account/sessions/anonymous"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -1099,17 +793,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
 
@@ -1136,20 +825,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
-
 
     /**
      * Update magic URL session
@@ -1173,17 +856,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
 
@@ -1210,17 +888,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
 
@@ -1247,17 +920,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
 
@@ -1281,17 +949,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
 
@@ -1315,17 +978,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Session = {
-            @Suppress("UNCHECKED_CAST")
-            Session.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Session::class,
-            converter,
         )
     }
 
@@ -1366,9 +1024,7 @@ abstract class Account(client: Client) : Service(client) {
      *
      * @return [User<T>]
      */
-    suspend fun <T: Any> updateStatus(
-        nestedType: KClass<T>,
-    ): User<T> {
+    suspend inline fun <reified T: Any> updateStatus(): User<T> {
         val apiPath = "/account/status"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -1376,32 +1032,14 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> User<T> = {
-            @Suppress("UNCHECKED_CAST")
-            User.from(map = it as Map<String, Any>, nestedType)
-        }
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = classOf(),
-            converter,
+            responseType = User::class as KClass<User<T>>,
         )
     }
-
-    /**
-     * Update status
-     *
-     * Block the currently logged in user account. Behind the scene, the user record is not deleted but permanently blocked from any access. To completely delete a user, use the Users API instead.
-     *
-     * @return [User<T>]
-     */
-    @Throws(AppwriteException::class, CancellationException::class)
-    suspend fun updateStatus(
-    ): User<Map<String, Any>> = updateStatus(
-        nestedType = classOf(),
-    )
 
     /**
      * Create push target
@@ -1429,17 +1067,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.Target = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.Target.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = io.appwrite.models.Target::class,
-            converter,
         )
     }
 
@@ -1538,17 +1171,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.Target = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.Target.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = io.appwrite.models.Target::class,
-            converter,
         )
     }
 
@@ -1608,17 +1236,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1652,17 +1275,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1751,17 +1369,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1785,17 +1398,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1822,17 +1430,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1853,17 +1456,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
 
@@ -1890,19 +1488,12 @@ abstract class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Token = {
-            @Suppress("UNCHECKED_CAST")
-            Token.from(map = it as Map<String, Any>)
-        }
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Token::class,
-            converter,
         )
     }
-
-
 }

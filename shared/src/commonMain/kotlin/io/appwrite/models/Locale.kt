@@ -51,30 +51,4 @@ data class Locale(
     @SerialName("currency")
     val currency: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "ip" to ip as Any,
-        "countryCode" to countryCode as Any,
-        "country" to country as Any,
-        "continentCode" to continentCode as Any,
-        "continent" to continent as Any,
-        "eu" to eu as Any,
-        "currency" to currency as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = Locale(
-            ip = map["ip"] as String,
-            countryCode = map["countryCode"] as String,
-            country = map["country"] as String,
-            continentCode = map["continentCode"] as String,
-            continent = map["continent"] as String,
-            eu = map["eu"] as Boolean,
-            currency = map["currency"] as String,
-        )
-    }
-}
+)

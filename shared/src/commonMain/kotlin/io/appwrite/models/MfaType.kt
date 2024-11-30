@@ -20,20 +20,4 @@ data class MfaType(
     @SerialName("uri")
     val uri: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "secret" to secret as Any,
-        "uri" to uri as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = MfaType(
-            secret = map["secret"] as String,
-            uri = map["uri"] as String,
-        )
-    }
-}
+)

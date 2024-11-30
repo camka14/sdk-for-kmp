@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     id("org.jetbrains.kotlinx.atomicfu") version "0.26.0"
     id("maven-publish")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0-Beta2"
 }
 
 publishing {
@@ -38,6 +39,7 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
+        it.withSourcesJar(publish = false)
     }
 
     sourceSets {
@@ -110,9 +112,9 @@ kotlin {
 
 android {
     namespace = "io.appwrite"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
-        minSdk = 24
+        minSdk = 21
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

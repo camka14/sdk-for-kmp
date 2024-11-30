@@ -1,5 +1,6 @@
 package io.appwrite.services
 
+import Execution
 import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.models.*
@@ -37,17 +38,13 @@ class Functions(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> ExecutionList = {
-            @Suppress("UNCHECKED_CAST")
-            ExecutionList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = ExecutionList::class,
-            converter,
         )
     }
 
@@ -90,17 +87,13 @@ class Functions(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Execution = {
-            @Suppress("UNCHECKED_CAST")
-            Execution.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Execution::class,
-            converter,
         )
     }
 
@@ -127,17 +120,13 @@ class Functions(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Execution = {
-            @Suppress("UNCHECKED_CAST")
-            Execution.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Execution::class,
-            converter,
         )
     }
 

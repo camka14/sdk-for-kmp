@@ -46,15 +46,6 @@ data class Team<T>(
     val prefs: Preferences<T>,
 
 ) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "\$id" to id as Any,
-        "\$createdAt" to createdAt as Any,
-        "\$updatedAt" to updatedAt as Any,
-        "name" to name as Any,
-        "total" to total as Any,
-        "prefs" to prefs.toMap() as Any,
-    )
-
     companion object {
         operator fun invoke(
             id: String,
@@ -70,19 +61,6 @@ data class Team<T>(
             name,
             total,
             prefs,
-        )
-
-        @Suppress("UNCHECKED_CAST")
-        fun <T : Any> from(
-            map: Map<String, Any>,
-            nestedType: KClass<T>
-        ) = Team(
-            id = map["\$id"] as String,
-            createdAt = map["\$createdAt"] as String,
-            updatedAt = map["\$updatedAt"] as String,
-            name = map["name"] as String,
-            total = (map["total"] as Number).toLong(),
-            prefs = Preferences.from(map = map["prefs"] as Map<String, Any>, nestedType),
         )
     }
 }

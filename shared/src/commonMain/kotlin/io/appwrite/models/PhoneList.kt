@@ -20,20 +20,4 @@ data class PhoneList(
     @SerialName("phones")
     val phones: List<Phone>,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "total" to total as Any,
-        "phones" to phones.map { it.toMap() } as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = PhoneList(
-            total = (map["total"] as Number).toLong(),
-            phones = (map["phones"] as List<Map<String, Any>>).map { Phone.from(map = it) },
-        )
-    }
-}
+)

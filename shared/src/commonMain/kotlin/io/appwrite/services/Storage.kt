@@ -26,28 +26,24 @@ class Storage(client: Client) : Service(client) {
         bucketId: String,
         queries: List<String>? = null,
         search: String? = null,
-    ): io.appwrite.models.FileList {
+    ): FileList {
         val apiPath = "/storage/buckets/{bucketId}/files"
             .replace("{bucketId}", bucketId)
 
-        val apiParams = mutableMapOf<String, Any?>(
+        val apiParams = mutableMapOf(
             "queries" to queries,
             "search" to search,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.FileList = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.FileList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = io.appwrite.models.FileList::class,
-            converter,
+            responseType = FileList::class,
         )
     }
 
@@ -70,7 +66,7 @@ class Storage(client: Client) : Service(client) {
         file: InputFile,
         permissions: List<String>? = null,
         onProgress: ((UploadProgress) -> Unit)? = null
-    ): io.appwrite.models.File {
+    ): File {
         val apiPath = "/storage/buckets/{bucketId}/files"
             .replace("{bucketId}", bucketId)
 
@@ -82,18 +78,14 @@ class Storage(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "multipart/form-data",
         )
-        val converter: (Any) -> io.appwrite.models.File = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.File.from(map = it as Map<String, Any>)
-        }
-        val idParamName: String? = "fileId"    
+
+        val idParamName: String? = "fileId"
         val paramName = "file"
         return client.chunkedUpload(
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = io.appwrite.models.File::class,
-            converter,
+            responseType = File::class,
             paramName,
             idParamName,
             onProgress,
@@ -113,7 +105,7 @@ class Storage(client: Client) : Service(client) {
     suspend fun getFile(
         bucketId: String,
         fileId: String,
-    ): io.appwrite.models.File {
+    ): File {
         val apiPath = "/storage/buckets/{bucketId}/files/{fileId}"
             .replace("{bucketId}", bucketId)
             .replace("{fileId}", fileId)
@@ -123,17 +115,13 @@ class Storage(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.File = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.File.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = io.appwrite.models.File::class,
-            converter,
+            responseType = File::class,
         )
     }
 
@@ -155,29 +143,25 @@ class Storage(client: Client) : Service(client) {
         fileId: String,
         name: String? = null,
         permissions: List<String>? = null,
-    ): io.appwrite.models.File {
+    ): File {
         val apiPath = "/storage/buckets/{bucketId}/files/{fileId}"
             .replace("{bucketId}", bucketId)
             .replace("{fileId}", fileId)
 
-        val apiParams = mutableMapOf<String, Any?>(
+        val apiParams = mutableMapOf(
             "name" to name,
             "permissions" to permissions,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.File = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.File.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = io.appwrite.models.File::class,
-            converter,
+            responseType = File::class,
         )
     }
 

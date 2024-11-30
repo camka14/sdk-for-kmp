@@ -26,17 +26,14 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.Locale = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.Locale.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = io.appwrite.models.Locale::class,
-            converter,
+
         )
     }
 
@@ -57,17 +54,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> LocaleCodeList = {
-            @Suppress("UNCHECKED_CAST")
-            LocaleCodeList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = LocaleCodeList::class,
-            converter,
         )
     }
 
@@ -88,17 +81,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> ContinentList = {
-            @Suppress("UNCHECKED_CAST")
-            ContinentList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = ContinentList::class,
-            converter,
         )
     }
 
@@ -119,17 +108,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> CountryList = {
-            @Suppress("UNCHECKED_CAST")
-            CountryList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = CountryList::class,
-            converter,
         )
     }
 
@@ -150,17 +135,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> CountryList = {
-            @Suppress("UNCHECKED_CAST")
-            CountryList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = CountryList::class,
-            converter,
         )
     }
 
@@ -181,17 +162,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> PhoneList = {
-            @Suppress("UNCHECKED_CAST")
-            PhoneList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = PhoneList::class,
-            converter,
         )
     }
 
@@ -212,17 +189,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> CurrencyList = {
-            @Suppress("UNCHECKED_CAST")
-            CurrencyList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = CurrencyList::class,
-            converter,
         )
     }
 
@@ -243,17 +216,13 @@ class Locale(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> LanguageList = {
-            @Suppress("UNCHECKED_CAST")
-            LanguageList.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = LanguageList::class,
-            converter,
         )
     }
 

@@ -30,16 +30,12 @@ class Graphql(client: Client) : Service(client) {
             "x-sdk-graphql" to "true",
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Any = {
-            it
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            converter,
         )
     }
 
@@ -64,16 +60,12 @@ class Graphql(client: Client) : Service(client) {
             "x-sdk-graphql" to "true",
             "content-type" to "application/json",
         )
-        val converter: (Any) -> Any = {
-            it
-        }
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            converter,
         )
     }
 

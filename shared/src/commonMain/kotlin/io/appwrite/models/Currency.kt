@@ -51,30 +51,4 @@ data class Currency(
     @SerialName("namePlural")
     val namePlural: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "symbol" to symbol as Any,
-        "name" to name as Any,
-        "symbolNative" to symbolNative as Any,
-        "decimalDigits" to decimalDigits as Any,
-        "rounding" to rounding as Any,
-        "code" to code as Any,
-        "namePlural" to namePlural as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = Currency(
-            symbol = map["symbol"] as String,
-            name = map["name"] as String,
-            symbolNative = map["symbolNative"] as String,
-            decimalDigits = (map["decimalDigits"] as Number).toLong(),
-            rounding = (map["rounding"] as Number).toDouble(),
-            code = map["code"] as String,
-            namePlural = map["namePlural"] as String,
-        )
-    }
-}
+)

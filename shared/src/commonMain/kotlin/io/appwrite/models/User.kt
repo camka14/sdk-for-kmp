@@ -1,5 +1,6 @@
 package io.appwrite.models
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -49,6 +50,7 @@ data class User<T>(
      * Password hashing algorithm configuration.
      */
     @SerialName("hashOptions")
+    @Contextual
     var hashOptions: Any?,
 
     /**
@@ -67,7 +69,7 @@ data class User<T>(
      * Labels for the user.
      */
     @SerialName("labels")
-    val labels: List<Any>,
+    val labels: List<@Contextual Any>,
 
     /**
      * Password update time in ISO 8601 format.
@@ -124,28 +126,6 @@ data class User<T>(
     val accessedAt: String,
 
 ) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "\$id" to id as Any,
-        "\$createdAt" to createdAt as Any,
-        "\$updatedAt" to updatedAt as Any,
-        "name" to name as Any,
-        "password" to password as Any,
-        "hash" to hash as Any,
-        "hashOptions" to hashOptions as Any,
-        "registration" to registration as Any,
-        "status" to status as Any,
-        "labels" to labels as Any,
-        "passwordUpdate" to passwordUpdate as Any,
-        "email" to email as Any,
-        "phone" to phone as Any,
-        "emailVerification" to emailVerification as Any,
-        "phoneVerification" to phoneVerification as Any,
-        "mfa" to mfa as Any,
-        "prefs" to prefs.toMap() as Any,
-        "targets" to targets.map { it.toMap() } as Any,
-        "accessedAt" to accessedAt as Any,
-    )
-
     companion object {
         operator fun invoke(
             id: String,
@@ -167,7 +147,7 @@ data class User<T>(
             prefs: Preferences<Map<String, Any>>,
             targets: List<Target>,
             accessedAt: String,
-        ) = User<Map<String, Any>>(
+        ) = User(
             id,
             createdAt,
             updatedAt,
@@ -187,32 +167,6 @@ data class User<T>(
             prefs,
             targets,
             accessedAt,
-        )
-
-        @Suppress("UNCHECKED_CAST")
-        fun <T : Any> from(
-            map: Map<String, Any>,
-            nestedType: KClass<T>
-        ) = User<T>(
-            id = map["\$id"] as String,
-            createdAt = map["\$createdAt"] as String,
-            updatedAt = map["\$updatedAt"] as String,
-            name = map["name"] as String,
-            password = map["password"] as? String?,
-            hash = map["hash"] as? String?,
-            hashOptions = map["hashOptions"] as? Any?,
-            registration = map["registration"] as String,
-            status = map["status"] as Boolean,
-            labels = map["labels"] as List<Any>,
-            passwordUpdate = map["passwordUpdate"] as String,
-            email = map["email"] as String,
-            phone = map["phone"] as String,
-            emailVerification = map["emailVerification"] as Boolean,
-            phoneVerification = map["phoneVerification"] as Boolean,
-            mfa = map["mfa"] as Boolean,
-            prefs = Preferences.from(map = map["prefs"] as Map<String, Any>, nestedType),
-            targets = (map["targets"] as List<Map<String, Any>>).map { Target.from(map = it) },
-            accessedAt = map["accessedAt"] as String,
         )
     }
 }

@@ -23,11 +23,22 @@ import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.put
+import kotlinx.serialization.serializer
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.reflect.KClass
 
 abstract class BaseClient<This: BaseClient<This>>(
+    var endpoint: String,
+    var endpointRealtime: String?
 ) : CoroutineScope {
     companion object {
         internal const val CHUNK_SIZE = 5*1024*1024 // 5MB
@@ -35,18 +46,9 @@ abstract class BaseClient<This: BaseClient<This>>(
 
     private val mutex = SynchronizedObject()
     private val job = Job()
-    open var endpoint: String = "https://cloud.appwrite.io/v1"
-    open var endpointRealtime: String? = null
     internal lateinit var httpClient: HttpClient
 
-    internal val headers = mutableMapOf(
-        "content-type" to "application/json",
-        "x-sdk-name" to "KMP",
-        "x-sdk-platform" to "client",
-        "x-sdk-language" to "kotlin",
-        "x-sdk-version" to "6.0.0",
-        "x-appwrite-response-format" to "1.6.0"
-    )
+    internal lateinit var headers : MutableMap<String, String>
     internal val config = mutableMapOf<String, String>()
     private val json = Json {
         ignoreUnknownKeys = true
@@ -118,6 +120,7 @@ abstract class BaseClient<This: BaseClient<This>>(
      *
      * @return [T]
      */
+    @OptIn(InternalSerializationApi::class)
     @Throws(AppwriteException::class, CancellationException::class)
     suspend fun <T : Any> call(
         method: String,
@@ -125,15 +128,16 @@ abstract class BaseClient<This: BaseClient<This>>(
         headers: Map<String, String> = mapOf(),
         params: Map<String, Any?> = mapOf(),
         responseType: KClass<T>,
-        converter: ((Any) -> T)? = null
     ): T {
         val filteredParams = params.filterValues { it != null }
+
+        val combinedHeaders = headers + this.headers
 
         return httpClient.request(endpoint + path) {
             this.method = HttpMethod.parse(method)
 
             // Add headers
-            headers.forEach { (key, value) ->
+            combinedHeaders.forEach { (key, value) ->
                 header(key, value)
             }
 
@@ -171,7 +175,18 @@ abstract class BaseClient<This: BaseClient<This>>(
                     ))
                 } else {
                     contentType(ContentType.Application.Json)
-                    setBody(filteredParams)
+                    val jsonObject = buildJsonObject {
+                        filteredParams.forEach { (key, value) ->
+                            when (value) {
+                                is String -> put(key, value)
+                                is Number -> put(key, value)
+                                is Boolean -> put(key, value)
+                                null -> put(key, JsonNull)
+                                else -> put(key, value.toString())
+                            }
+                        }
+                    }
+                    setBody(jsonObject.toString())
                 }
             }
         }.let { response ->
@@ -179,11 +194,11 @@ abstract class BaseClient<This: BaseClient<This>>(
                 !response.status.isSuccess() -> {
                     val body = response.bodyAsText()
                     if (response.contentType()?.match(ContentType.Application.Json) == true) {
-                        val map = Json.decodeFromString<Map<String, Any>>(body)
+                        val map = Json.decodeFromString<Map<String, JsonElement>>(body)
                         throw AppwriteException(
-                            map["message"] as? String ?: "",
-                            (map["code"] as Number).toInt(),
-                            map["type"] as? String ?: "",
+                            (map["message"] as? JsonPrimitive)?.content ?: "",
+                            (map["code"] as? JsonPrimitive)?.int ?: 0,
+                            (map["type"] as? JsonPrimitive)?.content ?: "",
                             body
                         )
                     } else {
@@ -197,8 +212,7 @@ abstract class BaseClient<This: BaseClient<This>>(
                     if (body.isEmpty()) {
                         true as T
                     } else {
-                        val map = Json.decodeFromString<Any>(body)
-                        converter?.invoke(map) ?: map as T
+                        Json.decodeFromString(responseType.serializer(), body)
                     }
                 }
             }
@@ -211,27 +225,20 @@ abstract class BaseClient<This: BaseClient<This>>(
         headers: MutableMap<String, String>,
         params: MutableMap<String, Any?>,
         responseType: KClass<T>,
-        converter: ((Any) -> T),
         paramName: String,
         idParamName: String? = null,
         onProgress: ((UploadProgress) -> Unit)? = null,
     ): T {
         val input = params[paramName] as InputFile
         val size: Long = when(input.sourceType) {
-            "path", "file" -> {
-                readFileSize(input.path)
-            }
-            "bytes" -> {
-                (input.data).size.toLong()
-            }
+            "path", "file" -> readFileSize(input.path)
+            "bytes" -> (input.data).size.toLong()
             else -> throw UnsupportedOperationException()
         }
 
         if (size < CHUNK_SIZE) {
             val data = when(input.sourceType) {
-                "file", "path" -> {
-                    readFileBytes(input.path, 0, size)
-                }
+                "file", "path" -> readFileBytes(input.path, 0, size)
                 "bytes" -> input.data
                 else -> throw UnsupportedOperationException()
             }
@@ -244,25 +251,24 @@ abstract class BaseClient<This: BaseClient<This>>(
                 path = path,
                 headers = headers,
                 params = params,
-                responseType = responseType,
-                converter = converter
+                responseType = responseType
             )
         }
 
         val buffer = ByteArray(CHUNK_SIZE)
         var offset = 0L
-        var result: Map<*, *>? = null
+        var result: T? = null
 
         if (idParamName?.isNotEmpty() == true && params[idParamName] != "unique()") {
-            val current = call(
+            result = call(
                 method = "GET",
                 path = "$path/${params[idParamName]}",
                 headers = headers,
                 params = emptyMap(),
-                responseType = Map::class,
+                responseType = responseType
             )
-            val chunksUploaded = (current["chunksUploaded"] as Number).toLong()
-            offset = chunksUploaded * CHUNK_SIZE
+            val chunksUploaded = (result as? Map<*, *>)?.get("chunksUploaded") as? Number
+            offset = (chunksUploaded?.toLong() ?: 0) * CHUNK_SIZE
         }
 
         while (offset < size) {
@@ -294,22 +300,25 @@ abstract class BaseClient<This: BaseClient<This>>(
                 path = path,
                 headers = headers,
                 params = params,
-                responseType = Map::class
+                responseType = responseType
             )
 
             offset += chunkSize
-            headers["x-appwrite-id"] = result["\$id"].toString()
+
+            val resultMap = result as? Map<*, *>
+            headers["x-appwrite-id"] = resultMap?.get("\$id").toString()
+
             onProgress?.invoke(
                 UploadProgress(
-                    id = result["\$id"].toString(),
+                    id = resultMap?.get("\$id").toString(),
                     progress = offset.coerceAtMost(size).toDouble() / size * 100,
                     sizeUploaded = offset.coerceAtMost(size),
-                    chunksTotal = (result["chunksTotal"] as Number).toInt(),
-                    chunksUploaded = (result["chunksUploaded"] as Number).toInt()
+                    chunksTotal = (resultMap?.get("chunksTotal") as? Number)?.toInt() ?: 0,
+                    chunksUploaded = (resultMap?.get("chunksUploaded") as? Number)?.toInt() ?: 0
                 )
             )
         }
 
-        return converter(result as Map<String, Any>)
+        return result ?: throw AppwriteException("Upload failed")
     }
 }

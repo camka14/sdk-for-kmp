@@ -33,24 +33,4 @@ data class MfaChallenge(
     @SerialName("expire")
     val expire: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "\$id" to id as Any,
-        "\$createdAt" to createdAt as Any,
-        "userId" to userId as Any,
-        "expire" to expire as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = MfaChallenge(
-            id = map["\$id"] as String,
-            createdAt = map["\$createdAt"] as String,
-            userId = map["userId"] as String,
-            expire = map["expire"] as String,
-        )
-    }
-}
+)

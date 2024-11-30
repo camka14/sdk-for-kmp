@@ -21,20 +21,4 @@ data class ContinentList(
     @SerialName("continents")
     val continents: List<Continent>,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "total" to total as Any,
-        "continents" to continents.map { it.toMap() } as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = ContinentList(
-            total = (map["total"] as Number).toLong(),
-            continents = (map["continents"] as List<Map<String, Any>>).map { Continent.from(map = it) },
-        )
-    }
-}
+)

@@ -21,20 +21,4 @@ data class LocaleCode(
     @SerialName("name")
     val name: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "code" to code as Any,
-        "name" to name as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = LocaleCode(
-            code = map["code"] as String,
-            name = map["name"] as String,
-        )
-    }
-}
+)

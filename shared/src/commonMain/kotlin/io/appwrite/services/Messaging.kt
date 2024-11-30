@@ -33,17 +33,13 @@ class Messaging(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val converter: (Any) -> io.appwrite.models.Subscriber = {
-            @Suppress("UNCHECKED_CAST")
-            io.appwrite.models.Subscriber.from(map = it as Map<String, Any>)
-        }
+
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
             responseType = io.appwrite.models.Subscriber::class,
-            converter,
         )
     }
 

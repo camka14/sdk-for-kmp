@@ -1,5 +1,6 @@
 package io.appwrite.models
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -37,7 +38,8 @@ data class File(
      * File permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
      */
     @SerialName("\$permissions")
-    val permissions: List<Any>,
+    @Contextual
+    val permissions: List<@Contextual Any>,
 
     /**
      * File name.
@@ -75,38 +77,4 @@ data class File(
     @SerialName("chunksUploaded")
     val chunksUploaded: Long,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "\$id" to id as Any,
-        "bucketId" to bucketId as Any,
-        "\$createdAt" to createdAt as Any,
-        "\$updatedAt" to updatedAt as Any,
-        "\$permissions" to permissions as Any,
-        "name" to name as Any,
-        "signature" to signature as Any,
-        "mimeType" to mimeType as Any,
-        "sizeOriginal" to sizeOriginal as Any,
-        "chunksTotal" to chunksTotal as Any,
-        "chunksUploaded" to chunksUploaded as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = File(
-            id = map["\$id"] as String,
-            bucketId = map["bucketId"] as String,
-            createdAt = map["\$createdAt"] as String,
-            updatedAt = map["\$updatedAt"] as String,
-            permissions = map["\$permissions"] as List<Any>,
-            name = map["name"] as String,
-            signature = map["signature"] as String,
-            mimeType = map["mimeType"] as String,
-            sizeOriginal = (map["sizeOriginal"] as Number).toLong(),
-            chunksTotal = (map["chunksTotal"] as Number).toLong(),
-            chunksUploaded = (map["chunksUploaded"] as Number).toLong(),
-        )
-    }
-}
+)

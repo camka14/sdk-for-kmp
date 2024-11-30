@@ -56,32 +56,4 @@ data class Target(
     @SerialName("identifier")
     val identifier: String,
 
-) {
-    fun toMap(): Map<String, Any> = mapOf(
-        "\$id" to id as Any,
-        "\$createdAt" to createdAt as Any,
-        "\$updatedAt" to updatedAt as Any,
-        "name" to name as Any,
-        "userId" to userId as Any,
-        "providerId" to providerId as Any,
-        "providerType" to providerType as Any,
-        "identifier" to identifier as Any,
-    )
-
-    companion object {
-
-        @Suppress("UNCHECKED_CAST")
-        fun from(
-            map: Map<String, Any>,
-        ) = Target(
-            id = map["\$id"] as String,
-            createdAt = map["\$createdAt"] as String,
-            updatedAt = map["\$updatedAt"] as String,
-            name = map["name"] as String,
-            userId = map["userId"] as String,
-            providerId = map["providerId"] as? String?,
-            providerType = map["providerType"] as String,
-            identifier = map["identifier"] as String,
-        )
-    }
-}
+)
