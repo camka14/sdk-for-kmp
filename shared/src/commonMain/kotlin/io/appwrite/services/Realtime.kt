@@ -5,7 +5,10 @@ import io.appwrite.Client
 import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.forEachAsync
 import io.appwrite.extensions.fromJson
+import io.appwrite.extensions.getSerializer
+import io.appwrite.extensions.json
 import io.appwrite.extensions.jsonCast
+import io.appwrite.extensions.toJson
 import io.appwrite.models.*
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
@@ -17,6 +20,11 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlinx.coroutines.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.serializer
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -41,45 +49,47 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     }
 
     private fun createSocket() {
-        launch {
+        launch(Dispatchers.IO) {
 
-        if (activeChannels.isEmpty()) {
-            reconnect = false
-            closeSocket()
-            return@launch
-        }
-
-        val queryParams = buildString {
-            append("project=${client.config["project"]}")
-            activeChannels.forEach {
-                append("&channels[]=$it")
+            if (activeChannels.isEmpty()) {
+                reconnect = false
+                closeSocket()
+                return@launch
             }
-        }
 
-        if (webSocketSession != null) {
-            reconnect = false
-            closeSocket()
-        }
-
-        webSocketSession = client.httpClient.webSocketSession {
-            url("${client.endpointRealtime}/realtime?$queryParams")
-        }
-
-                try {
-                    webSocketSession?.let { session ->
-                        for (frame in session.incoming) {
-                            when (frame) {
-                                is Frame.Text -> handleMessage(frame.readText())
-                                else -> {} // Ignore other frame types
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    handleFailure(e)
-                } finally {
-                    handleClosing(RealtimeCode.NORMAL_CLOSURE.value, "Connection closed")
+            val queryParams = buildString {
+                append("project=${client.config["project"]}")
+                activeChannels.forEach {
+                    append("&channels[]=$it")
                 }
             }
+
+            if (webSocketSession != null) {
+                reconnect = false
+                closeSocket()
+            }
+
+            webSocketSession = client.httpClient.webSocketSession {
+                url("${client.endpointRealtime}/realtime?$queryParams")
+            }
+
+            reconnectAttempts = 0  // Reset attempts on successful connection
+
+            try {
+                webSocketSession?.let { session ->
+                    for (frame in session.incoming) {
+                        when (frame) {
+                            is Frame.Text -> handleMessage(frame.readText())
+                            else -> {}
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                handleFailure(e)
+            } finally {
+                handleClosing(RealtimeCode.NORMAL_CLOSURE.value, "Connection closed")
+            }
+        }
     }
 
     private suspend fun closeSocket() {
@@ -100,12 +110,14 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     ) = subscribe(
         channels = channels,
         Any::class,
-        callback
+        callback = callback
     )
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : Any> subscribe(
         vararg channels: String,
         payloadType: KClass<T>,
+        payloadSerializer: KSerializer<T>? = null,
         callback: (RealtimeResponseEvent<T>) -> Unit,
     ): RealtimeSubscription {
         val counter = subscriptionsCounter++
@@ -114,6 +126,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         activeSubscriptions[counter] = RealtimeCallback(
             channels.toList(),
             payloadType,
+            payloadSerializer,
             callback as (RealtimeResponseEvent<*>) -> Unit
         )
 
@@ -145,7 +158,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     }
 
     private suspend fun handleMessage(text: String) {
-        val message = text.fromJson<RealtimeResponse>()
+        val message = text.fromJson(RealtimeResponse::class)
         when (message.type) {
             TYPE_ERROR -> handleResponseError(message)
             TYPE_EVENT -> handleResponseEvent(message)
@@ -156,8 +169,13 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         throw message.data.jsonCast<AppwriteException>()
     }
 
+    @OptIn(InternalSerializationApi::class)
     private suspend fun handleResponseEvent(message: RealtimeResponse) {
-        val event = message.data.jsonCast<RealtimeResponseEvent<Any>>()
+        val mapSerializer = getSerializer<Map<String, Any>>()
+        val event = json.decodeFromJsonElement(
+            RealtimeResponseEvent.serializer(mapSerializer),
+            message.data.jsonCast<JsonElement>()
+        )
         if (event.channels.isEmpty()) {
             return
         }
@@ -166,8 +184,12 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         }
         activeSubscriptions.values.forEachAsync { subscription ->
             if (event.channels.any { subscription.channels.contains(it) }) {
-                event.payload = event.payload.jsonCast(subscription.payloadClass)
-                subscription.callback(event)
+                val payloadSerializer = subscription.payloadSerializer ?: subscription.payloadClass.serializer()
+                val eventWithPayloadClass = json.decodeFromString(
+                    RealtimeResponseEvent.serializer(payloadSerializer),
+                    message.data.toJson()
+                )
+                subscription.callback(eventWithPayloadClass)
             }
         }
     }
@@ -188,5 +210,10 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
 
     private fun handleFailure(error: Throwable) {
         error.printStackTrace()
+        launch {
+            delay(getTimeout())
+            reconnectAttempts++
+            createSocket()
+        }
     }
 }

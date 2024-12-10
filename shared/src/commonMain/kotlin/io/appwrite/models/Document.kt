@@ -1,12 +1,15 @@
 package io.appwrite.models
 
+import io.appwrite.serializers.DocumentSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 
 /**
  * Document
  */
+@Serializable(with = DocumentSerializer::class)
 data class Document<T>(
     /**
      * Document ID.

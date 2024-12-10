@@ -1,6 +1,12 @@
 package io.appwrite.models
 
+import io.appwrite.serializers.StringCollectionSerializer
 import io.ktor.utils.io.core.Closeable
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 import kotlin.collections.Collection
 import kotlin.reflect.KClass
 
@@ -13,16 +19,22 @@ data class RealtimeSubscription(
 data class RealtimeCallback(
     val channels: Collection<String>,
     val payloadClass: KClass<*>,
+    val payloadSerializer: KSerializer<*>? = null,
     val callback: (RealtimeResponseEvent<*>) -> Unit
 )
 
+@Serializable
 open class RealtimeResponse(
     val type: String,
+    @Contextual
     val data: Any
 )
 
+@Serializable
 data class RealtimeResponseEvent<T>(
+    @Serializable(with = StringCollectionSerializer::class)
     val events: Collection<String>,
+    @Serializable(with = StringCollectionSerializer::class)
     val channels: Collection<String>,
     val timestamp: String,
     var payload: T

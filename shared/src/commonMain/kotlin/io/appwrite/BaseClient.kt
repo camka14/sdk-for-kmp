@@ -4,6 +4,7 @@ import io.appwrite.FileOperations.readFileBytes
 import io.appwrite.FileOperations.readFileChunk
 import io.appwrite.FileOperations.readFileSize
 import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.json
 import io.appwrite.models.InputFile
 import io.appwrite.models.UploadProgress
 import io.ktor.client.HttpClient
@@ -24,7 +25,7 @@ import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
@@ -36,60 +37,87 @@ import kotlinx.serialization.serializer
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.reflect.KClass
 
-abstract class BaseClient<This: BaseClient<This>>(
+@Suppress("UNCHECKED_CAST")
+abstract class BaseClient<This : BaseClient<This>>(
     var endpoint: String,
     var endpointRealtime: String?
 ) : CoroutineScope {
     companion object {
-        internal const val CHUNK_SIZE = 5*1024*1024 // 5MB
+        internal const val CHUNK_SIZE = 5 * 1024 * 1024 // 5MB
     }
 
     private val mutex = SynchronizedObject()
     private val job = Job()
     internal lateinit var httpClient: HttpClient
 
-    internal lateinit var headers : MutableMap<String, String>
+    internal lateinit var headers: MutableMap<String, String>
     internal val config = mutableMapOf<String, String>()
-    private val json = Json {
-        ignoreUnknownKeys = true
-        isLenient = true
-    }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the HTTP client instance for making API requests
+     *
+     * @param value The HTTP client instance
+     * @return [This]
+     */
     fun setHttpClient(value: HttpClient): This {
         httpClient = value
         return this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the project ID for authentication
+     *
+     * @param value The project ID
+     * @return [This]
+     */
     fun setProject(value: String): This = synchronized(mutex) {
         config["project"] = value
         addHeader("x-appwrite-project", value)
         this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the JWT token for authentication
+     *
+     * @param value The JWT token
+     * @return [This]
+     */
     fun setJWT(value: String): This = synchronized(mutex) {
         config["jWT"] = value
         addHeader("x-appwrite-jwt", value)
         this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the locale for internationalization
+     *
+     * @param value The locale string
+     * @return [This]
+     */
     fun setLocale(value: String): This = synchronized(mutex) {
         config["locale"] = value
         addHeader("x-appwrite-locale", value)
         this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the session token for authentication
+     *
+     * @param value The session token
+     * @return [This]
+     */
     fun setSession(value: String): This = synchronized(mutex) {
         config["session"] = value
         addHeader("x-appwrite-session", value)
         this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the API endpoint URL
+     *
+     * @param endpoint The API endpoint URL
+     * @return [This]
+     */
     fun setEndpoint(endpoint: String): This {
         this.endpoint = endpoint
         if (this.endpointRealtime == null && endpoint.startsWith("http")) {
@@ -98,13 +126,17 @@ abstract class BaseClient<This: BaseClient<This>>(
         return this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
+    /**
+     * Set the websocket endpoint URL for realtime connections
+     *
+     * @param endpoint The websocket endpoint URL
+     * @return [This]
+     */
     fun setEndpointRealtime(endpoint: String): This {
         this.endpointRealtime = endpoint
         return this as This
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun addHeader(key: String, value: String): This {
         headers[key] = value
         return this as This
@@ -113,10 +145,12 @@ abstract class BaseClient<This: BaseClient<This>>(
     /**
      * Send the HTTP request
      *
-     * @param method
-     * @param path
-     * @param headers
-     * @param params
+     * @param method The HTTP method
+     * @param path The API path
+     * @param headers The request headers
+     * @param params The request parameters
+     * @param responseType The expected response type
+     * @param serializer Optional custom serializer
      *
      * @return [T]
      */
@@ -128,6 +162,7 @@ abstract class BaseClient<This: BaseClient<This>>(
         headers: Map<String, String> = mapOf(),
         params: Map<String, Any?> = mapOf(),
         responseType: KClass<T>,
+        serializer: KSerializer<T>? = null
     ): T {
         val filteredParams = params.filterValues { it != null }
 
@@ -149,6 +184,7 @@ abstract class BaseClient<This: BaseClient<This>>(
                                 parameter("${key}[]", item.toString())
                             }
                         }
+
                         else -> parameter(key, value.toString())
                     }
                 }
@@ -163,11 +199,13 @@ abstract class BaseClient<This: BaseClient<This>>(
                                         val part = value as ByteArray
                                         append(key, part)
                                     }
+
                                     value is List<*> -> {
                                         value.forEach { item ->
                                             append("${key}[]", item.toString())
                                         }
                                     }
+
                                     else -> append(key, value.toString())
                                 }
                             }
@@ -205,6 +243,7 @@ abstract class BaseClient<This: BaseClient<This>>(
                         throw AppwriteException(body, response.status.value)
                     }
                 }
+
                 responseType == Boolean::class -> true as T
                 responseType == ByteArray::class -> response.body<ByteArray>() as T
                 else -> {
@@ -212,46 +251,67 @@ abstract class BaseClient<This: BaseClient<This>>(
                     if (body.isEmpty()) {
                         true as T
                     } else {
-                        Json.decodeFromString(responseType.serializer(), body)
+                        serializer?.let {
+                            json.decodeFromString(serializer, body)
+                        } ?: run {
+                            json.decodeFromString(responseType.serializer(), body)
+                        }
                     }
                 }
             }
         }
     }
 
+    /**
+     * Handle large file uploads by splitting into chunks
+     *
+     * @param path The upload endpoint path
+     * @param headers The request headers
+     * @param params The upload parameters
+     * @param responseType The expected response type
+     * @param serializer The response serializer
+     * @param paramName The file parameter name
+     * @param idParamName Optional ID parameter name
+     * @param onProgress Optional progress callback
+     *
+     * @return [T]
+     */
     @Throws(AppwriteException::class, CancellationException::class)
     suspend fun <T : Any> chunkedUpload(
         path: String,
         headers: MutableMap<String, String>,
         params: MutableMap<String, Any?>,
         responseType: KClass<T>,
+        serializer: KSerializer<T>,
         paramName: String,
         idParamName: String? = null,
         onProgress: ((UploadProgress) -> Unit)? = null,
     ): T {
         val input = params[paramName] as InputFile
-        val size: Long = when(input.sourceType) {
+        val size: Long = when (input.sourceType) {
             "path", "file" -> readFileSize(input.path)
             "bytes" -> (input.data).size.toLong()
             else -> throw UnsupportedOperationException()
         }
 
         if (size < CHUNK_SIZE) {
-            val data = when(input.sourceType) {
+            val data = when (input.sourceType) {
                 "file", "path" -> readFileBytes(input.path, 0, size)
                 "bytes" -> input.data
                 else -> throw UnsupportedOperationException()
             }
             params[paramName] = data
             headers["content-type"] = "multipart/form-data"
-            headers["content-disposition"] = "form-data; name=\"$paramName\"; filename=\"${input.filename}\""
+            headers["content-disposition"] =
+                "form-data; name=\"$paramName\"; filename=\"${input.filename}\""
 
             return call(
                 method = "POST",
                 path = path,
                 headers = headers,
                 params = params,
-                responseType = responseType
+                responseType = responseType,
+                serializer = serializer
             )
         }
 
@@ -265,7 +325,8 @@ abstract class BaseClient<This: BaseClient<This>>(
                 path = "$path/${params[idParamName]}",
                 headers = headers,
                 params = emptyMap(),
-                responseType = responseType
+                responseType = responseType,
+                serializer = serializer
             )
             val chunksUploaded = (result as? Map<*, *>)?.get("chunksUploaded") as? Number
             offset = (chunksUploaded?.toLong() ?: 0) * CHUNK_SIZE
@@ -274,25 +335,28 @@ abstract class BaseClient<This: BaseClient<This>>(
         while (offset < size) {
             val chunkSize = minOf(CHUNK_SIZE.toLong(), size - offset)
 
-            when(input.sourceType) {
+            when (input.sourceType) {
                 "file", "path" -> {
                     readFileChunk(input.path, offset, buffer, chunkSize.toInt())
                 }
+
                 "bytes" -> {
                     val end = (offset + chunkSize).toInt()
-                    (input.data as ByteArray).copyInto(
+                    (input.data).copyInto(
                         buffer,
                         destinationOffset = 0,
                         startIndex = offset.toInt(),
                         endIndex = end
                     )
                 }
+
                 else -> throw UnsupportedOperationException()
             }
 
             params[paramName] = buffer.copyOf(chunkSize.toInt())
             headers["content-type"] = "multipart/form-data"
-            headers["content-disposition"] = "form-data; name=\"$paramName\"; filename=\"${input.filename}\""
+            headers["content-disposition"] =
+                "form-data; name=\"$paramName\"; filename=\"${input.filename}\""
             headers["content-range"] = "bytes $offset-${(offset + chunkSize - 1)}/$size"
 
             result = call(
@@ -300,7 +364,8 @@ abstract class BaseClient<This: BaseClient<This>>(
                 path = path,
                 headers = headers,
                 params = params,
-                responseType = responseType
+                responseType = responseType,
+                serializer = serializer
             )
 
             offset += chunkSize

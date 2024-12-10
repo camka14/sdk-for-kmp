@@ -2,9 +2,12 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.enums.*
-import io.appwrite.exceptions.AppwriteException
 import io.appwrite.WebAuthComponent
+import io.appwrite.enums.AuthenticatorType
+import io.appwrite.enums.OAuthProvider
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.classOf
+import io.appwrite.extensions.getSerializer
 import io.appwrite.models.IdentityList
 import io.appwrite.models.Jwt
 import io.appwrite.models.LogList
@@ -22,15 +25,47 @@ import io.ktor.client.plugins.cookies.cookies
 import io.ktor.client.request.cookie
 import io.ktor.client.request.get
 import io.ktor.http.Cookie
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.serializer
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.reflect.KClass
 import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The Account service allows you to authenticate and manage a user account.
  **/
-@Suppress("UNCHECKED_CAST")
+@OptIn(InternalSerializationApi::class)
 class Account(client: Client) : Service(client) {
+    /**
+     * Get Account
+     *
+     * Get currently logged in user.
+     *
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns user data object
+     */
+    @JvmOverloads
+    suspend inline fun <reified T : Any> get(
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
+    ): User<T> {
+        val apiPath = "/account"
+        val apiParams = mutableMapOf<String, Any?>()
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+        )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        return client.call(
+            "GET",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
+        )
+    }
 
     /**
      * Get account
@@ -39,38 +74,31 @@ class Account(client: Client) : Service(client) {
      *
      * @return [User<T>]
      */
-    suspend inline fun <reified T: Any> get(): User<T> {
-        val apiPath = "/account"
-        val apiParams = mutableMapOf<String, Any?>()
-        val apiHeaders = mutableMapOf(
-            "content-type" to "application/json",
-        )
-        return client.call(
-            "GET",
-            apiPath,
-            apiHeaders,
-            apiParams,
-            responseType = User::class as KClass<User<T>>,
-        )
+    suspend inline fun get(): User<Map<String, Any>> {
+        return get(nestedType = classOf())
     }
 
     /**
-     * Create account
+     * Create Account
      *
-     * Use this endpoint to allow a new user to register a new account in your project. After the user registration completes successfully, you can use the [/account/verfication](https://appwrite.io/docs/references/cloud/client-web/account#createVerification) route to start verifying the user email address. To allow the new user to login to their new account, you need to create a new [account session](https://appwrite.io/docs/references/cloud/client-web/account#createEmailSession).
+     * Create a new user account.
      *
-     * @param userId User ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
-     * @param email User email.
-     * @param password New user password. Must be between 8 and 256 chars.
-     * @param name User name. Max length: 128 chars.
-     * @return [User<T>]
+     * @param userId Unique user ID. Choose custom ID or generate with ID.unique()
+     * @param email Valid user email
+     * @param password User password (8-256 characters)
+     * @param name Optional user name (max 128 chars)
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns created user object
      */
     @JvmOverloads
-    suspend inline fun <reified T: Any> create(
+    suspend inline fun <reified T : Any> create(
         userId: String,
         email: String,
         password: String,
         name: String? = null,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account"
 
@@ -83,27 +111,57 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "POST",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
 
+
     /**
-     * Update email
+     * Create Account
      *
-     * Update currently logged in user account email address. After changing user address, the user confirmation status will get reset. A new confirmation email is not sent automatically however you can use the send confirmation email endpoint again to send the confirmation email. For security measures, user password is required to complete this request.This endpoint can also be used to convert an anonymous account to a normal one, by passing an email address and a new password.
+     * Create a new user account.
      *
-     * @param email User email.
-     * @param password User password. Must be at least 8 chars.
-     * @return [User<T>]
+     * @param userId Unique user ID. Choose custom ID or generate with ID.unique()
+     * @param email Valid user email
+     * @param password User password (8-256 characters)
+     * @param name Optional user name (max 128 chars)
+     * @return [User<T>] Returns created user object
      */
-    suspend inline fun <reified T: Any> updateEmail(
+    @JvmOverloads
+    suspend fun create(
+        userId: String,
         email: String,
         password: String,
+        name: String? = null,
+    ): User<Map<String, Any>> {
+        return create(userId, email, password, name, nestedType = classOf())
+    }
+
+    /**
+     * Update Email
+     *
+     * Update currently logged in user's email address. Requires password confirmation.
+     * User's email verification status will be reset.
+     *
+     * @param email New email address
+     * @param password Current user password for verification
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns updated user object
+     */
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updateEmail(
+        email: String,
+        password: String,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/email"
 
@@ -114,22 +172,44 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
 
     /**
+     * Update Email
+     *
+     * Update currently logged in user's email address. Requires password confirmation.
+     * User's email verification status will be reset.
+     *
+     * @param email New email address
+     * @param password Current user password for verification
+     * @return [User<T>] Returns updated user object
+     */
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updateEmail(
+        email: String,
+        password: String,
+    ): User<Map<String, Any>> = updateEmail(
+        email,
+        password,
+        nestedType = classOf(),
+    )
+
+    /**
      * List Identities
      *
-     * Get the list of identities for the currently logged in user.
+     * Get list of identities for currently logged in user.
      *
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: userId, provider, providerUid, providerEmail, providerAccessTokenExpiry
-     * @return [IdentityList]
+     * @param queries Optional queries to filter results
+     * @return [IdentityList] Returns list of user identities
      */
     @JvmOverloads
     suspend fun listIdentities(
@@ -149,17 +229,18 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = IdentityList::class,
+            serializer = IdentityList.serializer()
         )
     }
 
 
     /**
-     * Delete identity
+     * Delete Identity
      *
-     * Delete an identity by its unique ID.
+     * Delete a user identity by its unique ID.
      *
-     * @param identityId Identity ID.
-     * @return [Any]
+     * @param identityId ID of identity to delete
+     * @return [Any] Returns empty object on success
      */
     suspend fun deleteIdentity(
         identityId: String,
@@ -178,6 +259,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = Any::class.serializer()
         )
     }
 
@@ -185,9 +267,10 @@ class Account(client: Client) : Service(client) {
     /**
      * Create JWT
      *
-     * Use this endpoint to create a JSON Web Token. You can use the resulting JWT to authenticate on behalf of the current user when working with the Appwrite server-side API and SDKs. The JWT secret is valid for 15 minutes from its creation and will be invalid if the user will logout in that time frame.
+     * Create a JSON Web Token for current session.
+     * Valid for 15 minutes.
      *
-     * @return [Jwt]
+     * @return [Jwt] Returns JWT object
      */
     suspend fun createJWT(
     ): Jwt {
@@ -204,17 +287,18 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Jwt::class,
+            serializer = Jwt::class.serializer()
         )
     }
 
 
     /**
-     * List logs
+     * List Logs
      *
-     * Get the list of latest security activity logs for the currently logged in user. Each log returns user IP address, location and date and time of log.
+     * Get list of security activity logs for current user.
      *
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Only supported methods are limit and offset
-     * @return [LogList]
+     * @param queries Optional queries to filter log results
+     * @return [LogList] Returns list of activity logs
      */
     @JvmOverloads
     suspend fun listLogs(
@@ -234,6 +318,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = LogList::class,
+            serializer = LogList::class.serializer()
         )
     }
 
@@ -241,13 +326,17 @@ class Account(client: Client) : Service(client) {
     /**
      * Update MFA
      *
-     * Enable or disable MFA on an account.
+     * Enable or disable Multi-Factor Authentication.
      *
-     * @param mfa Enable or disable MFA.
-     * @return [User<T>]
+     * @param mfa Boolean to enable/disable MFA
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns updated user object
      */
-    suspend inline fun <reified T: Any> updateMFA(
+    suspend inline fun <reified T : Any> updateMFA(
         mfa: Boolean,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/mfa"
 
@@ -257,14 +346,32 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
+
+    /**
+     * Update MFA
+     *
+     * Enable or disable Multi-Factor Authentication.
+     *
+     * @param mfa Boolean to enable/disable MFA
+     * @return [User<T>] Returns updated user object
+     */
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updateMFA(
+        mfa: Boolean,
+    ): User<Map<String, Any>> = updateMFA(
+        mfa,
+        nestedType = classOf(),
+    )
 
     /**
      * Create Authenticator
@@ -291,6 +398,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = MfaType::class,
+            serializer = MfaType::class.serializer()
         )
     }
 
@@ -302,11 +410,16 @@ class Account(client: Client) : Service(client) {
      *
      * @param type Type of authenticator.
      * @param otp Valid verification token.
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>]
      */
-    suspend inline fun <reified T: Any> updateMfaAuthenticator(
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updateMfaAuthenticator(
         type: AuthenticatorType,
         otp: String,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/mfa/authenticators/{type}"
             .replace("{type}", type.value)
@@ -317,14 +430,35 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PUT",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
+
+    /**
+     * Verify Authenticator
+     *
+     * Verify an authenticator app after adding it using the [add authenticator](/docs/references/cloud/client-web/account#createMfaAuthenticator) method.
+     *
+     * @param type Type of authenticator.
+     * @param otp Valid verification token.
+     * @return [io.appwrite.models.User<T>]
+     */
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updateMfaAuthenticator(
+        type: AuthenticatorType,
+        otp: String,
+    ): User<Map<String, Any>> = updateMfaAuthenticator(
+        type,
+        otp,
+        nestedType = classOf(),
+    )
 
     /**
      * Delete Authenticator
@@ -351,17 +485,17 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = Any::class.serializer()
         )
     }
-
 
     /**
      * Create MFA Challenge
      *
-     * Begin the process of MFA verification after sign-in. Finish the flow with [updateMfaChallenge](/docs/references/cloud/client-web/account#updateMfaChallenge) method.
+     * Create a new MFA challenge for verification.
      *
-     * @param factor Factor used for verification. Must be one of following: `email`, `phone`, `totp`, `recoveryCode`.
-     * @return [MfaChallenge]
+     * @param factor Authentication factor type
+     * @return [MfaChallenge] Returns MFA challenge object
      */
     suspend fun createMfaChallenge(
         factor: io.appwrite.enums.AuthenticationFactor,
@@ -380,6 +514,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = MfaChallenge::class,
+            serializer = MfaChallenge::class.serializer()
         )
     }
 
@@ -412,6 +547,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = Any::class.serializer()
         )
     }
 
@@ -437,6 +573,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = MfaFactors::class,
+            serializer = MfaFactors::class.serializer()
         )
     }
 
@@ -462,6 +599,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = MfaRecoveryCodes::class,
+            serializer = MfaRecoveryCodes::class.serializer()
         )
     }
 
@@ -487,6 +625,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = MfaRecoveryCodes::class,
+            serializer = MfaRecoveryCodes::class.serializer()
         )
     }
 
@@ -512,20 +651,26 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = MfaRecoveryCodes::class,
+            serializer = MfaRecoveryCodes::class.serializer()
         )
     }
 
 
     /**
-     * Update name
+     * Update Name
      *
-     * Update currently logged in user account name.
+     * Update currently logged in user's name.
      *
-     * @param name User name. Max length: 128 chars.
-     * @return [User<T>]
+     * @param name New user name (max 128 chars)
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns updated user object
      */
-    suspend inline fun <reified T: Any> updateName(
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updateName(
         name: String,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/name"
 
@@ -535,28 +680,51 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
 
     /**
-     * Update password
+     * Update Name
      *
-     * Update currently logged in user password. For validation, user is required to pass in the new password, and the old password. For users created with OAuth, Team Invites and Magic URL, oldPassword is optional.
+     * Update currently logged in user's name.
      *
-     * @param password New user password. Must be at least 8 chars.
-     * @param oldPassword Current user password. Must be at least 8 chars.
-     * @return [User<T>]
+     * @param name New user name (max 128 chars)
+     * @return [User<T>] Returns updated user object
+     */
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updateName(
+        name: String,
+    ): User<Map<String, Any>> = updateName(
+        name,
+        nestedType = classOf(),
+    )
+
+
+    /**
+     * Update Password
+     *
+     * Update currently logged in user's password.
+     *
+     * @param password New password (8-256 chars)
+     * @param oldPassword Current password
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns updated user object
      */
     @JvmOverloads
-    suspend inline fun <reified T: Any> updatePassword(
+    suspend inline fun <reified T : Any> updatePassword(
         password: String,
         oldPassword: String? = null,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/password"
 
@@ -567,27 +735,54 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
 
     /**
-     * Update phone
+     * Update Password
      *
-     * Update the currently logged in user&#039;s phone number. After updating the phone number, the phone verification status will be reset. A confirmation SMS is not sent automatically, however you can use the [POST /account/verification/phone](https://appwrite.io/docs/references/cloud/client-web/account#createPhoneVerification) endpoint to send a confirmation SMS.
+     * Update currently logged in user's password.
      *
-     * @param phone Phone number. Format this number with a leading '+' and a country code, e.g., +16175551212.
-     * @param password User password. Must be at least 8 chars.
-     * @return [User<T>]
+     * @param password New password (8-256 chars)
+     * @param oldPassword Current password
+     * @return [User<T>] Returns updated user object
      */
-    suspend inline fun <reified T: Any> updatePhone(
+    @JvmOverloads
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updatePassword(
+        password: String,
+        oldPassword: String? = null,
+    ): User<Map<String, Any>> = updatePassword(
+        password,
+        oldPassword,
+        nestedType = classOf(),
+    )
+
+    /**
+     * Update Phone
+     *
+     * Update currently logged in user's phone number.
+     *
+     * @param phone New phone number (E.164 format)
+     * @param password Current password for verification
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns updated user object
+     */
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updatePhone(
         phone: String,
         password: String,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/phone"
 
@@ -598,23 +793,50 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
 
     /**
-     * Get account preferences
+     * Update Phone
      *
-     * Get the preferences as a key-value object for the currently logged in user.
+     * Update currently logged in user's phone number.
      *
-     * @return [Preferences<T>]
+     * @param phone New phone number (E.164 format)
+     * @param password Current password for verification
+     * @return [User<T>] Returns updated user object
      */
-    suspend inline fun <reified T: Any> getPrefs(): Preferences<T> {
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updatePhone(
+        phone: String,
+        password: String,
+    ): User<Map<String, Any>> = updatePhone(
+        phone,
+        password,
+        nestedType = classOf(),
+    )
+
+    /**
+     * Get Preferences
+     *
+     * Get currently logged in user's preferences.
+     *
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [Preferences<T>] Returns user preferences object
+     */
+    @JvmOverloads
+    suspend inline fun <reified T : Any> getPrefs(
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
+    ): Preferences<T> {
         val apiPath = "/account/prefs"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -622,25 +844,45 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "GET",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = Preferences::class as KClass<Preferences<T>>,
+            responseType = classOf(),
+            serializer = Preferences.serializer(actualSerializer)
         )
     }
 
     /**
-     * Update preferences
+     * Get Preferences
      *
-     * Update currently logged in user account preferences. The object you pass is stored as is, and replaces any previous value. The maximum allowed prefs size is 64kB and throws error if exceeded.
+     * Get currently logged in user's preferences.
      *
-     * @param prefs Prefs key-value JSON object.
-     * @return [User<T>]
+     * @return [Preferences<T>] Returns user preferences object
      */
-    suspend inline fun <reified T: Any> updatePrefs(
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun getPrefs(
+    ): Preferences<Map<String, Any>> = getPrefs(
+        nestedType = classOf(),
+    )
+
+    /**
+     * Update Preferences
+     *
+     * Update currently logged in user's preferences.
+     *
+     * @param prefs Preferences key-value object
+     * @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     * @return [User<T>] Returns updated user object
+     */
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updatePrefs(
         prefs: Any,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
     ): User<T> {
         val apiPath = "/account/prefs"
 
@@ -650,14 +892,32 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
+
+    /**
+     * Update Preferences
+     *
+     * Update currently logged in user's preferences.
+     *
+     * @param prefs Preferences key-value object
+     * @return [User<T>] Returns updated user object
+     */
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updatePrefs(
+        prefs: Any,
+    ): User<Map<String, Any>> = updatePrefs(
+        prefs,
+        nestedType = classOf(),
+    )
 
     /**
      * Create password recovery
@@ -687,6 +947,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -722,6 +983,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -748,6 +1010,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = SessionList::class,
+            serializer = SessionList::class.serializer()
         )
     }
 
@@ -773,6 +1036,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = Any::class.serializer()
         )
     }
 
@@ -785,7 +1049,7 @@ class Account(client: Client) : Service(client) {
      * @return [Session]
      */
     suspend fun createAnonymousSession(
-): Session {
+    ): Session {
         val apiPath = "/account/sessions/anonymous"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -799,18 +1063,19 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
 
     /**
-     * Create email password session
+     * Create Email Password Session
      *
-     * Allow the user to login into their account by providing a valid email and password combination. This route will create a new session for the user.A user is limited to 10 active sessions at a time by default. [Learn more about session limits](https://appwrite.io/docs/authentication-security#limits).
+     * Create a new session using email and password.
      *
-     * @param email User email.
-     * @param password User password. Must be at least 8 chars.
-     * @return [Session]
+     * @param email User email
+     * @param password User password
+     * @return [Session] Returns new session object
      */
     suspend fun createEmailPasswordSession(
         email: String,
@@ -831,6 +1096,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
@@ -862,6 +1128,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
@@ -894,6 +1161,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
@@ -926,6 +1194,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
@@ -955,6 +1224,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
@@ -984,6 +1254,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Session::class,
+            serializer = Session::class.serializer()
         )
     }
 
@@ -1013,6 +1284,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = Any::class.serializer()
         )
     }
 
@@ -1022,9 +1294,16 @@ class Account(client: Client) : Service(client) {
      *
      * Block the currently logged in user account. Behind the scene, the user record is not deleted but permanently blocked from any access. To completely delete a user, use the Users API instead.
      *
+     *  @param nestedType Type parameter for nested objects
+     * @param genericSerializer Optional custom serializer for generic types
+     *
      * @return [User<T>]
      */
-    suspend inline fun <reified T: Any> updateStatus(): User<T> {
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updateStatus(
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
+    ): User<T> {
         val apiPath = "/account/status"
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -1032,14 +1311,29 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = User::class as KClass<User<T>>,
+            responseType = classOf(),
+            serializer = User.serializer(actualSerializer)
         )
     }
+
+    /**
+     * Update status
+     *
+     * Block the currently logged in user account. Behind the scene, the user record is not deleted but permanently blocked from any access. To completely delete a user, use the Users API instead.
+     *
+     * @return [io.appwrite.models.User<T>]
+     */
+    @Throws(AppwriteException::class, CancellationException::class)
+    suspend fun updateStatus(
+    ): User<Map<String, Any>> = updateStatus(
+        nestedType = classOf(),
+    )
 
     /**
      * Create push target
@@ -1073,6 +1367,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = io.appwrite.models.Target::class,
+            serializer = io.appwrite.models.Target::class.serializer()
         )
     }
 
@@ -1086,7 +1381,6 @@ class Account(client: Client) : Service(client) {
      * @param failure URL to redirect back to your app after a failed login attempt.  Only URLs from hostnames in your project's platform list are allowed. This requirement helps to prevent an [open redirect](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html) attack against your project API.
      * @param scopes A list of custom OAuth2 scopes. Check each provider internal docs for a list of supported scopes. Maximum of 100 scopes are allowed, each 4096 characters long.
      */
-    @JvmOverloads
     suspend fun createOAuth2Session(
         provider: OAuthProvider,
         success: String?,
@@ -1096,7 +1390,7 @@ class Account(client: Client) : Service(client) {
         val apiPath = "/account/sessions/oauth2/{provider}"
             .replace("{provider}", provider.value)
 
-        val apiParams = mutableMapOf<String, Any?>(
+        val apiParams = mutableMapOf(
             "success" to success,
             "failure" to failure,
             "scopes" to scopes,
@@ -1177,6 +1471,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = io.appwrite.models.Target::class,
+            serializer = io.appwrite.models.Target::class.serializer()
         )
     }
 
@@ -1206,6 +1501,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = Any::class.serializer()
         )
     }
 
@@ -1242,6 +1538,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -1281,10 +1578,10 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
-    @JvmOverloads
     suspend fun createOAuth2Token(
         provider: OAuthProvider,
         success: String?,
@@ -1294,7 +1591,7 @@ class Account(client: Client) : Service(client) {
         val apiPath = "/account/tokens/oauth2/{provider}"
             .replace("{provider}", provider.value)
 
-        val apiParams = mutableMapOf<String, Any?>(
+        val apiParams = mutableMapOf(
             "success" to success,
             "failure" to failure,
             "scopes" to scopes,
@@ -1375,6 +1672,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -1404,6 +1702,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -1436,6 +1735,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -1462,6 +1762,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 
@@ -1494,6 +1795,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Token::class,
+            serializer = Token::class.serializer()
         )
     }
 }

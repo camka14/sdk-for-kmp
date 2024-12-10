@@ -70,7 +70,7 @@ class Storage(client: Client) : Service(client) {
         val apiPath = "/storage/buckets/{bucketId}/files"
             .replace("{bucketId}", bucketId)
 
-        val apiParams = mutableMapOf<String, Any?>(
+        val apiParams = mutableMapOf(
             "fileId" to fileId,
             "file" to file,
             "permissions" to permissions,
@@ -79,13 +79,14 @@ class Storage(client: Client) : Service(client) {
             "content-type" to "multipart/form-data",
         )
 
-        val idParamName: String? = "fileId"
+        val idParamName = "fileId"
         val paramName = "file"
         return client.chunkedUpload(
             apiPath,
             apiHeaders,
             apiParams,
             responseType = File::class,
+            serializer = File.serializer(),
             paramName,
             idParamName,
             onProgress,

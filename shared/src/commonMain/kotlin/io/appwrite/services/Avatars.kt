@@ -78,7 +78,7 @@ class AvatarsImpl(private val client: Client) : Avatars {
         code: CreditCard,
         width: Long?,
         height: Long?,
-        quality: Long?
+        quality: Long?,
     ): ByteArray {
         val params = mutableMapOf(
             "width" to width,
@@ -90,7 +90,7 @@ class AvatarsImpl(private val client: Client) : Avatars {
             "GET",
             "/avatars/credit-cards/${code.value}",
             params = params,
-            responseType = ByteArray::class
+            responseType = ByteArray::class,
         )
     }
 

@@ -2,10 +2,12 @@ package io.appwrite.models
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Documents List
  */
+@Serializable
 data class DocumentList<T>(
     /**
      * Total number of documents documents that matched your query.

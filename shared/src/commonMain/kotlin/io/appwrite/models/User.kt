@@ -3,7 +3,6 @@ package io.appwrite.models
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.reflect.KClass
 
 /**
  * User
@@ -38,20 +37,20 @@ data class User<T>(
      * Hashed user password.
      */
     @SerialName("password")
-    var password: String?,
+    var password: String? = null,
 
     /**
      * Password hashing algorithm.
      */
     @SerialName("hash")
-    var hash: String?,
+    var hash: String? = null,
 
     /**
      * Password hashing algorithm configuration.
      */
     @SerialName("hashOptions")
     @Contextual
-    var hashOptions: Any?,
+    var hashOptions: Any? = null,
 
     /**
      * User registration date in ISO 8601 format.
@@ -125,7 +124,7 @@ data class User<T>(
     @SerialName("accessedAt")
     val accessedAt: String,
 
-) {
+    ) {
     companion object {
         operator fun invoke(
             id: String,
