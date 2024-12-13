@@ -15,14 +15,13 @@ import java.security.SecureRandom
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 fun createHttpClient(context: Context, selfSigned: Boolean) = HttpClient(OkHttp) {
     install(HttpCookies) {
         storage = AndroidCookieStorage(context)
     }
-    install(WebSockets){
+    install(WebSockets) {
         pingInterval = 30.seconds
 
     }
@@ -49,12 +48,16 @@ fun createHttpClient(context: Context, selfSigned: Boolean) = HttpClient(OkHttp)
     } else {
         engine {
             config {
-                val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+                val trustManagerFactory =
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
                 trustManagerFactory.init(null as KeyStore?)
                 val sslContext = SSLContext.getInstance("TLS").apply {
                     init(null, trustManagerFactory.trustManagers, SecureRandom())
                 }
-                sslSocketFactory(sslContext.socketFactory, trustManagerFactory.trustManagers[0] as X509TrustManager)
+                sslSocketFactory(
+                    sslContext.socketFactory,
+                    trustManagerFactory.trustManagers[0] as X509TrustManager
+                )
             }
         }
     }

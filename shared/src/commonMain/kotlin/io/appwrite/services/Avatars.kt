@@ -1,14 +1,10 @@
 import io.appwrite.Client
-import io.appwrite.Service
 import io.appwrite.enums.Browser
 import io.appwrite.enums.CreditCard
 import io.appwrite.enums.Flag
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 
 interface Avatars {
+    @Throws(Throwable::class)
     suspend fun getBrowser(
         code: Browser,
         width: Long? = null,
@@ -16,6 +12,7 @@ interface Avatars {
         quality: Long? = null
     ): ByteArray
 
+    @Throws(Throwable::class)
     suspend fun getCreditCard(
         code: CreditCard,
         width: Long? = null,
@@ -23,8 +20,10 @@ interface Avatars {
         quality: Long? = null
     ): ByteArray
 
+    @Throws(Throwable::class)
     suspend fun getFavicon(url: String): ByteArray
 
+    @Throws(Throwable::class)
     suspend fun getFlag(
         code: Flag,
         width: Long? = null,
@@ -32,12 +31,14 @@ interface Avatars {
         quality: Long? = null
     ): ByteArray
 
+    @Throws(Throwable::class)
     suspend fun getImage(
         url: String,
         width: Long? = null,
         height: Long? = null
     ): ByteArray
 
+    @Throws(Throwable::class)
     suspend fun getInitials(
         name: String? = null,
         width: Long? = null,
@@ -45,6 +46,7 @@ interface Avatars {
         background: String? = null
     ): ByteArray
 
+    @Throws(Throwable::class)
     suspend fun getQR(
         text: String,
         size: Long? = null,

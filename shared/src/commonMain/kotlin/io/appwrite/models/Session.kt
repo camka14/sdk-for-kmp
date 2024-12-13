@@ -182,5 +182,4 @@ data class Session(
      */
     @SerialName("mfaUpdatedAt")
     val mfaUpdatedAt: String,
-
-    )
+)

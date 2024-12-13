@@ -2,7 +2,6 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.classOf
 import io.appwrite.extensions.getSerializer
 import io.appwrite.models.Membership
@@ -11,7 +10,6 @@ import io.appwrite.models.Preferences
 import io.appwrite.models.Team
 import io.appwrite.models.TeamList
 import kotlinx.serialization.KSerializer
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
@@ -31,6 +29,7 @@ class Teams(client: Client) : Service(client) {
      * @return [io.appwrite.models.TeamList<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> list(
         queries: List<String>? = null,
         search: String? = null,
@@ -67,7 +66,7 @@ class Teams(client: Client) : Service(client) {
      * @return [io.appwrite.models.TeamList<T>]
      */
     @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun list(
         queries: List<String>? = null,
         search: String? = null,
@@ -88,6 +87,7 @@ class Teams(client: Client) : Service(client) {
      * @return [Team<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> create(
         teamId: String,
         name: String,
@@ -127,7 +127,7 @@ class Teams(client: Client) : Service(client) {
      * @return [io.appwrite.models.Team<T>]
      */
     @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun create(
         teamId: String,
         name: String,
@@ -149,6 +149,7 @@ class Teams(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [Team<T>]
      */
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> get(
         teamId: String,
         nestedType: KClass<T>?,
@@ -181,7 +182,7 @@ class Teams(client: Client) : Service(client) {
      * @param teamId Team ID.
      * @return [io.appwrite.models.Team<T>]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun get(
         teamId: String,
     ): Team<Map<String, Any>> = get(
@@ -201,6 +202,7 @@ class Teams(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [Team<T>]
      */
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> updateName(
         teamId: String,
         name: String,
@@ -236,7 +238,7 @@ class Teams(client: Client) : Service(client) {
      * @param name New team name. Max length: 128 chars.
      * @return [io.appwrite.models.Team<T>]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateName(
         teamId: String,
         name: String,
@@ -254,6 +256,7 @@ class Teams(client: Client) : Service(client) {
      * @param teamId Team ID.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun delete(
         teamId: String,
     ): Any {
@@ -286,6 +289,7 @@ class Teams(client: Client) : Service(client) {
      * @return [MembershipList]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun listMemberships(
         teamId: String,
         queries: List<String>? = null,
@@ -326,6 +330,7 @@ class Teams(client: Client) : Service(client) {
      * @return [Membership]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun createMembership(
         teamId: String,
         roles: List<String>,
@@ -368,6 +373,7 @@ class Teams(client: Client) : Service(client) {
      * @param membershipId Membership ID.
      * @return [Membership]
      */
+    @Throws(Throwable::class)
     suspend fun getMembership(
         teamId: String,
         membershipId: String,
@@ -401,6 +407,7 @@ class Teams(client: Client) : Service(client) {
      * @param roles An array of strings. Use this param to set the user's roles in the team. A role can be any string. Learn more about [roles and permissions](https://appwrite.io/docs/permissions). Maximum of 100 roles are allowed, each 32 characters long.
      * @return [Membership]
      */
+    @Throws(Throwable::class)
     suspend fun updateMembership(
         teamId: String,
         membershipId: String,
@@ -435,6 +442,7 @@ class Teams(client: Client) : Service(client) {
      * @param membershipId Membership ID.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteMembership(
         teamId: String,
         membershipId: String,
@@ -469,6 +477,7 @@ class Teams(client: Client) : Service(client) {
      * @param secret Secret key.
      * @return [Membership]
      */
+    @Throws(Throwable::class)
     suspend fun updateMembershipStatus(
         teamId: String,
         membershipId: String,
@@ -506,6 +515,7 @@ class Teams(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [Preferences<T>]
      */
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> getPrefs(
         teamId: String,
         nestedType: KClass<T>?,
@@ -538,7 +548,7 @@ class Teams(client: Client) : Service(client) {
      * @param teamId Team ID.
      * @return [io.appwrite.models.Preferences<T>]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun getPrefs(
         teamId: String,
     ): Preferences<Map<String, Any>> = getPrefs(
@@ -557,6 +567,7 @@ class Teams(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [Preferences<T>]
      */
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> updatePrefs(
         teamId: String,
         prefs: Any,
@@ -592,7 +603,7 @@ class Teams(client: Client) : Service(client) {
      * @param prefs Prefs key-value JSON object.
      * @return [io.appwrite.models.Preferences<T>]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updatePrefs(
         teamId: String,
         prefs: Any,

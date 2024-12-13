@@ -2,12 +2,10 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.models.*
-import io.appwrite.enums.*
 
 /**
  * The GraphQL API allows you to query and mutate your Appwrite server using GraphQL.
-**/
+ **/
 class Graphql(client: Client) : Service(client) {
 
     /**
@@ -18,6 +16,7 @@ class Graphql(client: Client) : Service(client) {
      * @param query The query or queries to execute.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun query(
         query: Any,
     ): Any {
@@ -48,6 +47,7 @@ class Graphql(client: Client) : Service(client) {
      * @param query The query or queries to execute.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun mutation(
         query: Any,
     ): Any {
@@ -68,6 +68,4 @@ class Graphql(client: Client) : Service(client) {
             responseType = Any::class,
         )
     }
-
-
 }

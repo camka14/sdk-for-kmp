@@ -1,4 +1,4 @@
-package io.appwrite.FileOperations
+package io.appwrite.fileOperations
 
 import java.io.RandomAccessFile
 

@@ -5,7 +5,7 @@ import io.appwrite.Service
 
 /**
  * The Messaging service allows you to send messages to any provider type (SMTP, push notification, SMS, etc.).
-**/
+ **/
 class Messaging(client: Client) : Service(client) {
 
     /**
@@ -18,6 +18,7 @@ class Messaging(client: Client) : Service(client) {
      * @param targetId Target ID. The target ID to link to the specified Topic ID.
      * @return [io.appwrite.models.Subscriber]
      */
+    @Throws(Throwable::class)
     suspend fun createSubscriber(
         topicId: String,
         subscriberId: String,
@@ -53,6 +54,7 @@ class Messaging(client: Client) : Service(client) {
      * @param subscriberId Subscriber ID.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteSubscriber(
         topicId: String,
         subscriberId: String,
@@ -74,6 +76,4 @@ class Messaging(client: Client) : Service(client) {
             responseType = Any::class,
         )
     }
-
-
 }

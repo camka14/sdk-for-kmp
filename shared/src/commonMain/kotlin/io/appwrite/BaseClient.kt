@@ -1,10 +1,10 @@
 package io.appwrite
 
-import io.appwrite.FileOperations.readFileBytes
-import io.appwrite.FileOperations.readFileChunk
-import io.appwrite.FileOperations.readFileSize
 import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.json
+import io.appwrite.fileOperations.readFileBytes
+import io.appwrite.fileOperations.readFileChunk
+import io.appwrite.fileOperations.readFileSize
 import io.appwrite.models.InputFile
 import io.appwrite.models.UploadProgress
 import io.ktor.client.HttpClient
@@ -34,7 +34,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.put
 import kotlinx.serialization.serializer
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
@@ -155,7 +154,7 @@ abstract class BaseClient<This : BaseClient<This>>(
      * @return [T]
      */
     @OptIn(InternalSerializationApi::class)
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun <T : Any> call(
         method: String,
         path: String,
@@ -228,6 +227,9 @@ abstract class BaseClient<This : BaseClient<This>>(
                 }
             }
         }.let { response ->
+            println("Response headers: ${response.headers}")
+            println("Response status: ${response.status}")
+            println("Response body: ${response.bodyAsText()}")
             when {
                 !response.status.isSuccess() -> {
                     val body = response.bodyAsText()
@@ -276,7 +278,7 @@ abstract class BaseClient<This : BaseClient<This>>(
      *
      * @return [T]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun <T : Any> chunkedUpload(
         path: String,
         headers: MutableMap<String, String>,

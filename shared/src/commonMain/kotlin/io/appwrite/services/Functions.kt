@@ -3,13 +3,13 @@ package io.appwrite.services
 import Execution
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.models.*
 import io.appwrite.enums.*
+import io.appwrite.models.*
 import kotlin.jvm.JvmOverloads
 
 /**
  * The Functions Service allows you view, create and manage your Cloud Functions.
-**/
+ **/
 class Functions(client: Client) : Service(client) {
 
     /**
@@ -23,6 +23,7 @@ class Functions(client: Client) : Service(client) {
      * @return [io.appwrite.models.ExecutionList]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun listExecutions(
         functionId: String,
         queries: List<String>? = null,
@@ -64,6 +65,7 @@ class Functions(client: Client) : Service(client) {
      * @return [io.appwrite.models.Execution]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun createExecution(
         functionId: String,
         body: String? = null,
@@ -107,6 +109,7 @@ class Functions(client: Client) : Service(client) {
      * @param executionId Execution ID.
      * @return [io.appwrite.models.Execution]
      */
+    @Throws(Throwable::class)
     suspend fun getExecution(
         functionId: String,
         executionId: String,
@@ -129,6 +132,4 @@ class Functions(client: Client) : Service(client) {
             responseType = Execution::class,
         )
     }
-
-
 }

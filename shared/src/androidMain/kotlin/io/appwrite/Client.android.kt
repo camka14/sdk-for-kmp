@@ -2,15 +2,9 @@ package io.appwrite
 
 import android.content.Context
 import android.content.pm.PackageManager
-import io.appwrite.extensions.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
 
-@OptIn(ExperimentalSerializationApi::class)
 actual class Client constructor(
     private val context: Context,
     endpoint: String = "https://cloud.appwrite.io/v1",

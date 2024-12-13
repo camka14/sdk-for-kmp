@@ -2,13 +2,11 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.classOf
 import io.appwrite.extensions.getSerializer
 import io.appwrite.models.Document
 import io.appwrite.models.DocumentList
 import kotlinx.serialization.KSerializer
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
@@ -30,6 +28,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.DocumentList<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> listDocuments(
         databaseId: String,
         collectionId: String,
@@ -69,7 +68,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.DocumentList<T>]
      */
     @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun listDocuments(
         databaseId: String,
         collectionId: String,
@@ -96,6 +95,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.Document<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> createDocument(
         databaseId: String,
         collectionId: String,
@@ -141,7 +141,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.Document<T>]
      */
     @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun createDocument(
         databaseId: String,
         collectionId: String,
@@ -171,6 +171,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.Document<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> getDocument(
         databaseId: String,
         collectionId: String,
@@ -214,6 +215,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.Document<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun getDocument(
         databaseId: String,
         collectionId: String,
@@ -238,6 +240,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.Document<T>]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> updateDocument(
         databaseId: String,
         collectionId: String,
@@ -283,7 +286,7 @@ class Databases(client: Client) : Service(client) {
      * @return [io.appwrite.models.Document<T>]
      */
     @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateDocument(
         databaseId: String,
         collectionId: String,
@@ -309,6 +312,7 @@ class Databases(client: Client) : Service(client) {
      * @param documentId Document ID.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteDocument(
         databaseId: String,
         collectionId: String,

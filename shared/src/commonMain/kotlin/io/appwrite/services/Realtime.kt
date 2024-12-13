@@ -1,7 +1,7 @@
 package io.appwrite.services
 
-import io.appwrite.Service
 import io.appwrite.Client
+import io.appwrite.Service
 import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.forEachAsync
 import io.appwrite.extensions.fromJson
@@ -9,21 +9,28 @@ import io.appwrite.extensions.getSerializer
 import io.appwrite.extensions.json
 import io.appwrite.extensions.jsonCast
 import io.appwrite.extensions.toJson
-import io.appwrite.models.*
-import io.ktor.client.HttpClient
+import io.appwrite.models.Document
+import io.appwrite.models.RealtimeCallback
+import io.appwrite.models.RealtimeCode
+import io.appwrite.models.RealtimeResponse
+import io.appwrite.models.RealtimeResponseEvent
+import io.appwrite.models.RealtimeSubscription
+import io.appwrite.serializers.DocumentSerializer
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
-import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.client.request.url
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
-import kotlinx.coroutines.*
-import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
@@ -92,7 +99,8 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         }
     }
 
-    private suspend fun closeSocket() {
+    @Throws(Throwable::class)
+    suspend fun closeSocket() {
         webSocketSession?.close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, ""))
         webSocketSession = null
     }
@@ -105,7 +113,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     }
 
     fun subscribe(
-        vararg channels: String,
+        channels: List<String>,
         callback: (RealtimeResponseEvent<Any>) -> Unit,
     ) = subscribe(
         channels = channels,
@@ -115,7 +123,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> subscribe(
-        vararg channels: String,
+        channels: List<String>,
         payloadType: KClass<T>,
         payloadSerializer: KSerializer<T>? = null,
         callback: (RealtimeResponseEvent<T>) -> Unit,
@@ -141,12 +149,12 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
 
         return RealtimeSubscription {
             activeSubscriptions.remove(counter)
-            cleanUp(*channels)
+            cleanUp(channels)
             createSocket()
         }
     }
 
-    private fun cleanUp(vararg channels: String) {
+    private fun cleanUp(channels: List<String>) {
         activeChannels.removeAll { channel ->
             if (!channels.contains(channel)) {
                 return@removeAll false
@@ -157,7 +165,8 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         }
     }
 
-    private suspend fun handleMessage(text: String) {
+    @Throws(Throwable::class)
+    suspend fun handleMessage(text: String) {
         val message = text.fromJson(RealtimeResponse::class)
         when (message.type) {
             TYPE_ERROR -> handleResponseError(message)
@@ -170,11 +179,12 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     }
 
     @OptIn(InternalSerializationApi::class)
-    private suspend fun handleResponseEvent(message: RealtimeResponse) {
+    @Throws(Throwable::class)
+    suspend fun handleResponseEvent(message: RealtimeResponse) {
         val mapSerializer = getSerializer<Map<String, Any>>()
-        val event = json.decodeFromJsonElement(
+        val event = json.decodeFromString(
             RealtimeResponseEvent.serializer(mapSerializer),
-            message.data.jsonCast<JsonElement>()
+            message.data.toJson()
         )
         if (event.channels.isEmpty()) {
             return
@@ -184,7 +194,9 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         }
         activeSubscriptions.values.forEachAsync { subscription ->
             if (event.channels.any { subscription.channels.contains(it) }) {
-                val payloadSerializer = subscription.payloadSerializer ?: subscription.payloadClass.serializer()
+                val payloadSerializer =
+                    subscription.payloadSerializer ?: subscription.payloadClass.serializer()
+
                 val eventWithPayloadClass = json.decodeFromString(
                     RealtimeResponseEvent.serializer(payloadSerializer),
                     message.data.toJson()
@@ -194,7 +206,8 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         }
     }
 
-    private suspend fun handleClosing(code: Int, reason: String) {
+    @Throws(Throwable::class)
+    suspend fun handleClosing(code: Int, reason: String) {
         if (!reconnect || code == RealtimeCode.POLICY_VIOLATION.value) {
             reconnect = true
             return

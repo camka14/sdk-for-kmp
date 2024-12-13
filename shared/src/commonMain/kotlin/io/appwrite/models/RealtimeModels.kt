@@ -1,13 +1,11 @@
 package io.appwrite.models
 
+import io.appwrite.serializers.DocumentSerializer
 import io.appwrite.serializers.StringCollectionSerializer
 import io.ktor.utils.io.core.Closeable
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlin.collections.Collection
 import kotlin.reflect.KClass
 
 data class RealtimeSubscription(
@@ -37,7 +35,8 @@ data class RealtimeResponseEvent<T>(
     @Serializable(with = StringCollectionSerializer::class)
     val channels: Collection<String>,
     val timestamp: String,
-    var payload: T
+    @Serializable(with = DocumentSerializer::class)
+    var payload: Document<T>
 )
 
 enum class RealtimeCode(val value: Int) {

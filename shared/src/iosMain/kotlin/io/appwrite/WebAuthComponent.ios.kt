@@ -1,17 +1,17 @@
 package io.appwrite
 
+import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-internal class WebAuthComponent {
+actual class WebAuthComponent {
     companion object {
         private var suspended = false
         private val callbacks = mutableMapOf<String, ((Result<String>) -> Unit)?>()
     }
 
-    suspend fun authenticate(
+    actual suspend fun authenticate(
         url: String,
         callbackUrlScheme: String,
         onComplete: ((Result<String>) -> Unit)?
@@ -32,7 +32,7 @@ internal class WebAuthComponent {
         }
     }
 
-    fun onCallback(scheme: String, url: String) {
+    actual fun onCallback(scheme: String, url: String) {
         callbacks.remove(scheme)?.invoke(Result.success(url))
         suspended = false
     }

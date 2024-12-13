@@ -51,6 +51,18 @@ kotlin {
         }
     }
 
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+        binaries.all {
+            // Configure native binary compilation
+            freeCompilerArgs += listOf(
+                "-Xexport-kdoc",
+                "-Xallocator=mimalloc",
+                "-Xadd-light-debug=enable",
+                "-Xruntime-logs=warning"
+            )
+        }
+    }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -59,6 +71,7 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
+            binaryOption("bundleId", "io.appwrite.shared")
         }
         it.withSourcesJar(publish = false)
     }
@@ -70,7 +83,6 @@ kotlin {
             implementation(libs.kotlin.reflect)
             implementation(libs.ktor.client.core)
             api(libs.kotlinx.serialization.json)
-            implementation(libs.ktor.network.tls.certificates)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.websockets)
             api(libs.ktor.serialization.kotlinx.json)

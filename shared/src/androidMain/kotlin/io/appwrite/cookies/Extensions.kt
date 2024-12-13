@@ -1,7 +1,6 @@
 package io.appwrite.cookies
 
 import android.os.Build
-import java.net.CookieStore
 import java.net.HttpCookie
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -14,7 +13,8 @@ fun HttpCookie.toSetCookieString(): String {
             timeZone = TimeZone.getTimeZone("GMT")
         }
 
-        val calendar = Calendar.getInstance(Locale.UK).apply { set(Calendar.SECOND, maxAge.toInt()) }
+        val calendar =
+            Calendar.getInstance(Locale.UK).apply { set(Calendar.SECOND, maxAge.toInt()) }
 
         "; expires=${dateFormat.format(calendar.time)}"
     } else {
@@ -34,7 +34,6 @@ fun HttpCookie.toSetCookieString(): String {
 }
 
 @Synchronized
-@Suppress("DEPRECATION")
 fun android.webkit.CookieManager.removeAll() {
     removeAllCookies(null)
     flush()

@@ -3,11 +3,10 @@ package io.appwrite.services
 import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.models.*
-import io.appwrite.enums.*
 
 /**
  * The Locale service allows you to customize your app based on your users&#039; location.
-**/
+ **/
 class Locale(client: Client) : Service(client) {
 
     /**
@@ -17,6 +16,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [Locale]
      */
+    @Throws(Throwable::class)
     suspend fun get(
     ): io.appwrite.models.Locale {
         val apiPath = "/locale"
@@ -34,7 +34,7 @@ class Locale(client: Client) : Service(client) {
             apiParams,
             responseType = io.appwrite.models.Locale::class,
 
-        )
+            )
     }
 
 
@@ -45,6 +45,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [LocaleCodeList]
      */
+    @Throws(Throwable::class)
     suspend fun listCodes(
     ): LocaleCodeList {
         val apiPath = "/locale/codes"
@@ -72,6 +73,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [ContinentList]
      */
+    @Throws(Throwable::class)
     suspend fun listContinents(
     ): ContinentList {
         val apiPath = "/locale/continents"
@@ -99,6 +101,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [CountryList]
      */
+    @Throws(Throwable::class)
     suspend fun listCountries(
     ): CountryList {
         val apiPath = "/locale/countries"
@@ -126,6 +129,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [CountryList]
      */
+    @Throws(Throwable::class)
     suspend fun listCountriesEU(
     ): CountryList {
         val apiPath = "/locale/countries/eu"
@@ -153,6 +157,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [PhoneList]
      */
+    @Throws(Throwable::class)
     suspend fun listCountriesPhones(
     ): PhoneList {
         val apiPath = "/locale/countries/phones"
@@ -180,6 +185,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [CurrencyList]
      */
+    @Throws(Throwable::class)
     suspend fun listCurrencies(
     ): CurrencyList {
         val apiPath = "/locale/currencies"
@@ -207,6 +213,7 @@ class Locale(client: Client) : Service(client) {
      *
      * @return [LanguageList]
      */
+    @Throws(Throwable::class)
     suspend fun listLanguages(
     ): LanguageList {
         val apiPath = "/locale/languages"
@@ -225,6 +232,4 @@ class Locale(client: Client) : Service(client) {
             responseType = LanguageList::class,
         )
     }
-
-
 }

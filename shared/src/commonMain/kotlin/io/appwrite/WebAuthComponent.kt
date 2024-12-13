@@ -5,6 +5,7 @@ package io.appwrite
  * suspension until the user completes the process or otherwise returns to the app.
  */
 expect class WebAuthComponent() {
+    @Throws(Throwable::class)
     suspend fun authenticate(
         url: String,
         callbackUrlScheme: String,

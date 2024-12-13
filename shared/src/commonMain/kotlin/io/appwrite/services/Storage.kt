@@ -2,13 +2,15 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.enums.*
-import io.appwrite.models.*
+import io.appwrite.models.File
+import io.appwrite.models.FileList
+import io.appwrite.models.InputFile
+import io.appwrite.models.UploadProgress
 import kotlin.jvm.JvmOverloads
 
 /**
  * The Storage service allows you to manage your project files.
-**/
+ **/
 class Storage(client: Client) : Service(client) {
 
     /**
@@ -22,6 +24,7 @@ class Storage(client: Client) : Service(client) {
      * @return [io.appwrite.models.FileList]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun listFiles(
         bucketId: String,
         queries: List<String>? = null,
@@ -60,6 +63,7 @@ class Storage(client: Client) : Service(client) {
      * @return [io.appwrite.models.File]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun createFile(
         bucketId: String,
         fileId: String,
@@ -103,6 +107,7 @@ class Storage(client: Client) : Service(client) {
      * @param fileId File ID.
      * @return [io.appwrite.models.File]
      */
+    @Throws(Throwable::class)
     suspend fun getFile(
         bucketId: String,
         fileId: String,
@@ -139,6 +144,7 @@ class Storage(client: Client) : Service(client) {
      * @return [io.appwrite.models.File]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun updateFile(
         bucketId: String,
         fileId: String,
@@ -176,6 +182,7 @@ class Storage(client: Client) : Service(client) {
      * @param fileId File ID.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteFile(
         bucketId: String,
         fileId: String,
@@ -208,6 +215,7 @@ class Storage(client: Client) : Service(client) {
      * @param fileId File ID.
      * @return [ByteArray]
      */
+    @Throws(Throwable::class)
     suspend fun getFileDownload(
         bucketId: String,
         fileId: String,
@@ -249,6 +257,7 @@ class Storage(client: Client) : Service(client) {
      * @return [ByteArray]
      */
     @JvmOverloads
+    @Throws(Throwable::class)
     suspend fun getFilePreview(
         bucketId: String,
         fileId: String,
@@ -300,6 +309,7 @@ class Storage(client: Client) : Service(client) {
      * @param fileId File ID.
      * @return [ByteArray]
      */
+    @Throws(Throwable::class)
     suspend fun getFileView(
         bucketId: String,
         fileId: String,

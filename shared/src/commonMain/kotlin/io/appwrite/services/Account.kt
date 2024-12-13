@@ -28,7 +28,6 @@ import io.ktor.http.Cookie
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
@@ -46,6 +45,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns user data object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> get(
         nestedType: KClass<T>?,
@@ -74,6 +74,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [User<T>]
      */
+    @Throws(Throwable::class)
     suspend inline fun get(): User<Map<String, Any>> {
         return get(nestedType = classOf())
     }
@@ -91,6 +92,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns created user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> create(
         userId: String,
@@ -134,6 +136,7 @@ class Account(client: Client) : Service(client) {
      * @param name Optional user name (max 128 chars)
      * @return [User<T>] Returns created user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend fun create(
         userId: String,
@@ -156,6 +159,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns updated user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updateEmail(
         email: String,
@@ -193,7 +197,7 @@ class Account(client: Client) : Service(client) {
      * @param password Current user password for verification
      * @return [User<T>] Returns updated user object
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateEmail(
         email: String,
         password: String,
@@ -211,6 +215,7 @@ class Account(client: Client) : Service(client) {
      * @param queries Optional queries to filter results
      * @return [IdentityList] Returns list of user identities
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listIdentities(
         queries: List<String>? = null,
@@ -242,6 +247,7 @@ class Account(client: Client) : Service(client) {
      * @param identityId ID of identity to delete
      * @return [Any] Returns empty object on success
      */
+    @Throws(Throwable::class)
     suspend fun deleteIdentity(
         identityId: String,
     ): Any {
@@ -272,6 +278,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [Jwt] Returns JWT object
      */
+    @Throws(Throwable::class)
     suspend fun createJWT(
     ): Jwt {
         val apiPath = "/account/jwts"
@@ -300,6 +307,7 @@ class Account(client: Client) : Service(client) {
      * @param queries Optional queries to filter log results
      * @return [LogList] Returns list of activity logs
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listLogs(
         queries: List<String>? = null,
@@ -333,6 +341,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns updated user object
      */
+    @Throws(Throwable::class)
     suspend inline fun <reified T : Any> updateMFA(
         mfa: Boolean,
         nestedType: KClass<T>?,
@@ -365,7 +374,7 @@ class Account(client: Client) : Service(client) {
      * @param mfa Boolean to enable/disable MFA
      * @return [User<T>] Returns updated user object
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateMFA(
         mfa: Boolean,
     ): User<Map<String, Any>> = updateMFA(
@@ -381,6 +390,7 @@ class Account(client: Client) : Service(client) {
      * @param type Type of authenticator. Must be `totp`
      * @return [MfaType]
      */
+    @Throws(Throwable::class)
     suspend fun createMfaAuthenticator(
         type: AuthenticatorType,
     ): MfaType {
@@ -414,6 +424,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>]
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updateMfaAuthenticator(
         type: AuthenticatorType,
@@ -450,7 +461,7 @@ class Account(client: Client) : Service(client) {
      * @param otp Valid verification token.
      * @return [io.appwrite.models.User<T>]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateMfaAuthenticator(
         type: AuthenticatorType,
         otp: String,
@@ -468,6 +479,7 @@ class Account(client: Client) : Service(client) {
      * @param type Type of authenticator.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteMfaAuthenticator(
         type: AuthenticatorType,
     ): Any {
@@ -497,6 +509,7 @@ class Account(client: Client) : Service(client) {
      * @param factor Authentication factor type
      * @return [MfaChallenge] Returns MFA challenge object
      */
+    @Throws(Throwable::class)
     suspend fun createMfaChallenge(
         factor: io.appwrite.enums.AuthenticationFactor,
     ): MfaChallenge {
@@ -528,6 +541,7 @@ class Account(client: Client) : Service(client) {
      * @param otp Valid verification token.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun updateMfaChallenge(
         challengeId: String,
         otp: String,
@@ -559,6 +573,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [MfaFactors]
      */
+    @Throws(Throwable::class)
     suspend fun listMfaFactors(): MfaFactors {
         val apiPath = "/account/mfa/factors"
 
@@ -585,6 +600,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [MfaRecoveryCodes]
      */
+    @Throws(Throwable::class)
     suspend fun getMfaRecoveryCodes(): MfaRecoveryCodes {
         val apiPath = "/account/mfa/recovery-codes"
 
@@ -611,6 +627,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [MfaRecoveryCodes]
      */
+    @Throws(Throwable::class)
     suspend fun createMfaRecoveryCodes(): MfaRecoveryCodes {
         val apiPath = "/account/mfa/recovery-codes"
 
@@ -637,6 +654,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [MfaRecoveryCodes]
      */
+    @Throws(Throwable::class)
     suspend fun updateMfaRecoveryCodes(): MfaRecoveryCodes {
         val apiPath = "/account/mfa/recovery-codes"
 
@@ -666,6 +684,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns updated user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updateName(
         name: String,
@@ -699,7 +718,7 @@ class Account(client: Client) : Service(client) {
      * @param name New user name (max 128 chars)
      * @return [User<T>] Returns updated user object
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateName(
         name: String,
     ): User<Map<String, Any>> = updateName(
@@ -719,6 +738,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns updated user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updatePassword(
         password: String,
@@ -756,7 +776,7 @@ class Account(client: Client) : Service(client) {
      * @return [User<T>] Returns updated user object
      */
     @JvmOverloads
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updatePassword(
         password: String,
         oldPassword: String? = null,
@@ -777,6 +797,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns updated user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updatePhone(
         phone: String,
@@ -813,7 +834,7 @@ class Account(client: Client) : Service(client) {
      * @param password Current password for verification
      * @return [User<T>] Returns updated user object
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updatePhone(
         phone: String,
         password: String,
@@ -832,6 +853,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [Preferences<T>] Returns user preferences object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> getPrefs(
         nestedType: KClass<T>?,
@@ -862,7 +884,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [Preferences<T>] Returns user preferences object
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun getPrefs(
     ): Preferences<Map<String, Any>> = getPrefs(
         nestedType = classOf(),
@@ -878,6 +900,7 @@ class Account(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [User<T>] Returns updated user object
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updatePrefs(
         prefs: Any,
@@ -911,7 +934,7 @@ class Account(client: Client) : Service(client) {
      * @param prefs Preferences key-value object
      * @return [User<T>] Returns updated user object
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updatePrefs(
         prefs: Any,
     ): User<Map<String, Any>> = updatePrefs(
@@ -928,6 +951,7 @@ class Account(client: Client) : Service(client) {
      * @param url URL to redirect the user back to your app from the recovery email. Only URLs from hostnames in your project platform list are allowed. This requirement helps to prevent an [open redirect](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html) attack against your project API.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun createRecovery(
         email: String,
         url: String,
@@ -962,6 +986,7 @@ class Account(client: Client) : Service(client) {
      * @param password New user password. Must be between 8 and 256 chars.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun updateRecovery(
         userId: String,
         secret: String,
@@ -995,6 +1020,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [SessionList]
      */
+    @Throws(Throwable::class)
     suspend fun listSessions(
     ): SessionList {
         val apiPath = "/account/sessions"
@@ -1022,6 +1048,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteSessions(): Any {
         val apiPath = "/account/sessions"
 
@@ -1048,6 +1075,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [Session]
      */
+    @Throws(Throwable::class)
     suspend fun createAnonymousSession(
     ): Session {
         val apiPath = "/account/sessions/anonymous"
@@ -1077,6 +1105,7 @@ class Account(client: Client) : Service(client) {
      * @param password User password
      * @return [Session] Returns new session object
      */
+    @Throws(Throwable::class)
     suspend fun createEmailPasswordSession(
         email: String,
         password: String,
@@ -1109,6 +1138,7 @@ class Account(client: Client) : Service(client) {
      * @param secret Valid verification token.
      * @return [Session]
      */
+    @Throws(Throwable::class)
     suspend fun updateMagicURLSession(
         userId: String,
         secret: String,
@@ -1142,6 +1172,7 @@ class Account(client: Client) : Service(client) {
      * @param secret Valid verification token.
      * @return [Session]
      */
+    @Throws(Throwable::class)
     suspend fun updatePhoneSession(
         userId: String,
         secret: String,
@@ -1175,6 +1206,7 @@ class Account(client: Client) : Service(client) {
      * @param secret Secret of a token generated by login methods. For example, the `createMagicURLToken` or `createPhoneToken` methods.
      * @return [Session]
      */
+    @Throws(Throwable::class)
     suspend fun createSession(
         userId: String,
         secret: String,
@@ -1207,6 +1239,7 @@ class Account(client: Client) : Service(client) {
      * @param sessionId Session ID. Use the string 'current' to get the current device session.
      * @return [Session]
      */
+    @Throws(Throwable::class)
     suspend fun getSession(
         sessionId: String,
     ): Session {
@@ -1237,6 +1270,7 @@ class Account(client: Client) : Service(client) {
      * @param sessionId Session ID. Use the string 'current' to update the current device session.
      * @return [Session]
      */
+    @Throws(Throwable::class)
     suspend fun updateSession(
         sessionId: String,
     ): Session {
@@ -1267,6 +1301,7 @@ class Account(client: Client) : Service(client) {
      * @param sessionId Session ID. Use the string 'current' to delete the current device session.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deleteSession(
         sessionId: String,
     ): Any {
@@ -1299,6 +1334,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [User<T>]
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend inline fun <reified T : Any> updateStatus(
         nestedType: KClass<T>?,
@@ -1329,7 +1365,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [io.appwrite.models.User<T>]
      */
-    @Throws(AppwriteException::class, CancellationException::class)
+    @Throws(Throwable::class)
     suspend fun updateStatus(
     ): User<Map<String, Any>> = updateStatus(
         nestedType = classOf(),
@@ -1345,6 +1381,7 @@ class Account(client: Client) : Service(client) {
      * @param providerId Provider ID. Message will be sent to this target from the specified provider ID. If no provider ID is set the first setup provider will be used.
      * @return [Target]
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend fun createPushTarget(
         targetId: String,
@@ -1381,6 +1418,7 @@ class Account(client: Client) : Service(client) {
      * @param failure URL to redirect back to your app after a failed login attempt.  Only URLs from hostnames in your project's platform list are allowed. This requirement helps to prevent an [open redirect](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html) attack against your project API.
      * @param scopes A list of custom OAuth2 scopes. Check each provider internal docs for a list of supported scopes. Maximum of 100 scopes are allowed, each 4096 characters long.
      */
+    @Throws(Throwable::class)
     suspend fun createOAuth2Session(
         provider: OAuthProvider,
         success: String?,
@@ -1452,6 +1490,7 @@ class Account(client: Client) : Service(client) {
      * @param identifier The target identifier (token, email, phone etc.)
      * @return [Target]
      */
+    @Throws(Throwable::class)
     suspend fun updatePushTarget(
         targetId: String,
         identifier: String,
@@ -1484,6 +1523,7 @@ class Account(client: Client) : Service(client) {
      * @param targetId Target ID.
      * @return [Any]
      */
+    @Throws(Throwable::class)
     suspend fun deletePushTarget(
         targetId: String,
     ): Any {
@@ -1516,6 +1556,7 @@ class Account(client: Client) : Service(client) {
      * @param phrase Toggle for security phrase. If enabled, email will be send with a randomly generated phrase and the phrase will also be included in the response. Confirming phrases match increases the security of your authentication flow.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend fun createEmailToken(
         userId: String,
@@ -1554,6 +1595,7 @@ class Account(client: Client) : Service(client) {
      * @param phrase Toggle for security phrase. If enabled, email will be send with a randomly generated phrase and the phrase will also be included in the response. Confirming phrases match increases the security of your authentication flow.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     @JvmOverloads
     suspend fun createMagicURLToken(
         userId: String,
@@ -1582,6 +1624,7 @@ class Account(client: Client) : Service(client) {
         )
     }
 
+    @Throws(Throwable::class)
     suspend fun createOAuth2Token(
         provider: OAuthProvider,
         success: String?,
@@ -1653,6 +1696,7 @@ class Account(client: Client) : Service(client) {
      * @param phone Phone number. Format this number with a leading '+' and a country code, e.g., +16175551212.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun createPhoneToken(
         userId: String,
         phone: String,
@@ -1685,6 +1729,7 @@ class Account(client: Client) : Service(client) {
      * @param url URL to redirect the user back to your app from the verification email. Only URLs from hostnames in your project platform list are allowed. This requirement helps to prevent an [open redirect](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html) attack against your project API.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun createVerification(
         url: String,
     ): Token {
@@ -1716,6 +1761,7 @@ class Account(client: Client) : Service(client) {
      * @param secret Valid verification token.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun updateVerification(
         userId: String,
         secret: String,
@@ -1747,6 +1793,7 @@ class Account(client: Client) : Service(client) {
      *
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun createPhoneVerification(
     ): Token {
         val apiPath = "/account/verification/phone"
@@ -1776,6 +1823,7 @@ class Account(client: Client) : Service(client) {
      * @param secret Valid verification token.
      * @return [Token]
      */
+    @Throws(Throwable::class)
     suspend fun updatePhoneVerification(
         userId: String,
         secret: String,
