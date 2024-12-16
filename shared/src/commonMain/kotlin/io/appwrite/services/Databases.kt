@@ -4,9 +4,11 @@ import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.extensions.classOf
 import io.appwrite.extensions.getSerializer
+import io.appwrite.extensions.json
 import io.appwrite.models.Document
 import io.appwrite.models.DocumentList
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encodeToString
 import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
@@ -94,6 +96,7 @@ class Databases(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [io.appwrite.models.Document<T>]
      */
+    @Suppress("UNCHECKED_CAST")
     @JvmOverloads
     @Throws(Throwable::class)
     suspend inline fun <reified T : Any> createDocument(
@@ -109,15 +112,19 @@ class Databases(client: Client) : Service(client) {
             .replace("{databaseId}", databaseId)
             .replace("{collectionId}", collectionId)
 
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val encodedData = when (data) {
+            is Map<*, *> -> json.encodeToString(data as Map<String, Any>)
+            else -> json.encodeToString(actualSerializer, data as T)
+        }
         val apiParams = mutableMapOf(
             "documentId" to documentId,
-            "data" to data,
+            "data" to encodedData,
             "permissions" to permissions,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "POST",
             apiPath,
@@ -239,6 +246,7 @@ class Databases(client: Client) : Service(client) {
      * @param genericSerializer Optional custom serializer for generic types
      * @return [io.appwrite.models.Document<T>]
      */
+    @Suppress("UNCHECKED_CAST")
     @JvmOverloads
     @Throws(Throwable::class)
     suspend inline fun <reified T : Any> updateDocument(
@@ -255,14 +263,19 @@ class Databases(client: Client) : Service(client) {
             .replace("{collectionId}", collectionId)
             .replace("{documentId}", documentId)
 
+        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val encodedData = when (data) {
+            is Map<*, *> -> json.encodeToString(data as Map<String, Any>)
+            else -> json.encodeToString(actualSerializer, data as T)
+        }
+
         val apiParams = mutableMapOf(
-            "data" to data,
-            "permissions" to permissions,
+            "data" to encodedData,
+            "permissions" to permissions
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
         return client.call(
             "PATCH",
             apiPath,
@@ -291,7 +304,7 @@ class Databases(client: Client) : Service(client) {
         databaseId: String,
         collectionId: String,
         documentId: String,
-        data: Any? = null,
+        data: Map<String, Any>? = null,
         permissions: List<String>? = null,
     ): Document<Map<String, Any>> = updateDocument(
         databaseId,

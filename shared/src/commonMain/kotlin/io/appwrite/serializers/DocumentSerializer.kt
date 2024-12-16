@@ -66,7 +66,6 @@ class DocumentSerializer<T>(private val dataSerializer: KSerializer<T>) : KSeria
 
     override fun serialize(encoder: Encoder, value: Document<T>) {
         val dataJson = json.encodeToJsonElement(dataSerializer, value.data).jsonObject
-
         val combined = buildJsonObject {
             put("\$id", value.id)
             put("\$collectionId", value.collectionId)
@@ -81,6 +80,6 @@ class DocumentSerializer<T>(private val dataSerializer: KSerializer<T>) : KSeria
             }
         }
 
-        encoder.encodeSerializableValue(JsonObject.serializer(), combined)
+        return encoder.encodeSerializableValue(JsonObject.serializer(), combined)
     }
 }

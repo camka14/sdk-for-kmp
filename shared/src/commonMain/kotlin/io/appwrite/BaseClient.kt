@@ -219,20 +219,17 @@ abstract class BaseClient<This : BaseClient<This>>(
                                 is Number -> put(key, value)
                                 is Boolean -> put(key, value)
                                 null -> put(key, JsonNull)
-                                else -> put(key, value.toString())
                             }
                         }
                     }
-                    setBody(jsonObject.toString())
+                    setBody(jsonObject)
                 }
             }
         }.let { response ->
-            println("Response headers: ${response.headers}")
-            println("Response status: ${response.status}")
-            println("Response body: ${response.bodyAsText()}")
             when {
                 !response.status.isSuccess() -> {
                     val body = response.bodyAsText()
+                    println(body)
                     if (response.contentType()?.match(ContentType.Application.Json) == true) {
                         val map = Json.decodeFromString<Map<String, JsonElement>>(body)
                         throw AppwriteException(
