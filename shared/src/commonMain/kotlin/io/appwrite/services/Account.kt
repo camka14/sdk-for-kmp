@@ -56,7 +56,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "GET",
             apiPath,
@@ -113,7 +113,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "POST",
             apiPath,
@@ -176,7 +176,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,
@@ -355,7 +355,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,
@@ -441,7 +441,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PUT",
             apiPath,
@@ -699,7 +699,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,
@@ -755,7 +755,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,
@@ -814,7 +814,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,
@@ -866,7 +866,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "GET",
             apiPath,
@@ -915,7 +915,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,
@@ -1347,7 +1347,7 @@ class Account(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "PATCH",
             apiPath,

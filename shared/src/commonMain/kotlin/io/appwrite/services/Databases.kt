@@ -48,7 +48,7 @@ class Databases(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "GET",
             apiPath,
@@ -112,7 +112,7 @@ class Databases(client: Client) : Service(client) {
             .replace("{databaseId}", databaseId)
             .replace("{collectionId}", collectionId)
 
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         val encodedData = when (data) {
             is Map<*, *> -> json.encodeToString(data as Map<String, Any>)
             else -> json.encodeToString(actualSerializer, data as T)
@@ -198,7 +198,7 @@ class Databases(client: Client) : Service(client) {
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
         )
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         return client.call(
             "GET",
             apiPath,
@@ -263,7 +263,7 @@ class Databases(client: Client) : Service(client) {
             .replace("{collectionId}", collectionId)
             .replace("{documentId}", documentId)
 
-        val actualSerializer = genericSerializer ?: getSerializer<T>()
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
         val encodedData = when (data) {
             is Map<*, *> -> json.encodeToString(data as Map<String, Any>)
             else -> json.encodeToString(actualSerializer, data as T)

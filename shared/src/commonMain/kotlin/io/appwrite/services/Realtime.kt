@@ -9,13 +9,11 @@ import io.appwrite.extensions.getSerializer
 import io.appwrite.extensions.json
 import io.appwrite.extensions.jsonCast
 import io.appwrite.extensions.toJson
-import io.appwrite.models.Document
 import io.appwrite.models.RealtimeCallback
 import io.appwrite.models.RealtimeCode
 import io.appwrite.models.RealtimeResponse
 import io.appwrite.models.RealtimeResponseEvent
 import io.appwrite.models.RealtimeSubscription
-import io.appwrite.serializers.DocumentSerializer
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.client.request.url
@@ -29,9 +27,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.serializer
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
@@ -131,10 +127,13 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         val counter = subscriptionsCounter++
 
         activeChannels.addAll(channels)
+
+        val actualSerializer = payloadSerializer ?: getSerializer(payloadType)
+
         activeSubscriptions[counter] = RealtimeCallback(
             channels.toList(),
             payloadType,
-            payloadSerializer,
+            actualSerializer,
             callback as (RealtimeResponseEvent<*>) -> Unit
         )
 
@@ -178,10 +177,9 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         throw message.data.jsonCast<AppwriteException>()
     }
 
-    @OptIn(InternalSerializationApi::class)
     @Throws(Throwable::class)
     suspend fun handleResponseEvent(message: RealtimeResponse) {
-        val mapSerializer = getSerializer<Map<String, Any>>()
+        val mapSerializer = getSerializer(Map::class)
         val event = json.decodeFromString(
             RealtimeResponseEvent.serializer(mapSerializer),
             message.data.toJson()
@@ -195,7 +193,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         activeSubscriptions.values.forEachAsync { subscription ->
             if (event.channels.any { subscription.channels.contains(it) }) {
                 val payloadSerializer =
-                    subscription.payloadSerializer ?: subscription.payloadClass.serializer()
+                    subscription.payloadSerializer
 
                 val eventWithPayloadClass = json.decodeFromString(
                     RealtimeResponseEvent.serializer(payloadSerializer),

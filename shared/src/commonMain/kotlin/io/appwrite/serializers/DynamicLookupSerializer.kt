@@ -21,6 +21,7 @@ import kotlinx.serialization.json.double
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import kotlinx.serialization.json.longOrNull
 
@@ -60,9 +61,14 @@ object DynamicLookupSerializer : KSerializer<Any> {
     }
 
     override fun deserialize(decoder: Decoder): Any {
-        return when (val element = decoder.decodeSerializableValue(JsonElement.serializer())) {
+        val element = decoder.decodeSerializableValue(JsonElement.serializer())
+        return deserializeJsonElement(element) ?: Unit
+    }
+
+    private fun deserializeJsonElement(element: JsonElement): Any? {
+        return when (element) {
             is JsonPrimitive -> when {
-                element.isString -> element.content
+                element.isString -> element.jsonPrimitive.content
                 element.intOrNull != null -> element.int
                 element.longOrNull != null -> element.long
                 element.doubleOrNull != null -> element.double
@@ -73,27 +79,11 @@ object DynamicLookupSerializer : KSerializer<Any> {
             is JsonObject -> element.toDeserializedMap()
             is JsonArray -> element.map { deserializeJsonElement(it) }
             JsonNull -> null
-        } ?: Unit
-    }
-
-    private fun deserializeJsonElement(element: JsonElement): Any? {
-        return when (element) {
-            is JsonPrimitive -> when {
-                element.isString -> element.content
-                element.intOrNull != null -> element.int
-                element.longOrNull != null -> element.long
-                element.doubleOrNull != null -> element.double
-                element.booleanOrNull != null -> element.boolean
-                else -> element.content
-            }
-
-            is JsonObject -> element.toMap()
-            is JsonArray -> element.map { deserializeJsonElement(it) }
-            JsonNull -> null
         }
     }
 
     private fun JsonObject.toDeserializedMap(): Map<String, Any?> {
         return mapValues { (_, value) -> deserializeJsonElement(value) }
     }
+
 }

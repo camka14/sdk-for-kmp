@@ -1,6 +1,5 @@
 package io.appwrite.models
 
-import io.appwrite.serializers.DocumentSerializer
 import io.appwrite.serializers.StringCollectionSerializer
 import io.ktor.utils.io.core.Closeable
 import kotlinx.serialization.Contextual
@@ -17,7 +16,7 @@ data class RealtimeSubscription(
 data class RealtimeCallback(
     val channels: Collection<String>,
     val payloadClass: KClass<*>,
-    val payloadSerializer: KSerializer<*>? = null,
+    val payloadSerializer: KSerializer<*>,
     val callback: (RealtimeResponseEvent<*>) -> Unit
 )
 
@@ -35,7 +34,6 @@ data class RealtimeResponseEvent<T>(
     @Serializable(with = StringCollectionSerializer::class)
     val channels: Collection<String>,
     val timestamp: String,
-    @Serializable(with = DocumentSerializer::class)
     var payload: Document<T>
 )
 

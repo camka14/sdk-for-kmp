@@ -29,10 +29,10 @@ var json = Json {
 
 @Suppress("UNCHECKED_CAST")
 @OptIn(InternalSerializationApi::class)
-inline fun <reified T: Any> getSerializer() = when (T::class) {
+fun <T : Any> getSerializer(kClass: KClass<T>): KSerializer<T> = when (kClass) {
     Map::class -> MapSerializer(String.serializer(), JsonElement.serializer()) as KSerializer<T>
     JsonObject::class -> JsonObject.serializer() as KSerializer<T>
-    else -> T::class.serializer()
+    else -> kClass.serializer()
 }
 
 fun Any.toJson(): String =
