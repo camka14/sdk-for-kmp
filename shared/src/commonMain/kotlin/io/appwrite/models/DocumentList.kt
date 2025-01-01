@@ -23,12 +23,12 @@ data class DocumentList<T>(
     val documents: List<Document<T>>,
 ) {
     companion object {
-        operator fun invoke(
+        operator fun <T> invoke(
             total: Long,
-            documents: List<Document<Map<String, Any>>>,
+            documents: List<Document<T>>
         ) = DocumentList(
             total,
-            documents,
+            documents
         )
     }
 }
