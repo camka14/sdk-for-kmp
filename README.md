@@ -28,12 +28,32 @@ locally.
 1. Clone the repository:
    ```bash git clone https://github.com/camka14/sdk-for-kmp.git cd sdk-for-kmp ```
 
-2. Clean and publish to
-   local Maven: ```./gradlew clean publishToMavenLocal ``` ### Gradle Setup Add the following
-   to
-   your root level `build.gradle.kts`: ```kotlin repositories { mavenLocal() mavenCentral() } ``` In
-   your shared module's `build.gradle.kts`:
-   ```kotlin kotlin { androidTarget() iosX64() iosArm64() iosSimulatorArm64() sourceSets { commonMain { dependencies { implementation("io.appwrite:sdk-for-kmp:0.2.0") } } } } ```
+2. Clean and publish to local Maven:
+    ```./gradlew clean publishToMavenLocal ```
+### Gradle Setup
+Add the following to your root level `settings.gradle.kts`:
+
+```
+dependencyResolutionManagement {
+   repositories {
+      mavenLocal()
+   }
+}
+```
+
+In your shared module's `build.gradle.kts`:
+
+```
+kotlin {
+   sourceSets {
+      commonMain {
+         dependencies {
+            implementation("io.appwrite:sdk-for-kmp:0.2.0")
+         }
+      }
+   }
+}
+```
 
 ### Maven
 
