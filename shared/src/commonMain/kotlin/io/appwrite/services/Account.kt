@@ -20,6 +20,7 @@ import io.appwrite.models.Session
 import io.appwrite.models.SessionList
 import io.appwrite.models.Token
 import io.appwrite.models.User
+import io.appwrite.serializers.DynamicLookupSerializer
 import io.appwrite.webInterface.UrlParser
 import io.ktor.client.plugins.cookies.cookies
 import io.ktor.client.request.cookie
@@ -1063,7 +1064,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            serializer = Any::class.serializer()
+            serializer = DynamicLookupSerializer
         )
     }
 
