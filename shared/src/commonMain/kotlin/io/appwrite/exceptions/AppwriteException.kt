@@ -1,5 +1,8 @@
 package io.appwrite.exceptions
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class AppwriteException(
     override val message: String? = null,
     val code: Int? = null,

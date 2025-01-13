@@ -41,6 +41,8 @@ publishing {
     }
 }
 kotlin {
+    jvm()
+
     androidTarget {
         publishLibraryVariants("release", "debug")
         compilations.all {
@@ -89,6 +91,9 @@ kotlin {
     }
 
     sourceSets {
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.java)
+        }
         commonMain.dependencies {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
@@ -154,5 +159,4 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.espresso.core)
     implementation(libs.firebase.crashlytics.buildtools)
-
 }

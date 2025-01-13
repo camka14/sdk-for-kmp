@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.appwrite.Client
+import io.appwrite.ID
 import io.appwrite.Query
 import io.appwrite.models.DocumentList
 import io.appwrite.services.Account
@@ -39,13 +42,16 @@ class MainActivity : ComponentActivity() {
             val realtime = Realtime(client)
             var documents by remember { mutableStateOf(null as DocumentList<MatchDTO>?) }
             var accountId by remember { mutableStateOf("") }
-            var documentId by remember { mutableStateOf("") }
+            var documentTeam: String? by remember { mutableStateOf(null) }
             var realtimeId by remember { mutableStateOf("") }
+            var team1: String? by remember { mutableStateOf(null) }
             val scope = rememberCoroutineScope()
 
             MyApplicationTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
@@ -56,8 +62,11 @@ class MainActivity : ComponentActivity() {
                                     databases,
                                     realtime,
                                     { accountId = it },
-                                    { documentId = it },
-                                    { realtimeId = it }
+                                    { documentTeam = it.team1 },
+                                    {
+                                        realtimeId = it.matchId.toString()
+                                        team1 = it.team1
+                                    }
                                 )
                             }
                         }) {
@@ -72,8 +81,9 @@ class MainActivity : ComponentActivity() {
                             Text("Update Match")
                         }
                         Text(accountId)
-                        Text(documentId)
+                        documentTeam?.let { Text(it) }
                         Text(realtimeId)
+                        team1?.let { Text(it) }
                     }
                 }
             }
@@ -86,12 +96,24 @@ suspend fun performAppwriteOperations(
     databases: Databases,
     realtime: Realtime,
     onAccountIdChange: (String) -> Unit,
-    onDocumentIdChange: (String) -> Unit,
-    onRealtimeIdChange: (String) -> Unit
+    onDocumentIdChange: (MatchDTO) -> Unit,
+    onRealtimeIdChange: (MatchDTO) -> Unit
 ): DocumentList<MatchDTO>? {
+    val email = "temp@temp2.com"
+    val password = "dsaf32f2223"
+    val name = "Tester1"
+    account.create(
+        userId = ID.unique(),
+        email = email,
+        password = password,
+        name = name
+    )
     try {
-        account.createEmailPasswordSession("camka14@gmail.com", "Zenit1925")
+        val session = account.createEmailPasswordSession(email, password)
         onAccountIdChange(account.get().id)
+        println("session = ${session.id}")
+        val sessions = account.listSessions()
+        println("sessions = ${sessions}")
 
         val documents = databases.listDocuments(
             "mvp",
@@ -99,13 +121,13 @@ suspend fun performAppwriteOperations(
             nestedType = MatchDTO::class,
             queries = listOf(Query.equal("matchId", 1))
         )
-        onDocumentIdChange(documents.documents.first().id)
+        onDocumentIdChange(documents.documents.first().data)
 
         realtime.subscribe(
             listOf("databases.mvp.collections.matches.documents"),
             payloadType = MatchDTO::class
         ) { response ->
-            onRealtimeIdChange(response.payload.data.matchId.toString())
+            onRealtimeIdChange(response.payload.data)
         }
         return documents
     } catch (e: Exception) {
@@ -116,8 +138,9 @@ suspend fun performAppwriteOperations(
 
 suspend fun updateMatch(
     databases: Databases,
-    documents: DocumentList<MatchDTO>
-) {
+    documents: DocumentList<MatchDTO>,
+
+    ) {
     databases.updateDocument(
         "mvp",
         "matches",
