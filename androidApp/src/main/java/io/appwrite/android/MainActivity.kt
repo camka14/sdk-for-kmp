@@ -112,8 +112,8 @@ suspend fun performAppwriteOperations(
         val session = account.createEmailPasswordSession(email, password)
         onAccountIdChange(account.get().id)
         println("session = ${session.id}")
-        val sessions = account.listSessions()
-        println("sessions = ${sessions}")
+        val token = account.createJWT()
+        println("token = ${token}")
 
         val documents = databases.listDocuments(
             "mvp",

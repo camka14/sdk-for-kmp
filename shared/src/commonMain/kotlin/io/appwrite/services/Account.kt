@@ -266,7 +266,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            serializer = Any::class.serializer()
+            serializer = DynamicLookupSerializer
         )
     }
 
@@ -295,7 +295,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Jwt::class,
-            serializer = Jwt::class.serializer()
+            serializer = Jwt.serializer()
         )
     }
 
@@ -327,7 +327,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = LogList::class,
-            serializer = LogList::class.serializer()
+            serializer = LogList.serializer()
         )
     }
 
@@ -498,7 +498,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            serializer = Any::class.serializer()
+            serializer = DynamicLookupSerializer
         )
     }
 
@@ -562,7 +562,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            serializer = Any::class.serializer()
+            serializer = DynamicLookupSerializer
         )
     }
 
@@ -1320,7 +1320,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            serializer = Any::class.serializer()
+            serializer = DynamicLookupSerializer
         )
     }
 
@@ -1420,7 +1420,8 @@ class Account(client: Client) : Service(client) {
      * @param scopes A list of custom OAuth2 scopes. Check each provider internal docs for a list of supported scopes. Maximum of 100 scopes are allowed, each 4096 characters long.
      */
     @Throws(Throwable::class)
-    suspend fun createOAuth2Session(
+    internal suspend fun createOAuth2Session(
+        webAuth: WebAuthComponent,
         provider: OAuthProvider,
         success: String?,
         failure: String?,
@@ -1449,7 +1450,6 @@ class Account(client: Client) : Service(client) {
         val apiUrl = urlParser.parse(fullUrl)
         val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
 
-        val webAuth = WebAuthComponent()
         webAuth.authenticate(apiUrl.toString(), callbackUrlScheme) {
 
             if (it.isFailure) {
@@ -1542,7 +1542,7 @@ class Account(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
-            serializer = Any::class.serializer()
+            serializer = DynamicLookupSerializer
         )
     }
 
@@ -1626,7 +1626,8 @@ class Account(client: Client) : Service(client) {
     }
 
     @Throws(Throwable::class)
-    suspend fun createOAuth2Token(
+    internal suspend fun createOAuth2Token(
+        webAuth: WebAuthComponent,
         provider: OAuthProvider,
         success: String?,
         failure: String?,
@@ -1655,7 +1656,6 @@ class Account(client: Client) : Service(client) {
         val apiUrl = urlParser.parse(fullUrl)
         val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
 
-        val webAuth = WebAuthComponent()
         webAuth.authenticate(apiUrl.toString(), callbackUrlScheme) {
             if (it.isFailure) {
                 throw it.exceptionOrNull()!!

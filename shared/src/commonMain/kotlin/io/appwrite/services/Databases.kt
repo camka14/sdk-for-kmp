@@ -7,6 +7,7 @@ import io.appwrite.extensions.getSerializer
 import io.appwrite.extensions.json
 import io.appwrite.models.Document
 import io.appwrite.models.DocumentList
+import io.appwrite.serializers.DynamicLookupSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.encodeToString
 import kotlin.jvm.JvmOverloads
@@ -347,6 +348,7 @@ class Databases(client: Client) : Service(client) {
             apiHeaders,
             apiParams,
             responseType = Any::class,
+            serializer = DynamicLookupSerializer
         )
     }
 }
