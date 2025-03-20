@@ -1,8 +1,24 @@
 package io.appwrite.models
 
-import kotlinx.serialization.Contextual
+import io.appwrite.extensions.jsonCast
+import io.appwrite.extensions.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
 
 /**
  * User
@@ -37,20 +53,20 @@ data class User<T>(
      * Hashed user password.
      */
     @SerialName("password")
-    var password: String? = null,
+    var password: String?,
 
     /**
      * Password hashing algorithm.
      */
     @SerialName("hash")
-    var hash: String? = null,
+    var hash: String?,
 
     /**
      * Password hashing algorithm configuration.
      */
     @SerialName("hashOptions")
     @Contextual
-    var hashOptions: Any? = null,
+    var hashOptions: Any?,
 
     /**
      * User registration date in ISO 8601 format.
@@ -68,7 +84,7 @@ data class User<T>(
      * Labels for the user.
      */
     @SerialName("labels")
-    val labels: List<@Contextual Any>,
+    val labels: List<String>,
 
     /**
      * Password update time in ISO 8601 format.
@@ -110,6 +126,7 @@ data class User<T>(
      * User preferences as a key-value object
      */
     @SerialName("prefs")
+    @Contextual
     val prefs: Preferences<T>,
 
     /**
@@ -124,48 +141,5 @@ data class User<T>(
     @SerialName("accessedAt")
     val accessedAt: String,
 
-    ) {
-    companion object {
-        operator fun invoke(
-            id: String,
-            createdAt: String,
-            updatedAt: String,
-            name: String,
-            password: String?,
-            hash: String?,
-            hashOptions: Any?,
-            registration: String,
-            status: Boolean,
-            labels: List<Any>,
-            passwordUpdate: String,
-            email: String,
-            phone: String,
-            emailVerification: Boolean,
-            phoneVerification: Boolean,
-            mfa: Boolean,
-            prefs: Preferences<Map<String, Any>>,
-            targets: List<Target>,
-            accessedAt: String,
-        ) = User(
-            id,
-            createdAt,
-            updatedAt,
-            name,
-            password,
-            hash,
-            hashOptions,
-            registration,
-            status,
-            labels,
-            passwordUpdate,
-            email,
-            phone,
-            emailVerification,
-            phoneVerification,
-            mfa,
-            prefs,
-            targets,
-            accessedAt,
-        )
-    }
-}
+)
+

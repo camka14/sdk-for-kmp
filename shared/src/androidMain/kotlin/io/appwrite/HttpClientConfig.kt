@@ -1,7 +1,6 @@
 package io.appwrite
 
-import android.content.Context
-import io.appwrite.cookies.AndroidCookieStorage
+import io.appwrite.cookies.stores.DataStoreCookieStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
@@ -17,13 +16,12 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 import kotlin.time.Duration.Companion.seconds
 
-fun createHttpClient(context: Context, selfSigned: Boolean) = HttpClient(OkHttp) {
+fun createHttpClient(selfSigned: Boolean, dataStoreCookieStorage: DataStoreCookieStorage) = HttpClient(OkHttp) {
     install(HttpCookies) {
-        storage = AndroidCookieStorage(context)
+        storage = dataStoreCookieStorage
     }
     install(WebSockets) {
         pingInterval = 30.seconds
-
     }
     install(HttpTimeout) {
         requestTimeoutMillis = 60000

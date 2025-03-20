@@ -2,8 +2,12 @@ package io.appwrite
 
 import android.content.Context
 import android.content.pm.PackageManager
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import io.appwrite.cookies.stores.DataStoreCookieStorage
+import io.appwrite.cookies.stores.DataStoreManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import okio.Path.Companion.toPath
 
 actual class Client constructor(
     private val context: Context,
@@ -12,6 +16,12 @@ actual class Client constructor(
     selfSigned: Boolean = false,
 ) : BaseClient<Client>(endpoint, endpointRealtime) {
     actual override val coroutineContext = Job() + Dispatchers.Default
+
+    private val dataStoreManager = DataStoreManager(
+        PreferenceDataStoreFactory.createWithPath (
+            produceFile = { context.filesDir.resolve("appwriteCookies.preferences_pb").absolutePath.toPath() }
+        ))
+    val dataStoreCookieStorage = DataStoreCookieStorage(dataStoreManager)
 
     private val appVersion by lazy {
         try {
@@ -24,21 +34,22 @@ actual class Client constructor(
     }
 
     init {
-        httpClient = createHttpClient(context, selfSigned)
+
+        httpClient = createHttpClient(selfSigned, dataStoreCookieStorage)
         headers = mutableMapOf(
-            "content-type" to "application/json",
-            "origin" to "appwrite-android://${context.packageName}",
-            "user-agent" to "${context.packageName}/${appVersion}, ${System.getProperty("http.agent")}",
-            "x-sdk-name" to "Android",
-            "x-sdk-platform" to "client",
-            "x-sdk-language" to "android",
-            "x-sdk-version" to "6.0.0",
-            "x-appwrite-response-format" to "1.6.0"
-        )
+              "content-type" to "application/json",
+              "origin" to "appwrite-android://${context.packageName}",
+              "user-agent" to "${context.packageName}/${appVersion}, ${System.getProperty("http.agent")}",
+              "x-sdk-name" to "KMP",
+              "x-sdk-platform" to "",
+              "x-sdk-language" to "kmp",
+              "x-sdk-version" to "0.0.0-SNAPSHOT",
+                "x-appwrite-response-format" to "1.6.0"  
+          )
     }
 
     actual fun setSelfSigned(value: Boolean): Client {
-        httpClient = createHttpClient(context, value)
+        httpClient = createHttpClient(value, dataStoreCookieStorage)
         return this
     }
 }

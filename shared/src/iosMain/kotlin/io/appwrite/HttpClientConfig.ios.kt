@@ -19,9 +19,9 @@ import platform.Foundation.serverTrust
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalForeignApi::class)
-fun createHttpClient(selfSigned: Boolean) = HttpClient(Darwin) {
+fun createHttpClient(selfSigned: Boolean, iosCookieStorage: IosCookieStorage) = HttpClient(Darwin) {
     install(HttpCookies) {
-        storage = IosCookieStorage()
+        storage = iosCookieStorage
     }
     install(WebSockets) {
         pingInterval = 30.seconds
@@ -58,4 +58,3 @@ fun createHttpClient(selfSigned: Boolean) = HttpClient(Darwin) {
         }
     }
 }
-

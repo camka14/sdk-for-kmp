@@ -7,13 +7,10 @@ import kotlinx.serialization.Serializable
 enum class AuthenticationFactor(val value: String) {
     @SerialName("email")
     EMAIL("email"),
-
     @SerialName("phone")
     PHONE("phone"),
-
     @SerialName("totp")
     TOTP("totp"),
-
     @SerialName("recoverycode")
     RECOVERYCODE("recoverycode");
 

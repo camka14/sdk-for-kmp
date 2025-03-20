@@ -10,36 +10,26 @@ plugins {
     id("signing")
 }
 
-
-group = "io.appwrite"
-version = "0.3.0"
-
-publishing {
-    publications {
-        withType<MavenPublication> {
-            // Configure POM
-            artifactId = "sdk-for-kmp"
-            pom {
-                name.set("Appwrite KMP SDK")
-                description.set("Kotlin Multiplatform SDK for Appwrite")
-                url.set("https://github.com/camka14/sdk-for-kmp")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("camka14")
-                        name.set("Samuel Razumovskiy")
-                        email.set("samuel.razumovskiy@razumly.com")
-                    }
-                }
-            }
-        }
-    }
+ext {
+    set("PUBLISH_GROUP_ID", "io.github.camka14.appwrite")
+    set("PUBLISH_ARTIFACT_ID", "sdk-for-kmp")
+    set("PUBLISH_VERSION", System.getenv("SDK_VERSION"))
+    set("POM_URL", "https://github.com/camka14/sdk-for-kmp")
+    set("POM_SCM_URL", "https://github.com/camka14/sdk-for-kmp")
+    set("POM_ISSUE_URL", "https://github.com/camka14/sdk-for-kmp/issues")
+    set("POM_DESCRIPTION", "THIS IS NOT AN OFFICIAL RELEASE: For full API documentation and tutorials go to https://appwrite.io/docs")
+    set("POM_LICENSE_URL", "https://opensource.org/licenses/GPL-3.0")
+    set("POM_LICENSE_NAME", "GPL-3.0")
+    set("POM_DEVELOPER_ID", "camka")
+    set("POM_DEVELOPER_NAME", "Samuel Razumovskiy")
+    set("POM_DEVELOPER_EMAIL", "samuel.razumovskiy@gmail.com")
+    set("GITHUB_SCM_CONNECTION", "scm:git:git://github.com/camka14/sdk-for-kmp.git")
 }
+
+version = project.ext["PUBLISH_VERSION"].toString()
+group = project.ext["PUBLISH_GROUP_ID"].toString()
+
+
 kotlin {
     jvm()
 
@@ -48,7 +38,7 @@ kotlin {
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_1_8)
+                    jvmTarget.set(JvmTarget.JVM_17)
                 }
             }
         }
@@ -69,25 +59,35 @@ kotlin {
         binaries.all {
             // Configure native binary compilation
             freeCompilerArgs += listOf(
-                "-Xexport-kdoc",
                 "-Xallocator=mimalloc",
-                "-Xadd-light-debug=enable",
-                "-Xruntime-logs=warning"
             )
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    iosX64 {
+        // Create a framework binary with additional options
+        binaries.framework {
             baseName = "shared"
             isStatic = true
-            binaryOption("bundleId", "io.appwrite.shared")
+            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
         }
-        it.withSourcesJar(publish = false)
+        withSourcesJar(publish = false)
+    }
+    iosArm64 {
+        binaries.framework {
+            baseName = "shared"
+            isStatic = true
+            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
+        }
+        withSourcesJar(publish = false)
+    }
+    iosSimulatorArm64 {
+        binaries.framework {
+            baseName = "shared"
+            isStatic = true
+            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
+        }
+        withSourcesJar(publish = false)
     }
 
     sourceSets {
@@ -95,14 +95,14 @@ kotlin {
             implementation(libs.ktor.client.java)
         }
         commonMain.dependencies {
-            implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlin.reflect)
             implementation(libs.ktor.client.core)
-            api(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.websockets)
+            implementation(libs.okio)
+            api(libs.kotlinx.serialization.json)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.napier)
         }
@@ -110,7 +110,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.appcompat)
-            implementation(libs.androidx.browser.v170)
             implementation(libs.androidx.lifecycle.livedata.ktx)
             implementation(libs.androidx.lifecycle.viewmodel.ktx)
             implementation(libs.androidx.navigation.fragment.ktx)
@@ -118,6 +117,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.firebase.messaging)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.androidx.datastore)
+            implementation(libs.androidx.datastore.preferences)
             implementation(libs.gson)
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.6.0"))
         }
@@ -129,10 +131,16 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
 
         androidUnitTest.dependencies {
             implementation(libs.junit)
+            implementation(libs.androidx.test.core)
+            implementation(libs.androidx.junit)
+            implementation(libs.androidx.test.runner)
+            implementation(libs.robolectric)
+            implementation(libs.ktor.client.mock)
         }
 
         androidInstrumentedTest.dependencies {
@@ -142,18 +150,79 @@ kotlin {
     }
 }
 
+publishing {
+    publications.withType<MavenPublication> {
+        artifactId = if (name != "kotlinMultiplatform") {
+            // Append the target name to the artifactId so each publication is unique.
+            "${project.ext["PUBLISH_ARTIFACT_ID"].toString()}-$name"
+        } else {
+            project.ext["PUBLISH_ARTIFACT_ID"].toString()
+        }
+
+        pom {
+            name.set(project.ext["PUBLISH_ARTIFACT_ID"].toString())
+            description.set(project.ext["POM_DESCRIPTION"].toString())
+            url.set(project.ext["POM_URL"].toString())
+
+            licenses {
+                license {
+                    name.set(project.ext["POM_LICENSE_NAME"].toString())
+                    url.set(project.ext["POM_LICENSE_URL"].toString())
+                }
+            }
+
+            developers {
+                developer {
+                    id.set(project.ext["POM_DEVELOPER_ID"].toString())
+                    name.set(project.ext["POM_DEVELOPER_NAME"].toString())
+                    email.set(project.ext["POM_DEVELOPER_EMAIL"].toString())
+                }
+            }
+
+            scm {
+                connection.set(project.ext["GITHUB_SCM_CONNECTION"].toString())
+                url.set(project.ext["POM_SCM_URL"].toString())
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "sonatype"
+            url = uri(
+                if (version.toString().endsWith("SNAPSHOT")) {
+                    "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                } else {
+                    "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                }
+            )
+            credentials {
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+}
 
 android {
-    namespace = "io.appwrite"
+    namespace = "io.github.camka14.appwrite"
     compileSdk = 35
     defaultConfig {
         minSdk = 21
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all { it.useJUnit() }
+        }
     }
 }
+
 dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.browser)

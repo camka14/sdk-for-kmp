@@ -14,7 +14,7 @@ data class RealtimeSubscription(
 }
 
 data class RealtimeCallback(
-    val channels: Collection<String>,
+    val channels: kotlin.collections.Collection<String>,
     val payloadClass: KClass<*>,
     val payloadSerializer: KSerializer<*>,
     val callback: (RealtimeResponseEvent<*>) -> Unit
@@ -30,11 +30,11 @@ open class RealtimeResponse(
 @Serializable
 data class RealtimeResponseEvent<T>(
     @Serializable(with = StringCollectionSerializer::class)
-    val events: Collection<String>,
+    val events: kotlin.collections.Collection<String>,
     @Serializable(with = StringCollectionSerializer::class)
-    val channels: Collection<String>,
+    val channels: kotlin.collections.Collection<String>,
     val timestamp: String,
-    var payload: Document<T>
+    var payload: T
 )
 
 enum class RealtimeCode(val value: Int) {

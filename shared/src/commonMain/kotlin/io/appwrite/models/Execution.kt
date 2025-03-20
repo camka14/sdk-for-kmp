@@ -1,7 +1,24 @@
-import io.appwrite.models.Headers
-import kotlinx.serialization.Contextual
+package io.appwrite.models
+
+import io.appwrite.extensions.jsonCast
+import io.appwrite.extensions.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
 
 /**
  * Execution
@@ -30,8 +47,7 @@ data class Execution(
      * Execution roles.
      */
     @SerialName("\$permissions")
-    @Contextual
-    val permissions: List<@Contextual Any>,
+    val permissions: List<String>,
 
     /**
      * Function ID.
@@ -110,4 +126,6 @@ data class Execution(
      */
     @SerialName("scheduledAt")
     var scheduledAt: String?,
+
 )
+

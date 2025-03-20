@@ -25,15 +25,15 @@ actual class Client(
     init {
         httpClient = createHttpClient(selfSigned)
         headers = mutableMapOf(
+            "origin" to "appwrite-jvm://app",
             "content-type" to "application/json",
             "origin" to "appwrite-jvm://app",
             "user-agent" to "JVM/$appVersion, ${System.getProperty("java.version")}",
-            "x-sdk-name" to "JVM",
-            "x-sdk-platform" to "client",
-            "x-sdk-language" to "kotlin",
-            "x-sdk-version" to "6.0.0",
-            "x-appwrite-response-format" to "1.6.0"
-        )
+            "x-sdk-name" to "KMP",
+            "x-sdk-platform" to "",
+            "x-sdk-language" to "kmp",
+            "x-sdk-version" to "0.0.0-SNAPSHOT",
+                        "x-appwrite-response-format" to "1.6.0"                      )
     }
 
     actual fun setSelfSigned(value: Boolean): Client {

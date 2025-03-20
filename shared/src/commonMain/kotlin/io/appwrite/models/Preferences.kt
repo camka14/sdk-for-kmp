@@ -1,21 +1,24 @@
 package io.appwrite.models
 
 import io.appwrite.extensions.jsonCast
-import io.appwrite.serializers.DynamicLookupSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.KSerializer
+import io.appwrite.extensions.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlin.reflect.KClass
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
 
 /**
  * Preferences
@@ -29,8 +32,43 @@ data class Preferences<T>(
     val data: T
 )
 
-class PreferencesSerializer<T>(private val dataSerializer: KSerializer<T>) : KSerializer<Preferences<T>> {
-    override val descriptor: SerialDescriptor = dataSerializer.descriptor
-    override fun serialize(encoder: Encoder, value: Preferences<T>) = dataSerializer.serialize(encoder, value.data)
-    override fun deserialize(decoder: Decoder) = Preferences(dataSerializer.deserialize(decoder))
+class PreferencesSerializer<T>(private val dataSerializer: KSerializer<T>): KSerializer<Preferences<T>> {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Document") {
+        element("data", dataSerializer.descriptor)
+    }
+
+    override fun deserialize(decoder: Decoder): Preferences<T> {
+        val jsonObject = decoder.decodeSerializableValue(JsonObject.serializer())
+
+        // Extract system fields ($ prefixed)
+
+        // Create data object from remaining fields
+        val dataObject = buildJsonObject {
+            jsonObject.forEach { (key, value) ->
+                if (key.startsWith("$")) {
+                    // Remove $ prefix for system fields
+                    put(key.substring(1), value)
+                } else {
+                    put(key, value)
+                }
+            }
+        }
+
+        return Preferences(
+            data = json.decodeFromJsonElement(dataSerializer, dataObject)
+        )
+    }
+
+    override fun serialize(encoder: Encoder, value: Preferences<T>) {
+        val combined = buildJsonObject {
+            val jsonValues = json.encodeToJsonElement(dataSerializer, value.data).jsonObject
+
+            // Add all data fields to root
+            jsonValues.forEach { (key, value) ->
+                put(key, value)
+            }
+        }
+
+        return encoder.encodeSerializableValue(JsonObject.serializer(), combined)
+    }
 }

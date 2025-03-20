@@ -1,8 +1,24 @@
 package io.appwrite.models
 
-import kotlinx.serialization.Contextual
+import io.appwrite.extensions.jsonCast
+import io.appwrite.extensions.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
 
 /**
  * Membership
@@ -34,13 +50,13 @@ data class Membership(
     val userId: String,
 
     /**
-     * User name.
+     * User name. Hide this attribute by toggling membership privacy in the Console.
      */
     @SerialName("userName")
     val userName: String,
 
     /**
-     * User email address.
+     * User email address. Hide this attribute by toggling membership privacy in the Console.
      */
     @SerialName("userEmail")
     val userEmail: String,
@@ -76,7 +92,7 @@ data class Membership(
     val confirm: Boolean,
 
     /**
-     * Multi factor authentication status, true if the user has MFA enabled or false otherwise.
+     * Multi factor authentication status, true if the user has MFA enabled or false otherwise. Hide this attribute by toggling membership privacy in the Console.
      */
     @SerialName("mfa")
     val mfa: Boolean,
@@ -85,6 +101,7 @@ data class Membership(
      * User list of roles
      */
     @SerialName("roles")
-    val roles: List<@Contextual Any>,
+    val roles: List<String>,
 
 )
+

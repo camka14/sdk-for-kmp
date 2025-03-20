@@ -1,5 +1,6 @@
 package io.appwrite
 
+import io.appwrite.cookies.IosCookieStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import platform.Foundation.NSBundle
@@ -20,22 +21,22 @@ actual class Client(
         NSBundle.mainBundle.bundleIdentifier ?: ""
     }
 
+    val iosCookieStorage = IosCookieStorage()
+
     init {
-        httpClient = createHttpClient(selfSigned)
+        httpClient = createHttpClient(selfSigned, iosCookieStorage)
         headers = mutableMapOf(
             "content-type" to "application/json",
-            "x-sdk-name" to "Apple",
-            "x-sdk-platform" to "client",
-            "x-sdk-language" to "apple",
-            "x-sdk-version" to "7.0.0",
-            "x-appwrite-response-format" to "1.6.0",
-            "origin" to "appwrite-ios://$bundleId",
-            "user-agent" to "$bundleId/$appVersion ${UIDevice.currentDevice.systemName()} ${UIDevice.currentDevice.systemVersion}"
-        )
+            "x-sdk-name" to "KMP",
+            "x-sdk-platform" to "",
+            "x-sdk-language" to "kmp",
+            "x-sdk-version" to "0.0.0-SNAPSHOT",
+            "x-appwrite-response-format" to "1.6.0"
+          )
     }
 
     actual fun setSelfSigned(value: Boolean): Client {
-        httpClient = createHttpClient(value)
+        httpClient = createHttpClient(value, iosCookieStorage)
         return this
     }
 }
