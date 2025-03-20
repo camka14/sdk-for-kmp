@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 
@@ -6,8 +7,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinx.serialization)
     id("org.jetbrains.kotlinx.atomicfu") version "0.26.0"
-    id("maven-publish")
-    id("signing")
+    id("com.vanniktech.maven.publish") version "0.31.0-rc2"
 }
 
 ext {
@@ -17,10 +17,13 @@ ext {
     set("POM_URL", "https://github.com/camka14/sdk-for-kmp")
     set("POM_SCM_URL", "https://github.com/camka14/sdk-for-kmp")
     set("POM_ISSUE_URL", "https://github.com/camka14/sdk-for-kmp/issues")
-    set("POM_DESCRIPTION", "THIS IS NOT AN OFFICIAL RELEASE: For full API documentation and tutorials go to https://appwrite.io/docs")
+    set(
+        "POM_DESCRIPTION",
+        "THIS IS NOT AN OFFICIAL RELEASE: For full API documentation and tutorials go to https://appwrite.io/docs"
+    )
     set("POM_LICENSE_URL", "https://opensource.org/licenses/GPL-3.0")
     set("POM_LICENSE_NAME", "GPL-3.0")
-    set("POM_DEVELOPER_ID", "camka")
+    set("POM_DEVELOPER_ID", "camka14")
     set("POM_DEVELOPER_NAME", "Samuel Razumovskiy")
     set("POM_DEVELOPER_EMAIL", "samuel.razumovskiy@gmail.com")
     set("GITHUB_SCM_CONNECTION", "scm:git:git://github.com/camka14/sdk-for-kmp.git")
@@ -150,59 +153,44 @@ kotlin {
     }
 }
 
-publishing {
-    publications.withType<MavenPublication> {
-        artifactId = if (name != "kotlinMultiplatform") {
-            // Append the target name to the artifactId so each publication is unique.
-            "${project.ext["PUBLISH_ARTIFACT_ID"].toString()}-$name"
-        } else {
-            project.ext["PUBLISH_ARTIFACT_ID"].toString()
-        }
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-        pom {
-            name.set(project.ext["PUBLISH_ARTIFACT_ID"].toString())
-            description.set(project.ext["POM_DESCRIPTION"].toString())
-            url.set(project.ext["POM_URL"].toString())
+    signAllPublications()
 
-            licenses {
-                license {
-                    name.set(project.ext["POM_LICENSE_NAME"].toString())
-                    url.set(project.ext["POM_LICENSE_URL"].toString())
-                }
-            }
+    coordinates(
+        project.ext["PUBLISH_GROUP_ID"].toString(),
+        project.ext["PUBLISH_ARTIFACT_ID"].toString(),
+        project.ext["PUBLISH_VERSION"].toString()
+    )
 
-            developers {
-                developer {
-                    id.set(project.ext["POM_DEVELOPER_ID"].toString())
-                    name.set(project.ext["POM_DEVELOPER_NAME"].toString())
-                    email.set(project.ext["POM_DEVELOPER_EMAIL"].toString())
-                }
-            }
+    pom {
+        name.set(project.ext["PUBLISH_ARTIFACT_ID"].toString())
+        description.set(project.ext["POM_DESCRIPTION"].toString())
+        url.set(project.ext["POM_URL"].toString())
 
-            scm {
-                connection.set(project.ext["GITHUB_SCM_CONNECTION"].toString())
-                url.set(project.ext["POM_SCM_URL"].toString())
+        licenses {
+            license {
+                name.set(project.ext["POM_LICENSE_NAME"].toString())
+                url.set(project.ext["POM_LICENSE_URL"].toString())
             }
         }
-    }
 
-    repositories {
-        maven {
-            name = "sonatype"
-            url = uri(
-                if (version.toString().endsWith("SNAPSHOT")) {
-                    "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-                } else {
-                    "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                }
-            )
-            credentials {
-                username = System.getenv("OSSRH_USERNAME")
-                password = System.getenv("OSSRH_PASSWORD")
+        developers {
+            developer {
+                id.set(project.ext["POM_DEVELOPER_ID"].toString())
+                name.set(project.ext["POM_DEVELOPER_NAME"].toString())
+                email.set(project.ext["POM_DEVELOPER_EMAIL"].toString())
             }
+        }
+
+        scm {
+            connection.set(project.ext["GITHUB_SCM_CONNECTION"].toString())
+            url.set(project.ext["POM_SCM_URL"].toString())
         }
     }
 }
+
 
 android {
     namespace = "io.github.camka14.appwrite"
