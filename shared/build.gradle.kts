@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinx.serialization)
     id("org.jetbrains.kotlinx.atomicfu") version "0.26.0"
-    id("com.vanniktech.maven.publish") version "0.31.0-rc2"
+    id("com.vanniktech.maven.publish") version "0.31.0"
 }
 
 ext {
