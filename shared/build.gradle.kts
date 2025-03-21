@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     id("org.jetbrains.kotlinx.atomicfu") version "0.26.0"
     id("com.vanniktech.maven.publish") version "0.31.0"
+    id("signing")
 }
 
 ext {
