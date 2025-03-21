@@ -8,6 +8,7 @@ jobs:
   publish:
     name: Release build and publish
     runs-on: macOS-latest
+    environment: Maven Publishing
     steps:
       - name: Check out code
         uses: actions/checkout@v4
