@@ -157,6 +157,8 @@ kotlin {
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
+    signAllPublications()
+
     coordinates(
         project.ext["PUBLISH_GROUP_ID"].toString(),
         project.ext["PUBLISH_ARTIFACT_ID"].toString(),
