@@ -193,7 +193,7 @@ mavenPublishing {
 
 
 android {
-    namespace = "io.github.camka14.appwrite"
+    namespace = "io.appwrite"
     compileSdk = 35
     defaultConfig {
         minSdk = 21
