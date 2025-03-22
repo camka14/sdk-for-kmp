@@ -25,5 +25,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
           SDK_VERSION: ${{ secrets.SDK_VERSION }}
-      - name: Debug Environment Variables
-        run: env | grep ORG_GRADLE_PROJECT_
