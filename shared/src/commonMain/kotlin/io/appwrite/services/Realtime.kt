@@ -53,32 +53,31 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
 
     private fun createSocket() {
         launch(Dispatchers.IO) {
-
-            if (activeChannels.isEmpty()) {
-                reconnect = false
-                closeSocket()
-                return@launch
-            }
-
-            val queryParams = buildString {
-                append("project=${client.config["project"]}")
-                activeChannels.forEach {
-                    append("&channels[]=$it")
-                }
-            }
-
-            if (webSocketSession != null) {
-                reconnect = false
-                closeSocket()
-            }
-
-            webSocketSession = client.httpClient.webSocketSession {
-                url("${client.endpointRealtime}/realtime?$queryParams")
-            }
-
-            reconnectAttempts = 0  // Reset attempts on successful connection
-
             try {
+
+                if (activeChannels.isEmpty()) {
+                    reconnect = false
+                    closeSocket()
+                    return@launch
+                }
+
+                val queryParams = buildString {
+                    append("project=${client.config["project"]}")
+                    activeChannels.forEach {
+                        append("&channels[]=$it")
+                    }
+                }
+
+                if (webSocketSession != null) {
+                    reconnect = false
+                    closeSocket()
+                }
+
+                webSocketSession = client.httpClient.webSocketSession {
+                    url("${client.endpointRealtime}/realtime?$queryParams")
+                }
+
+                reconnectAttempts = 0  // Reset attempts on successful connection
                 webSocketSession?.let { session ->
                     for (frame in session.incoming) {
                         when (frame) {
@@ -87,6 +86,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
                         }
                     }
                 }
+
             } catch (e: Exception) {
                 handleFailure(e)
             } finally {
@@ -149,7 +149,6 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         return RealtimeSubscription {
             activeSubscriptions.remove(counter)
             cleanUp(channels)
-            createSocket()
         }
     }
 
