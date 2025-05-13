@@ -8,6 +8,13 @@ jobs:
   publish:
     name: Release build and publish
     runs-on: macOS-latest
+    env:
+      SDK_VERSION: ${{ 
+        github.event_name == 'release'
+          && github.event.release.tag_name
+          || github.event.inputs.sdk_version
+        }}
+      
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -24,4 +31,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
-          SDK_VERSION: ${{ secrets.SDK_VERSION }}
