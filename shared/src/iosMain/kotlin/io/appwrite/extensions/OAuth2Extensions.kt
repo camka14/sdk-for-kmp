@@ -49,7 +49,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
                 if (key == null && secret == null) {
-                    throw APPWRITEException("Authentication cookie missing!")
+                    throw AppwriteException("Authentication cookie missing!")
                 }
                 val cookie = Cookie(
                     name = key!!,
@@ -112,7 +112,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
                 if (key == null && secret == null) {
-                    throw APPWRITEException("Authentication cookie missing!")
+                    throw AppwriteException("Authentication cookie missing!")
                 }
                 val cookie = Cookie(
                     name = key!!,
