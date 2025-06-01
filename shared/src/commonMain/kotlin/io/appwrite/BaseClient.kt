@@ -137,6 +137,9 @@ abstract class BaseClient<This : BaseClient<This>>(
      * @return [This]
      */
     fun setEndpoint(endpoint: String): This {
+        require(endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
+            "Invalid endpoint URL: $endpoint"
+        }
         this.endpoint = endpoint
         if (this.endpointRealtime == null && endpoint.startsWith("http")) {
             this.endpointRealtime = endpoint.replaceFirst("http", "ws")
@@ -323,14 +326,14 @@ abstract class BaseClient<This : BaseClient<This>>(
             // Make a request to check if a file already exists
             try {
                 val current = call(
-                method = "GET",
-                path = "$path/${params[idParamName]}",
-                headers = headers,
-                params = emptyMap(),
-                responseType = Map::class,
-            )
-            chunksUploaded = current["chunksUploaded"] as Long
-            offset = chunksUploaded * CHUNK_SIZE
+                    method = "GET",
+                    path = "$path/${params[idParamName]}",
+                    headers = headers,
+                    params = emptyMap(),
+                    responseType = Map::class,
+                )
+                chunksUploaded = current["chunksUploaded"] as Long
+                offset = chunksUploaded * CHUNK_SIZE
             } catch (e: Exception) {
                 // Swallow exception
             }

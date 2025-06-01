@@ -79,6 +79,7 @@ class Vcs(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -202,7 +203,7 @@ class Vcs(client: Client) : Service(client) {
     }
 
             /**
-     * Detect runtime settings from source code
+     * Create runtime settings detection
      *
      * Analyze a GitHub repository to automatically detect the programming language and runtime environment. This endpoint scans the repository&#039;s files and language statistics to determine the appropriate runtime settings for your function. The GitHub installation must be properly configured and the repository must be accessible through your installation for this endpoint to work.
      *
@@ -229,6 +230,7 @@ class Vcs(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -242,7 +244,7 @@ class Vcs(client: Client) : Service(client) {
     }
 
             /**
-     * Authorize external deployment
+     * Update external deployment (authorize)
      *
      * Authorize and create deployments for a GitHub pull request in your project. This endpoint allows external contributions by creating deployments from pull requests, enabling preview environments for code review. The pull request must be open and not previously authorized. The GitHub installation must be properly configured and have access to both the repository and pull request for this endpoint to work.
      *
@@ -266,6 +268,7 @@ class Vcs(client: Client) : Service(client) {
             "providerPullRequestId" to providerPullRequestId,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -367,6 +370,7 @@ class Vcs(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
  **/
 class Assistant(client: Client) : Service(client) {
         /**
-     * Ask query
+     * Create assistant query
      *
      * Send a prompt to the AI assistant and receive a response. This endpoint allows you to interact with Appwrite&#039;s AI assistant by sending questions or prompts and receiving helpful responses in real-time through a server-sent events stream. 
      *
@@ -35,6 +35,7 @@ class Assistant(client: Client) : Service(client) {
             "prompt" to prompt,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

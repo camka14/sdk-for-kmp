@@ -54,7 +54,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Migrate Appwrite data
+     * Create Appwrite migration
      *
      * Migrate data from another Appwrite project to your current project. This endpoint allows you to migrate resources like databases, collections, documents, users, and files from an existing Appwrite project. 
      *
@@ -82,6 +82,7 @@ class Migrations(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -95,7 +96,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Generate a report on Appwrite data
+     * Get Appwrite migration report
      *
      * Generate a report of the data in an Appwrite project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated.
      *
@@ -136,7 +137,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Migrate Firebase data
+     * Create Firebase migration
      *
      * Migrate data from a Firebase project to your Appwrite project. This endpoint allows you to migrate resources like authentication and other supported services from a Firebase project. 
      *
@@ -158,6 +159,7 @@ class Migrations(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -171,7 +173,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Generate a report on Firebase data
+     * Get Firebase migration report
      *
      * Generate a report of the data in a Firebase project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated.
      *
@@ -206,7 +208,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Migrate NHost data
+     * Create NHost migration
      *
      * Migrate data from an NHost project to your Appwrite project. This endpoint allows you to migrate resources like authentication, databases, and other supported services from an NHost project. 
      *
@@ -248,6 +250,7 @@ class Migrations(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -261,7 +264,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Generate a report on NHost Data
+     * Get NHost migration report
      *
      * Generate a detailed report of the data in an NHost project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated. 
      *
@@ -316,7 +319,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Migrate Supabase data
+     * Create Supabase migration
      *
      * Migrate data from a Supabase project to your Appwrite project. This endpoint allows you to migrate resources like authentication, databases, and other supported services from a Supabase project. 
      *
@@ -355,6 +358,7 @@ class Migrations(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -368,7 +372,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Generate a report on Supabase Data
+     * Get Supabase migration report
      *
      * Generate a report of the data in a Supabase project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated. 
      *
@@ -452,7 +456,7 @@ class Migrations(client: Client) : Service(client) {
     }
 
             /**
-     * Retry migration
+     * Update retry migration
      *
      * Retry a failed migration. This endpoint allows you to retry a migration that has previously failed.
      *
@@ -470,6 +474,7 @@ class Migrations(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -502,6 +507,7 @@ class Migrations(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

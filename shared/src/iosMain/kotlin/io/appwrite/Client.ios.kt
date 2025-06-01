@@ -4,7 +4,6 @@ import io.appwrite.cookies.IosCookieStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import platform.Foundation.NSBundle
-import platform.UIKit.UIDevice
 
 actual class Client(
     endpoint: String = "https://cloud.appwrite.io/v1",
@@ -25,14 +24,24 @@ actual class Client(
 
     init {
         httpClient = createHttpClient(selfSigned, iosCookieStorage)
+        val appName =
+            NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleDisplayName") as String?
+                ?: NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleName") as? String
+                ?: ""
+        val version =
+            NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as String?
+                ?: ""
+
         headers = mutableMapOf(
             "content-type" to "application/json",
             "x-sdk-name" to "KMP",
-            "x-sdk-platform" to "",
+            "x-sdk-platform" to "client",
             "x-sdk-language" to "kmp",
             "x-sdk-version" to "0.0.0-SNAPSHOT",
+            "user-agent" to "${appName}/${version} ios",
+            "origin" to "appwrite-ios://${appName}",
             "x-appwrite-response-format" to "1.6.0"
-          )
+        )
     }
 
     actual fun setSelfSigned(value: Boolean): Client {

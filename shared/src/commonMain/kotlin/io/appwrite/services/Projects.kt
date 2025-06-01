@@ -111,6 +111,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -207,6 +208,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -238,6 +240,7 @@ class Projects(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -277,6 +280,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -311,6 +315,7 @@ class Projects(client: Client) : Service(client) {
             "status" to status,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -347,6 +352,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -382,6 +388,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -416,6 +423,7 @@ class Projects(client: Client) : Service(client) {
             "limit" to limit,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -458,6 +466,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -492,6 +501,7 @@ class Projects(client: Client) : Service(client) {
             "numbers" to numbers,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -528,6 +538,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -563,6 +574,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -576,7 +588,7 @@ class Projects(client: Client) : Service(client) {
     }
 
             /**
-     * Enable or disable checking user passwords for similarity with their personal data.
+     * Update personal data check
      *
      * Enable or disable checking user passwords against their personal data. This helps prevent users from using personal information in their passwords. 
      *
@@ -597,6 +609,7 @@ class Projects(client: Client) : Service(client) {
             "enabled" to enabled,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -632,6 +645,7 @@ class Projects(client: Client) : Service(client) {
             "alerts" to alerts,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -670,6 +684,7 @@ class Projects(client: Client) : Service(client) {
             "status" to status,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -710,6 +725,7 @@ class Projects(client: Client) : Service(client) {
             "duration" to duration,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -785,6 +801,7 @@ class Projects(client: Client) : Service(client) {
             "expire" to expire,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -867,6 +884,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -901,6 +919,7 @@ class Projects(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -947,6 +966,7 @@ class Projects(client: Client) : Service(client) {
             "enabled" to enabled,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1028,6 +1048,7 @@ class Projects(client: Client) : Service(client) {
             "hostname" to hostname,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1113,6 +1134,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1147,6 +1169,7 @@ class Projects(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1186,6 +1209,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1220,6 +1244,7 @@ class Projects(client: Client) : Service(client) {
             "status" to status,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1282,6 +1307,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1343,6 +1369,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1377,6 +1404,7 @@ class Projects(client: Client) : Service(client) {
             "teamId" to teamId,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1471,6 +1499,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1484,7 +1513,7 @@ class Projects(client: Client) : Service(client) {
     }
 
             /**
-     * Reset custom email template
+     * Delete custom email template
      *
      * Reset a custom email template to its default value. This endpoint removes any custom content and restores the template to its original state. 
      *
@@ -1508,6 +1537,7 @@ class Projects(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1588,6 +1618,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1625,6 +1656,7 @@ class Projects(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1712,6 +1744,7 @@ class Projects(client: Client) : Service(client) {
             "httpPass" to httpPass,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1806,6 +1839,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1841,6 +1875,7 @@ class Projects(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1875,6 +1910,7 @@ class Projects(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

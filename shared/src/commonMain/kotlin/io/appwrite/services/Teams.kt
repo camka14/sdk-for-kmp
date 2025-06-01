@@ -105,6 +105,7 @@ class Teams(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -213,6 +214,7 @@ class Teams(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -261,6 +263,7 @@ class Teams(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -391,6 +394,7 @@ class Teams(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -464,6 +468,7 @@ class Teams(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -498,6 +503,7 @@ class Teams(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -539,6 +545,7 @@ class Teams(client: Client) : Service(client) {
             "secret" to secret,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -623,9 +630,10 @@ class Teams(client: Client) : Service(client) {
         val actualSerializer = genericSerializer ?: getSerializer(T::class)
 
         val apiParams = mutableMapOf<String, Any?>(
-            "prefs" to prefs,
+            "prefs" to json.encodeToString(actualSerializer, prefs as T),
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

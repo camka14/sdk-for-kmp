@@ -93,6 +93,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -146,6 +147,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -183,6 +185,7 @@ class Account(client: Client) : Service(client) {
             "password" to password,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -267,6 +270,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -295,6 +299,7 @@ class Account(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -365,6 +370,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -411,6 +417,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -424,7 +431,7 @@ class Account(client: Client) : Service(client) {
     }
 
             /**
-     * Verify authenticator
+     * Update authenticator (confirmation)
      *
      * Verify an authenticator app after adding it using the [add authenticator](/docs/references/cloud/client-web/account#createMfaAuthenticator) method.
      *
@@ -449,6 +456,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -462,7 +470,7 @@ class Account(client: Client) : Service(client) {
     }
 
     /**
-     * Verify authenticator
+     * Update authenticator (confirmation)
      *
      * Verify an authenticator app after adding it using the [add authenticator](/docs/references/cloud/client-web/account#createMfaAuthenticator) method.
      *
@@ -498,6 +506,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -530,6 +539,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -543,7 +553,7 @@ class Account(client: Client) : Service(client) {
     }
 
             /**
-     * Create MFA challenge (confirmation)
+     * Update MFA challenge (confirmation)
      *
      * Complete the MFA challenge by providing the one-time password. Finish the process of MFA verification by providing the one-time password. To begin the flow, use [createMfaChallenge](/docs/references/cloud/client-web/account#createMfaChallenge) method.
      *
@@ -564,6 +574,7 @@ class Account(client: Client) : Service(client) {
             "otp" to otp,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -607,7 +618,7 @@ class Account(client: Client) : Service(client) {
     }
 
             /**
-     * Get MFA recovery codes
+     * List MFA recovery codes
      *
      * Get recovery codes that can be used as backup for MFA flow. Before getting codes, they must be generated using [createMfaRecoveryCodes](/docs/references/cloud/client-web/account#createMfaRecoveryCodes) method. An OTP challenge is required to read recovery codes.
      *
@@ -652,6 +663,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -665,7 +677,7 @@ class Account(client: Client) : Service(client) {
     }
 
             /**
-     * Regenerate MFA recovery codes
+     * Update MFA recovery codes (regenerate)
      *
      * Regenerate recovery codes that can be used as backup for MFA flow. Before regenerating codes, they must be first generated using [createMfaRecoveryCodes](/docs/references/cloud/client-web/account#createMfaRecoveryCodes) method. An OTP challenge is required to regenreate recovery codes.
      *
@@ -680,6 +692,7 @@ class Account(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -715,6 +728,7 @@ class Account(client: Client) : Service(client) {
             "name" to name,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -769,6 +783,7 @@ class Account(client: Client) : Service(client) {
             "oldPassword" to oldPassword,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -825,6 +840,7 @@ class Account(client: Client) : Service(client) {
             "password" to password,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -917,9 +933,10 @@ class Account(client: Client) : Service(client) {
         val actualSerializer = genericSerializer ?: getSerializer(T::class)
 
         val apiParams = mutableMapOf<String, Any?>(
-            "prefs" to prefs,
+            "prefs" to json.encodeToString(actualSerializer, prefs as T),
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -970,6 +987,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -983,7 +1001,7 @@ class Account(client: Client) : Service(client) {
     }
 
             /**
-     * Create password recovery (confirmation)
+     * Update password recovery (confirmation)
      *
      * Use this endpoint to complete the user account password reset. Both the **userId** and **secret** arguments will be passed as query parameters to the redirect URL you have provided when sending your request to the [POST /account/recovery](https://appwrite.io/docs/references/cloud/client-web/account#createRecovery) endpoint.Please note that in order to avoid a [Redirect Attack](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.md) the only valid redirect URLs are the ones from domains you have set when adding your platforms in the console interface.
      *
@@ -1007,6 +1025,7 @@ class Account(client: Client) : Service(client) {
             "password" to password,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1066,6 +1085,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1094,6 +1114,7 @@ class Account(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1130,6 +1151,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1164,6 +1186,7 @@ class Account(client: Client) : Service(client) {
             "secret" to secret,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1200,6 +1223,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1234,6 +1258,7 @@ class Account(client: Client) : Service(client) {
             "secret" to secret,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1299,6 +1324,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1331,6 +1357,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1362,6 +1389,7 @@ class Account(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1414,6 +1442,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1449,6 +1478,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1480,6 +1510,7 @@ class Account(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1520,6 +1551,7 @@ class Account(client: Client) : Service(client) {
             "phrase" to phrase,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1564,6 +1596,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1599,6 +1632,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1631,6 +1665,7 @@ class Account(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1644,7 +1679,7 @@ class Account(client: Client) : Service(client) {
     }
 
             /**
-     * Create email verification (confirmation)
+     * Update email verification (confirmation)
      *
      * Use this endpoint to complete the user email verification process. Use both the **userId** and **secret** parameters that were attached to your app URL to verify the user email ownership. If confirmed this route will return a 200 status code.
      *
@@ -1665,6 +1700,7 @@ class Account(client: Client) : Service(client) {
             "secret" to secret,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1694,6 +1730,7 @@ class Account(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1729,6 +1766,7 @@ class Account(client: Client) : Service(client) {
             "secret" to secret,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

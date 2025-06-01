@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import okio.Path.Companion.toPath
 
-actual class Client constructor(
+actual class Client(
     private val context: Context,
     endpoint: String = "https://cloud.appwrite.io/v1",
     endpointRealtime: String? = null,
@@ -18,7 +18,7 @@ actual class Client constructor(
     actual override val coroutineContext = Job() + Dispatchers.Default
 
     private val dataStoreManager = DataStoreManager(
-        PreferenceDataStoreFactory.createWithPath (
+        PreferenceDataStoreFactory.createWithPath(
             produceFile = { context.filesDir.resolve("appwriteCookies.preferences_pb").absolutePath.toPath() }
         ))
     val dataStoreCookieStorage = DataStoreCookieStorage(dataStoreManager)
@@ -34,18 +34,17 @@ actual class Client constructor(
     }
 
     init {
-
         httpClient = createHttpClient(selfSigned, dataStoreCookieStorage)
         headers = mutableMapOf(
-              "content-type" to "application/json",
-              "origin" to "appwrite-android://${context.packageName}",
-              "user-agent" to "${context.packageName}/${appVersion}, ${System.getProperty("http.agent")}",
-              "x-sdk-name" to "KMP",
-              "x-sdk-platform" to "",
-              "x-sdk-language" to "kmp",
-              "x-sdk-version" to "0.0.0-SNAPSHOT",
-                "x-appwrite-response-format" to "1.6.0"  
-          )
+            "content-type" to "application/json",
+            "origin" to "appwrite-android://${context.packageName}",
+            "user-agent" to "${context.packageName}/${appVersion}, ${System.getProperty("http.agent")}",
+            "x-sdk-name" to "KMP",
+            "x-sdk-platform" to "client",
+            "x-sdk-language" to "kmp",
+            "x-sdk-version" to "0.0.0-SNAPSHOT",
+            "x-appwrite-response-format" to "1.6.0"
+        )
     }
 
     actual fun setSelfSigned(value: Boolean): Client {

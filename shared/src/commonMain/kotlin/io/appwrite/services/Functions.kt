@@ -143,6 +143,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -427,6 +428,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -458,6 +460,7 @@ class Functions(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -545,6 +548,7 @@ class Functions(client: Client) : Service(client) {
             "activate" to activate,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "multipart/form-data",
         )
 
@@ -622,6 +626,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -657,6 +662,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -670,7 +676,7 @@ class Functions(client: Client) : Service(client) {
     }
 
             /**
-     * Rebuild deployment
+     * Create deployment build
      *
      * Create a new build for an existing function deployment. This endpoint allows you to rebuild a deployment with the updated function configuration, including its entrypoint and build commands if they have been modified The build process will be queued and executed asynchronously. The original deployment&#039;s code will be preserved and used for the new build.
      *
@@ -696,6 +702,7 @@ class Functions(client: Client) : Service(client) {
             "buildId" to buildId,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -732,6 +739,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -745,7 +753,7 @@ class Functions(client: Client) : Service(client) {
     }
 
             /**
-     * Download deployment
+     * Get deployment download
      *
      * Get a Deployment&#039;s contents by its unique ID. This endpoint supports range requests for partial or streaming file download.
      *
@@ -854,6 +862,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -923,6 +932,7 @@ class Functions(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1031,6 +1041,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1109,6 +1120,7 @@ class Functions(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1143,6 +1155,7 @@ class Functions(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 

@@ -19,8 +19,6 @@ enum class Name(val value: String) {
     V1_STATS_RESOURCES("v1-stats-resources"),
     @SerialName("v1-stats-usage")
     V1_STATS_USAGE("v1-stats-usage"),
-    @SerialName("v1-stats-usage-dump")
-    V1_STATS_USAGE_DUMP("v1-stats-usage-dump"),
     @SerialName("v1-webhooks")
     V1_WEBHOOKS("v1-webhooks"),
     @SerialName("v1-certificates")

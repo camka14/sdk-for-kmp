@@ -35,6 +35,7 @@ class Graphql(client: Client) : Service(client) {
             "query" to query,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "x-sdk-graphql" to "true",
             "content-type" to "application/json",
         )
@@ -68,6 +69,7 @@ class Graphql(client: Client) : Service(client) {
             "query" to query,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "x-sdk-graphql" to "true",
             "content-type" to "application/json",
         )

@@ -610,40 +610,6 @@ class Health(client: Client) : Service(client) {
     }
 
             /**
-     * Get usage dump queue
-     *
-     * Get the number of projects containing metrics that are waiting to be processed in the Appwrite internal queue server.
-     *
-    @JvmOverloads
-    @Throws(Throwable::class)
-     * @param threshold Queue size threshold. When hit (equal or higher), endpoint returns server error. Default value is 5000.
-     */
-    @Throws(Throwable::class)
-    @JvmOverloads
-    suspend fun getQueueStatsUsageDump(
-        threshold: Long? = null,
-    ): io.appwrite.models.HealthQueue {
-        val apiPath = "/health/queue/stats-usage-dump"
-
-
-        val apiParams = mutableMapOf<String, Any?>(
-            "threshold" to threshold,
-        )
-        val apiHeaders = mutableMapOf(
-            "content-type" to "application/json",
-        )
-
-        return client.call(
-            "GET",
-            apiPath,
-            apiHeaders,
-            apiParams,
-            responseType = io.appwrite.models.HealthQueue::class,
-            serializer = io.appwrite.models.HealthQueue.serializer()
-        )
-    }
-
-            /**
      * Get webhooks queue
      *
      * Get the number of webhooks that are waiting to be processed in the Appwrite internal queue server.

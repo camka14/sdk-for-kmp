@@ -16,7 +16,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
     val apiPath = "/account/sessions/oauth2/{provider}"
         .replace("{provider}", provider.value)
 
-    val apiParams = mutableMapOf(
+    val apiParams = mutableMapOf<String, Any?>(
         "success" to success,
         "failure" to failure,
         "scopes" to scopes,
@@ -49,7 +49,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
                 if (key == null && secret == null) {
-                    throw AppwriteException("Authentication cookie missing!")
+                    throw APPWRITEException("Authentication cookie missing!")
                 }
                 val cookie = Cookie(
                     name = key!!,
@@ -69,7 +69,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
     }
 }
 
-// Update your token version as well
+
 suspend fun io.appwrite.services.Account.createOAuth2Token(
     provider: io.appwrite.enums.OAuthProvider,
     success: String? = null,
@@ -101,7 +101,6 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
     val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
 
     WebAuthComponent.setCookieStorage(client.iosCookieStorage)
-
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
         if (result.isFailure) {
             throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")
@@ -112,22 +111,25 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
-                if (key != null && secret != null) {
-                    val cookie = Cookie(
-                        name = key,
-                        value = secret,
-                        domain = urlParser.getHost(client.endpoint),
-                        path = "/",
-                        httpOnly = true,
-                        secure = client.endpoint.startsWith("https")
-                    )
-
-                    client.iosCookieStorage.addCookie(
-                        requestUrl = Url(fullUrl),
-                        cookie = cookie
-                    )
+                if (key == null && secret == null) {
+                    throw APPWRITEException("Authentication cookie missing!")
                 }
+                val cookie = Cookie(
+                    name = key!!,
+                    value = secret!!,
+                    domain = urlParser.getHost(client.endpoint),
+                    path = "/",
+                    httpOnly = true,
+                    secure = client.endpoint.startsWith("https")
+                )
+
+                client.iosCookieStorage.addCookie(
+                    requestUrl = Url(fullUrl),
+                    cookie = cookie
+                )
             }
         }
     }
 }
+
+

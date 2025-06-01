@@ -81,6 +81,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -187,6 +188,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -218,6 +220,7 @@ class Databases(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -308,6 +311,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -392,6 +396,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -426,6 +431,7 @@ class Databases(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -516,6 +522,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -564,6 +571,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -614,6 +622,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -662,6 +671,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -712,6 +722,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -760,6 +771,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -813,6 +825,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -864,6 +877,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -920,6 +934,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -974,6 +989,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1030,6 +1046,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1085,6 +1102,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1134,6 +1152,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1182,6 +1201,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1238,6 +1258,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1293,6 +1314,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1345,6 +1367,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1394,6 +1417,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1442,6 +1466,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1519,6 +1544,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1564,6 +1590,7 @@ class Databases(client: Client) : Service(client) {
             "newKey" to newKey,
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -1642,7 +1669,7 @@ class Databases(client: Client) : Service(client) {
         nestedType = classOf(),
     )
             /**
-     * Create document
+     * createDocument
      *
      * Create a new Document. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
      *
@@ -1678,6 +1705,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1691,7 +1719,7 @@ class Databases(client: Client) : Service(client) {
     }
 
     /**
-     * Create document
+     * createDocument
      *
      * Create a new Document. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
      *
@@ -1715,6 +1743,207 @@ class Databases(client: Client) : Service(client) {
         documentId,
         data,
         permissions,
+        nestedType = classOf(),
+    )
+            /**
+     * Create or update documents
+     *
+     * Create or update Documents. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param databaseId Database ID.
+     * @param collectionId Collection ID.
+     * @param documents Array of document data as JSON objects. May contain partial documents.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend inline fun <reified T : Any> upsertDocuments(
+        databaseId: String,
+        collectionId: String,
+        documents: List<Any>? = null,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
+    ): io.appwrite.models.DocumentList<T> {
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/documents"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "documents" to documents,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PUT",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = classOf(),
+            serializer = io.appwrite.models.DocumentList.serializer(actualSerializer)
+        )
+    }
+
+    /**
+     * Create or update documents
+     *
+     * Create or update Documents. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
+     *
+     * @param databaseId Database ID.
+     * @param collectionId Collection ID.
+     * @param documents Array of document data as JSON objects. May contain partial documents.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun upsertDocuments(
+        databaseId: String,
+        collectionId: String,
+        documents: List<Any>? = null,
+    ): io.appwrite.models.DocumentList<Map<String, Any>> = upsertDocuments(
+        databaseId,
+        collectionId,
+        documents,
+        nestedType = classOf(),
+    )
+            /**
+     * Update documents
+     *
+     * Update all documents that match your queries, if no queries are submitted then all documents are updated. You can pass only specific fields to be updated.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param databaseId Database ID.
+     * @param collectionId Collection ID.
+     * @param data Document data as JSON object. Include only attribute and value pairs to be updated.
+     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend inline fun <reified T : Any> updateDocuments(
+        databaseId: String,
+        collectionId: String,
+        data: Any? = null,
+        queries: List<String>? = null,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
+    ): io.appwrite.models.DocumentList<T> {
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/documents"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "data" to json.encodeToString(actualSerializer, data as T),
+            "queries" to queries,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PATCH",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = classOf(),
+            serializer = io.appwrite.models.DocumentList.serializer(actualSerializer)
+        )
+    }
+
+    /**
+     * Update documents
+     *
+     * Update all documents that match your queries, if no queries are submitted then all documents are updated. You can pass only specific fields to be updated.
+     *
+     * @param databaseId Database ID.
+     * @param collectionId Collection ID.
+     * @param data Document data as JSON object. Include only attribute and value pairs to be updated.
+     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun updateDocuments(
+        databaseId: String,
+        collectionId: String,
+        data: Any? = null,
+        queries: List<String>? = null,
+    ): io.appwrite.models.DocumentList<Map<String, Any>> = updateDocuments(
+        databaseId,
+        collectionId,
+        data,
+        queries,
+        nestedType = classOf(),
+    )
+            /**
+     * Delete documents
+     *
+     * Bulk delete documents using queries, if no queries are passed then all documents are deleted.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param databaseId Database ID.
+     * @param collectionId Collection ID. You can create a new collection using the Database service [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection).
+     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend inline fun <reified T : Any> deleteDocuments(
+        databaseId: String,
+        collectionId: String,
+        queries: List<String>? = null,
+        nestedType: KClass<T>?,
+        genericSerializer: KSerializer<T>? = null,
+    ): io.appwrite.models.DocumentList<T> {
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/documents"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+
+        val actualSerializer = genericSerializer ?: getSerializer(T::class)
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "queries" to queries,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "DELETE",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = classOf(),
+            serializer = io.appwrite.models.DocumentList.serializer(actualSerializer)
+        )
+    }
+
+    /**
+     * Delete documents
+     *
+     * Bulk delete documents using queries, if no queries are passed then all documents are deleted.
+     *
+     * @param databaseId Database ID.
+     * @param collectionId Collection ID. You can create a new collection using the Database service [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection).
+     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun deleteDocuments(
+        databaseId: String,
+        collectionId: String,
+        queries: List<String>? = null,
+    ): io.appwrite.models.DocumentList<Map<String, Any>> = deleteDocuments(
+        databaseId,
+        collectionId,
+        queries,
         nestedType = classOf(),
     )
             /**
@@ -1824,6 +2053,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -1888,6 +2118,7 @@ class Databases(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
@@ -2021,6 +2252,7 @@ class Databases(client: Client) : Service(client) {
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
+            "content-type" to "application/json",
         )
 
         return client.call(
@@ -2096,6 +2328,7 @@ class Databases(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
         )
         val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
             "content-type" to "application/json",
         )
 
