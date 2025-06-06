@@ -9,7 +9,7 @@ espressoCore = "3.6.1"
 gson = "2.10.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
-kotlin = "2.1.0"
+kotlin = "2.1.21"
 ktor = "3.0.3"
 activityKtx = "1.10.0"
 browser = "1.8.0"
@@ -23,7 +23,6 @@ firebaseCrashlyticsBuildtools = "3.0.3"
 okio = "3.10.2"
 robolectric = "4.14.1"
 androidx-test = "1.6.1"
-coroutines-test = "1.10.1"
 test-runner = "1.6.2"
 
 
@@ -38,7 +37,7 @@ okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "test-runner" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }

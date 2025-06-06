@@ -39,10 +39,6 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
 
     WebAuthComponent.setCookieStorage(client.iosCookieStorage)
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
-        if (result.isFailure) {
-            throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")
-        }
-
         result.getOrNull()?.let { callbackUrl ->
             runBlocking {
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
@@ -66,6 +62,8 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
                 )
             }
         }
+    }.onFailure {
+        throw AppwriteException("${it.message}")
     }
 }
 
@@ -102,10 +100,6 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
 
     WebAuthComponent.setCookieStorage(client.iosCookieStorage)
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
-        if (result.isFailure) {
-            throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")
-        }
-
         result.getOrNull()?.let { callbackUrl ->
             runBlocking {
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
@@ -129,6 +123,8 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
                 )
             }
         }
+    }.onFailure {
+        throw AppwriteException("${it.message}")
     }
 }
 

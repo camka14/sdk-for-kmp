@@ -24,10 +24,7 @@ actual class Client(
 
     init {
         httpClient = createHttpClient(selfSigned, iosCookieStorage)
-        val appName =
-            NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleDisplayName") as String?
-                ?: NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleName") as? String
-                ?: ""
+        val bundleId = NSBundle.mainBundle.bundleIdentifier ?: ""
         val version =
             NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as String?
                 ?: ""
@@ -38,8 +35,8 @@ actual class Client(
             "x-sdk-platform" to "client",
             "x-sdk-language" to "kmp",
             "x-sdk-version" to "0.0.0-SNAPSHOT",
-            "user-agent" to "${appName}/${version} ios",
-            "origin" to "appwrite-ios://${appName}",
+            "user-agent" to "${bundleId}/${version} ios",
+            "origin" to "appwrite-ios://${bundleId}",
             "x-appwrite-response-format" to "1.6.0"
         )
     }
