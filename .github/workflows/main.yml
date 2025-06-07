@@ -4,19 +4,21 @@ on:
   release:
     types: [released, prereleased]
   workflow_dispatch:
+    inputs:
+      sdk_version:
+        description: 'Release version (e.g., v0.2.1 or 0.2.1)'
+        required: true
+        default: '0.2.1'
+
 jobs:
   publish:
     name: Release build and publish
     runs-on: macOS-latest
     env:
-      SDK_VERSION: ${{ 
-          (
-            (github.event_name == 'release' && github.event.release.tag_name)
-            || github.event.inputs.sdk_version
-          )
-          | replace('.*?([0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._]+)?)$', '$1')
+      RAW_VERSION: ${{ 
+        (github.event_name == 'release' && github.event.release.tag_name)
+        || github.event.inputs.sdk_version
         }}
-      
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -25,6 +27,12 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
+      - name: Process version
+        run: |
+          SDK_VERSION=$(echo "${{ env.RAW_VERSION }}" | sed -E 's/.*?([0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._]+)?)$/\1/')
+          echo "SDK_VERSION=${SDK_VERSION}" >> $GITHUB_ENV
+      - name: Set Gradle version
+        run: echo "version=${{ env.SDK_VERSION }}" >> gradle.properties
       - name: Publish to MavenCentral
         run: ./gradlew publishToMavenCentral  --no-configuration-cache
         env:
