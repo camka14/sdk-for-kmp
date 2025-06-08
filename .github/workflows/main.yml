@@ -15,8 +15,9 @@ jobs:
     name: Release build and publish
     runs-on: macOS-latest
     env:
-      RAW_VERSION: ${{ 
-        SDK_VERSION=$(echo "${{ env.RAW_VERSION }}" | sed -E 's/.*([0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._]+)?)$/\1/')
+      RAW_VERSION: ${{
+        (github.event_name == 'release' && github.event.release.tag_name)
+        || github.event.inputs.sdk_version
         }}
     steps:
       - name: Check out code
@@ -28,7 +29,7 @@ jobs:
           java-version: 17
       - name: Process version
         run: |
-          SDK_VERSION=$(echo "${{ env.RAW_VERSION }}" | sed -E 's/.*?([0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._]+)?)$/\1/')
+          SDK_VERSION=$(echo "${{ env.RAW_VERSION }}" | sed -E 's/.*([0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._]+)?)$/\1/')
           echo "SDK_VERSION=${SDK_VERSION}" >> $GITHUB_ENV
       - name: Set Gradle version
         run: echo "version=${{ env.SDK_VERSION }}" >> gradle.properties
