@@ -129,7 +129,7 @@ kotlin {
         }
 
         iosMain.dependencies {
-            implementation(libs.jetbrains.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.client.darwin)
         }
 
