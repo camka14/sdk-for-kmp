@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalTime::class)
+
 package io.appwrite
 
-import kotlinx.datetime.Clock
 import kotlin.random.Random
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Helper class to generate ID strings for resources.
@@ -25,8 +28,10 @@ class ID {
         fun unique(padding: Int = 7): String {
             val baseId = hexTimestamp()
             val randomPadding = (1..padding)
-                .map { Random.nextInt(0, 16).toString(16) }
-                .joinToString("")
+                .joinToString("") {
+                    Random.nextInt(0, 16)
+                        .toString(16)
+                }
 
             return baseId + randomPadding
         }
