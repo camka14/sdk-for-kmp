@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 
@@ -6,8 +5,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinx.serialization)
-    id("org.jetbrains.kotlinx.atomicfu") version "0.26.0"
-    id("com.vanniktech.maven.publish") version "0.31.0"
+    id("org.jetbrains.kotlinx.atomicfu") version "0.29.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
     id("signing")
 }
 
@@ -106,6 +105,7 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.websockets)
             implementation(libs.okio)
+            implementation(libs.kotlin.metadata.jvm)
             api(libs.kotlinx.serialization.json)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.napier)
@@ -155,7 +155,7 @@ kotlin {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
 
     signAllPublications()
 
@@ -195,7 +195,7 @@ mavenPublishing {
 
 android {
     namespace = "io.appwrite"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         minSdk = 21
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
