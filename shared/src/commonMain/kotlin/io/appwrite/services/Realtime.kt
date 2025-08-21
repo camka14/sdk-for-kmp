@@ -21,6 +21,7 @@ import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
+import io.ktor.websocket.send
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -39,6 +40,8 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     private companion object {
         private const val TYPE_ERROR = "error"
         private const val TYPE_EVENT = "event"
+        private const val TYPE_PONG = "pong"
+        private const val HEARTBEAT_INTERVAL = 20_000L // 20 seconds
         private const val DEBOUNCE_MILLIS = 1L
 
         private var webSocketSession: DefaultClientWebSocketSession? = null
@@ -49,6 +52,8 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         private var reconnectAttempts = 0
         private var subscriptionsCounter = 0
         private var reconnect = true
+        private var heartbeatJob: Job? = null
+        private var isActive = false
     }
 
     private fun createSocket() {
@@ -77,7 +82,9 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
                     url("${client.endpointRealtime}/realtime?$queryParams")
                 }
 
-                reconnectAttempts = 0  // Reset attempts on successful connection
+                reconnectAttempts = 0
+                isActive = true
+                startHeartbeat()
                 webSocketSession?.let { session ->
                     for (frame in session.incoming) {
                         when (frame) {
@@ -117,6 +124,21 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         callback = callback
     )
 
+    private fun startHeartbeat() {
+        stopHeartbeat()
+        heartbeatJob = launch {
+            while (isActive) {
+                delay(HEARTBEAT_INTERVAL)
+                webSocketSession?.send("""{"type":"ping"}""")
+            }
+        }
+    }
+
+    private fun stopHeartbeat() {
+        heartbeatJob?.cancel()
+        heartbeatJob = null
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> subscribe(
         channels: List<String>,
@@ -149,6 +171,9 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         return RealtimeSubscription {
             activeSubscriptions.remove(counter)
             cleanUp(channels)
+            if (activeSubscriptions.isEmpty()) {
+                isActive = false
+            }
         }
     }
 
@@ -173,7 +198,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     }
 
     private fun handleResponseError(message: RealtimeResponse) {
-        throw message.data.jsonCast<AppwriteException>()
+        throw message.data?.jsonCast<AppwriteException>() ?: RuntimeException("Data is not present")
     }
 
     @Throws(Throwable::class)
@@ -181,7 +206,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         val mapSerializer = getSerializer(Map::class)
         val event = json.decodeFromString(
             RealtimeResponseEvent.serializer(mapSerializer),
-            message.data.toJson()
+            message.data?.toJson() ?: return
         )
         if (event.channels.isEmpty()) {
             return
@@ -205,6 +230,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
 
     @Throws(Throwable::class)
     suspend fun handleClosing(code: Int, reason: String) {
+        stopHeartbeat()
         if (!reconnect || code == RealtimeCode.POLICY_VIOLATION.value) {
             reconnect = true
             return
