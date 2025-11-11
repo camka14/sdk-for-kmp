@@ -2,9 +2,9 @@ name: Build shared KMP library (Android + iOS)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
     inputs:
       sdk_version:
