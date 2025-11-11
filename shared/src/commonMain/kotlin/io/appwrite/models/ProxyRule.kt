@@ -1,24 +1,9 @@
 package io.appwrite.models
 
-import io.appwrite.extensions.jsonCast
-import io.appwrite.extensions.json
+import io.appwrite.enums.ProxyRuleDeploymentResourceType
+import io.appwrite.enums.ProxyRuleStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 
 /**
  * Rule
@@ -50,22 +35,58 @@ data class ProxyRule(
     val domain: String,
 
     /**
-     * Action definition for the rule. Possible values are &quot;api&quot;, &quot;function&quot;, or &quot;redirect&quot;
+     * Action definition for the rule. Possible values are &quot;api&quot;, &quot;deployment&quot;, or &quot;redirect&quot;
      */
-    @SerialName("resourceType")
-    val resourceType: String,
+    @SerialName("type")
+    val type: String,
 
     /**
-     * ID of resource for the action type. If resourceType is &quot;api&quot; or &quot;url&quot;, it is empty. If resourceType is &quot;function&quot;, it is ID of the function.
+     * Defines how the rule was created. Possible values are &quot;manual&quot; or &quot;deployment&quot;
      */
-    @SerialName("resourceId")
-    val resourceId: String,
+    @SerialName("trigger")
+    val trigger: String,
+
+    /**
+     * URL to redirect to. Used if type is &quot;redirect&quot;
+     */
+    @SerialName("redirectUrl")
+    val redirectUrl: String,
+
+    /**
+     * Status code to apply during redirect. Used if type is &quot;redirect&quot;
+     */
+    @SerialName("redirectStatusCode")
+    val redirectStatusCode: Long,
+
+    /**
+     * ID of deployment. Used if type is &quot;deployment&quot;
+     */
+    @SerialName("deploymentId")
+    val deploymentId: String,
+
+    /**
+     * Type of deployment. Possible values are &quot;function&quot;, &quot;site&quot;. Used if rule&#039;s type is &quot;deployment&quot;.
+     */
+    @SerialName("deploymentResourceType")
+    val deploymentResourceType: ProxyRuleDeploymentResourceType,
+
+    /**
+     * ID deployment&#039;s resource. Used if type is &quot;deployment&quot;
+     */
+    @SerialName("deploymentResourceId")
+    val deploymentResourceId: String,
+
+    /**
+     * Name of Git branch that updates rule. Used if type is &quot;deployment&quot;
+     */
+    @SerialName("deploymentVcsProviderBranch")
+    val deploymentVcsProviderBranch: String,
 
     /**
      * Domain verification status. Possible values are &quot;created&quot;, &quot;verifying&quot;, &quot;verified&quot; and &quot;unverified&quot;
      */
     @SerialName("status")
-    val status: String,
+    val status: ProxyRuleStatus,
 
     /**
      * Certificate generation logs. This will return an empty string if generation did not run, or succeeded.
@@ -79,5 +100,5 @@ data class ProxyRule(
     @SerialName("renewAt")
     val renewAt: String,
 
-)
+    )
 

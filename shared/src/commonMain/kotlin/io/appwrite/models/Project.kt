@@ -1,24 +1,7 @@
 package io.appwrite.models
 
-import io.appwrite.extensions.jsonCast
-import io.appwrite.extensions.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 
 /**
  * Project
@@ -176,6 +159,12 @@ data class Project(
     val authMembershipsMfa: Boolean,
 
     /**
+     * Whether or not all existing sessions should be invalidated on password change
+     */
+    @SerialName("authInvalidateSessions")
+    val authInvalidateSessions: Boolean,
+
+    /**
      * List of Auth Providers.
      */
     @SerialName("oAuthProviders")
@@ -198,6 +187,12 @@ data class Project(
      */
     @SerialName("keys")
     val keys: List<Key>,
+
+    /**
+     * List of dev keys.
+     */
+    @SerialName("devKeys")
+    val devKeys: List<DevKey>,
 
     /**
      * Status for custom SMTP
@@ -320,10 +315,16 @@ data class Project(
     val serviceStatusForAvatars: Boolean,
 
     /**
-     * Databases service status
+     * Databases (legacy) service status
      */
     @SerialName("serviceStatusForDatabases")
     val serviceStatusForDatabases: Boolean,
+
+    /**
+     * TablesDB service status
+     */
+    @SerialName("serviceStatusForTablesdb")
+    val serviceStatusForTablesdb: Boolean,
 
     /**
      * Locale service status
@@ -356,6 +357,12 @@ data class Project(
     val serviceStatusForUsers: Boolean,
 
     /**
+     * Sites service status
+     */
+    @SerialName("serviceStatusForSites")
+    val serviceStatusForSites: Boolean,
+
+    /**
      * Functions service status
      */
     @SerialName("serviceStatusForFunctions")
@@ -373,5 +380,5 @@ data class Project(
     @SerialName("serviceStatusForMessaging")
     val serviceStatusForMessaging: Boolean,
 
-)
+    )
 

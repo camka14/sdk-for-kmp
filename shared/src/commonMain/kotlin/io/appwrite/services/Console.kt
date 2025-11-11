@@ -2,21 +2,48 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.models.*
-import io.appwrite.enums.*
-import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.*
 import io.appwrite.serializers.*
-import io.appwrite.webInterface.UrlParser
-import kotlinx.serialization.KSerializer
-import kotlin.jvm.JvmOverloads
-import kotlin.reflect.KClass
 
 /**
  * The Console service allows you to interact with console relevant informations.
  **/
 class Console(client: Client) : Service(client) {
-        /**
+    /**
+     * Check resource ID availability
+     *
+     * Check if a resource ID is available.
+     *
+    @Throws(Throwable::class)
+     * @param value Resource value.
+     * @param type Resource type.
+     */
+    @Throws(Throwable::class)
+    suspend fun getResource(
+        value: String,
+        type: io.appwrite.enums.ConsoleResourceType,
+    ): Any {
+        val apiPath = "/console/resources"
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "value" to value,
+            "type" to type,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "GET",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = Any::class,
+            serializer = DynamicLookupSerializer
+        )
+    }
+
+    /**
      * Get variables
      *
      * Get all Environment Variables that are relevant for the console.
@@ -45,4 +72,4 @@ class Console(client: Client) : Service(client) {
         )
     }
 
-    }
+}

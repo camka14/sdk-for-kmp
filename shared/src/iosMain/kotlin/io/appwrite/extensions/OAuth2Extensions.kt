@@ -5,7 +5,8 @@ import io.appwrite.exceptions.AppwriteException
 import io.appwrite.webInterface.UrlParser
 import io.ktor.http.Cookie
 import io.ktor.http.Url
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 suspend fun io.appwrite.services.Account.createOAuth2Session(
     provider: io.appwrite.enums.OAuthProvider,
@@ -36,11 +37,16 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
     val fullUrl = "${client.endpoint}${apiPath}?${apiQuery.joinToString("&")}"
     val apiUrl = urlParser.parse(fullUrl)
     val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
+    val webAuthScope = CoroutineScope(client.coroutineContext)
 
     WebAuthComponent.setCookieStorage(client.iosCookieStorage)
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
+        if (result.isFailure) {
+            throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")
+        }
+
         result.getOrNull()?.let { callbackUrl ->
-            runBlocking {
+            webAuthScope.launch {
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
@@ -63,7 +69,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
             }
         }
     }.onFailure {
-        throw AppwriteException("${it.message}")
+        throw AppwriteException("it.message")
     }
 }
 
@@ -97,11 +103,16 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
     val fullUrl = "${client.endpoint}${apiPath}?${apiQuery.joinToString("&")}"
     val apiUrl = urlParser.parse(fullUrl)
     val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
+    val webAuthScope = CoroutineScope(client.coroutineContext)
 
     WebAuthComponent.setCookieStorage(client.iosCookieStorage)
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
+        if (result.isFailure) {
+            throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")
+        }
+
         result.getOrNull()?.let { callbackUrl ->
-            runBlocking {
+            webAuthScope.launch {
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
@@ -124,7 +135,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
             }
         }
     }.onFailure {
-        throw AppwriteException("${it.message}")
+        throw AppwriteException("it.message")
     }
 }
 

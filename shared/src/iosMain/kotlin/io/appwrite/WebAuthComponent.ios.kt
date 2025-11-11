@@ -3,7 +3,6 @@ package io.appwrite
 import io.appwrite.cookies.IosCookieStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
-import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.AuthenticationServices.ASPresentationAnchor
 import platform.AuthenticationServices.ASWebAuthenticationPresentationContextProvidingProtocol
@@ -25,7 +24,7 @@ import kotlin.coroutines.resumeWithException
 actual class WebAuthComponent {
     actual companion object {
         private data class PendingAuth(
-            val continuation: CancellableContinuation<Result<String>>,
+            val continuation: kotlinx.coroutines.CancellableContinuation<String>,
             val session: ASWebAuthenticationSession?,
             val onComplete: ((Result<String>) -> Unit)?
         )
@@ -44,7 +43,7 @@ actual class WebAuthComponent {
             url: String,
             callbackUrlScheme: String,
             onComplete: ((Result<String>) -> Unit)?
-        ): Result<String> = suspendCancellableCoroutine { cont ->
+        ): String = suspendCancellableCoroutine { cont ->
             val nsUrl = NSURL.URLWithString(url)
             if (nsUrl == null) {
                 cont.resumeWithException(IllegalArgumentException("Invalid URL: $url"))
@@ -72,7 +71,7 @@ actual class WebAuthComponent {
                             handleIncomingCookie(callbackUrlString)
                             pending?.onComplete?.invoke(Result.success(callbackUrlString))
                             if (pending?.continuation?.isActive == true) {
-                                pending.continuation.resume(Result.success(callbackUrlString))
+                                pending.continuation.resume(callbackUrlString)
                             }
                         }
 
@@ -87,11 +86,14 @@ actual class WebAuthComponent {
                 }
             )
 
+            // Configure the session
             authSession.prefersEphemeralWebBrowserSession = true
             authSession.presentationContextProvider = PresentationContextProviderImpl()
 
+            // Store the pending authentication
             pendingAuth[callbackUrlScheme] = PendingAuth(cont, authSession, onComplete)
 
+            // Start the authentication session
             val started = authSession.start()
             if (!started) {
                 pendingAuth.remove(callbackUrlScheme)
@@ -109,7 +111,7 @@ actual class WebAuthComponent {
                 pending.session?.cancel()
                 pending.onComplete?.invoke(Result.success(url))
                 if (pending.continuation.isActive) {
-                    pending.continuation.resume(Result.success(url))
+                    pending.continuation.resume(url)
                 }
             }
         }

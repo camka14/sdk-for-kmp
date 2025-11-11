@@ -1,24 +1,8 @@
 package io.appwrite.models
 
-import io.appwrite.extensions.jsonCast
-import io.appwrite.extensions.json
+import io.appwrite.enums.PlatformType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 
 /**
  * Platform
@@ -50,10 +34,10 @@ data class Platform(
     val name: String,
 
     /**
-     * Platform type. Possible values are: web, flutter-web, flutter-ios, flutter-android, ios, android, and unity.
+     * Platform type. Possible values are: web, flutter-web, flutter-ios, flutter-android, flutter-linux, flutter-macos, flutter-windows, apple-ios, apple-macos, apple-watchos, apple-tvos, android, unity, react-native-ios, react-native-android.
      */
     @SerialName("type")
-    val type: String,
+    val type: PlatformType,
 
     /**
      * Platform Key. iOS bundle ID or Android package name.  Empty string for other platforms.
@@ -85,5 +69,5 @@ data class Platform(
     @SerialName("httpPass")
     val httpPass: String,
 
-)
+    )
 

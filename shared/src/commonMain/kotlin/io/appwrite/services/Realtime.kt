@@ -21,10 +21,8 @@ import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
-import io.ktor.websocket.send
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -59,7 +57,6 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     private fun createSocket() {
         launch(Dispatchers.IO) {
             try {
-
                 if (activeChannels.isEmpty()) {
                     reconnect = false
                     closeSocket()
@@ -129,7 +126,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         heartbeatJob = launch {
             while (isActive) {
                 delay(HEARTBEAT_INTERVAL)
-                webSocketSession?.send("""{"type":"ping"}""")
+                webSocketSession?.send(Frame.Text("""{"type":"ping"}"""))
             }
         }
     }
@@ -194,6 +191,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         when (message.type) {
             TYPE_ERROR -> handleResponseError(message)
             TYPE_EVENT -> handleResponseEvent(message)
+            TYPE_PONG -> {}
         }
     }
 

@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 enum class SMTPSecure(val value: String) {
     @SerialName("tls")
     TLS("tls"),
+
     @SerialName("ssl")
     SSL("ssl");
 

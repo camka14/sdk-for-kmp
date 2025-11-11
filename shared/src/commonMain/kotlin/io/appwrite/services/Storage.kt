@@ -3,25 +3,13 @@ package io.appwrite.services
 import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.models.*
-import io.appwrite.enums.*
-import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.*
 import io.appwrite.serializers.*
-import io.appwrite.webInterface.UrlParser
-import kotlinx.serialization.KSerializer
-import kotlin.jvm.JvmOverloads
-import kotlin.reflect.KClass
-import kotlinx.serialization.serializer
-import io.ktor.client.plugins.cookies.cookies
-import io.ktor.client.request.cookie
-import io.ktor.client.request.get
-import io.ktor.http.Cookie
 
 /**
  * The Storage service allows you to manage your project files.
  **/
 class Storage(client: Client) : Service(client) {
-        /**
+    /**
      * List buckets
      *
      * Get a list of all the storage buckets. You can use the query params to filter your results.
@@ -30,12 +18,14 @@ class Storage(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: enabled, name, fileSecurity, maximumFileSize, encryption, antivirus
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listBuckets(
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.BucketList {
         val apiPath = "/storage/buckets"
 
@@ -43,6 +33,7 @@ class Storage(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -58,7 +49,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create bucket
      *
      * Create a new storage bucket.
@@ -120,7 +111,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get bucket
      *
      * Get a storage bucket by its unique ID. This endpoint response returns a JSON object with the storage bucket metadata.
@@ -152,7 +143,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update bucket
      *
      * Update a storage bucket by its unique ID.
@@ -214,7 +205,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete bucket
      *
      * Delete a storage bucket by its unique ID.
@@ -247,7 +238,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List files
      *
      * Get a list of all the user files. You can use the query params to filter your results.
@@ -257,6 +248,7 @@ class Storage(client: Client) : Service(client) {
      * @param bucketId Storage bucket unique ID. You can create a new storage bucket using the Storage service [server integration](https://appwrite.io/docs/server/storage#createBucket).
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, signature, mimeType, sizeOriginal, chunksTotal, chunksUploaded
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
@@ -264,6 +256,7 @@ class Storage(client: Client) : Service(client) {
         bucketId: String,
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.FileList {
         val apiPath = "/storage/buckets/{bucketId}/files"
             .replace("{bucketId}", bucketId)
@@ -272,6 +265,7 @@ class Storage(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -287,7 +281,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create file
      *
      * Create a new file. Before using this route, you should create a new bucket resource using either a [server integration](https://appwrite.io/docs/server/storage#storageCreateBucket) API or directly from your Appwrite console.Larger files should be uploaded using multiple requests with the [content-range](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range) header to send a partial request with a maximum supported chunk of `5MB`. The `content-range` header values should always be in bytes.When the first request is sent, the server will return the **File** object, and the subsequent part request must include the file&#039;s **id** in `x-appwrite-id` header to allow the server to know that the partial upload is for the existing file and not for a new one.If you&#039;re creating a new file using one of the Appwrite SDKs, all the chunking logic will be managed by the SDK internally.
@@ -322,7 +316,7 @@ class Storage(client: Client) : Service(client) {
             "content-type" to "multipart/form-data",
         )
 
-        val idParamName: String? ="fileId"
+        val idParamName: String? = "fileId"
         val paramName = "file"
 
         return client.chunkedUpload(
@@ -338,7 +332,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get file
      *
      * Get a file by its unique ID. This endpoint response returns a JSON object with the file metadata.
@@ -373,7 +367,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update file
      *
      * Update a file by its unique ID. Only users with write permissions have access to update this resource.
@@ -417,7 +411,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete file
      *
      * Delete a file by its unique ID. Only users with write permissions have access to delete this resource.
@@ -453,19 +447,23 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get file for download
      *
      * Get a file content by its unique ID. The endpoint response return with a &#039;Content-Disposition: attachment&#039; header that tells the browser to start downloading the file to user downloads directory.
      *
+    @JvmOverloads
     @Throws(Throwable::class)
      * @param bucketId Storage bucket ID. You can create a new storage bucket using the Storage service [server integration](https://appwrite.io/docs/server/storage#createBucket).
      * @param fileId File ID.
+     * @param token File token for accessing this file.
      */
     @Throws(Throwable::class)
+    @JvmOverloads
     suspend fun getFileDownload(
         bucketId: String,
         fileId: String,
+        token: String? = null,
     ): ByteArray {
         val apiPath = "/storage/buckets/{bucketId}/files/{fileId}/download"
             .replace("{bucketId}", bucketId)
@@ -473,6 +471,7 @@ class Storage(client: Client) : Service(client) {
 
 
         val apiParams = mutableMapOf<String, Any?>(
+            "token" to token,
             "project" to client.config["project"],
         )
         return client.call(
@@ -483,7 +482,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get file preview
      *
      * Get a file preview image. Currently, this method supports preview for image files (jpg, png, and gif), other supported formats, like pdf, docs, slides, and spreadsheets, will return the file icon image. You can also pass query string arguments for cutting and resizing your preview image. Preview is supported only for image files smaller than 10MB.
@@ -495,7 +494,7 @@ class Storage(client: Client) : Service(client) {
      * @param width Resize preview image width, Pass an integer between 0 to 4000.
      * @param height Resize preview image height, Pass an integer between 0 to 4000.
      * @param gravity Image crop gravity. Can be one of center,top-left,top,top-right,left,right,bottom-left,bottom,bottom-right
-     * @param quality Preview image quality. Pass an integer between 0 to 100. Defaults to 100.
+     * @param quality Preview image quality. Pass an integer between 0 to 100. Defaults to keep existing image quality.
      * @param borderWidth Preview image border in pixels. Pass an integer between 0 to 100. Defaults to 0.
      * @param borderColor Preview image border color. Use a valid HEX color, no # is needed for prefix.
      * @param borderRadius Preview image border radius in pixels. Pass an integer between 0 to 4000.
@@ -503,6 +502,7 @@ class Storage(client: Client) : Service(client) {
      * @param rotation Preview image rotation in degrees. Pass an integer between -360 and 360.
      * @param background Preview image background color. Only works with transparent images (png). Use a valid HEX color, no # is needed for prefix.
      * @param output Output format type (jpeg, jpg, png, gif and webp).
+     * @param token File token for accessing this file.
      */
     @Throws(Throwable::class)
     @JvmOverloads
@@ -520,6 +520,7 @@ class Storage(client: Client) : Service(client) {
         rotation: Long? = null,
         background: String? = null,
         output: io.appwrite.enums.ImageFormat? = null,
+        token: String? = null,
     ): ByteArray {
         val apiPath = "/storage/buckets/{bucketId}/files/{fileId}/preview"
             .replace("{bucketId}", bucketId)
@@ -538,6 +539,7 @@ class Storage(client: Client) : Service(client) {
             "rotation" to rotation,
             "background" to background,
             "output" to output,
+            "token" to token,
             "project" to client.config["project"],
         )
         return client.call(
@@ -548,19 +550,23 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get file for view
      *
      * Get a file content by its unique ID. This endpoint is similar to the download method but returns with no  &#039;Content-Disposition: attachment&#039; header.
      *
+    @JvmOverloads
     @Throws(Throwable::class)
      * @param bucketId Storage bucket unique ID. You can create a new storage bucket using the Storage service [server integration](https://appwrite.io/docs/server/storage#createBucket).
      * @param fileId File ID.
+     * @param token File token for accessing this file.
      */
     @Throws(Throwable::class)
+    @JvmOverloads
     suspend fun getFileView(
         bucketId: String,
         fileId: String,
+        token: String? = null,
     ): ByteArray {
         val apiPath = "/storage/buckets/{bucketId}/files/{fileId}/view"
             .replace("{bucketId}", bucketId)
@@ -568,6 +574,7 @@ class Storage(client: Client) : Service(client) {
 
 
         val apiParams = mutableMapOf<String, Any?>(
+            "token" to token,
             "project" to client.config["project"],
         )
         return client.call(
@@ -578,7 +585,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get storage usage stats
      *
      * Get usage metrics and statistics for all buckets in the project. You can view the total number of buckets, files, storage usage. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -590,7 +597,7 @@ class Storage(client: Client) : Service(client) {
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun getUsage(
-        range: io.appwrite.enums.StorageUsageRange? = null,
+        range: io.appwrite.enums.UsageRange? = null,
     ): io.appwrite.models.UsageStorage {
         val apiPath = "/storage/usage"
 
@@ -612,7 +619,7 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get bucket usage stats
      *
      * Get usage metrics and statistics a specific bucket in the project. You can view the total number of files, storage usage. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -626,7 +633,7 @@ class Storage(client: Client) : Service(client) {
     @JvmOverloads
     suspend fun getBucketUsage(
         bucketId: String,
-        range: io.appwrite.enums.StorageUsageRange? = null,
+        range: io.appwrite.enums.UsageRange? = null,
     ): io.appwrite.models.UsageBuckets {
         val apiPath = "/storage/{bucketId}/usage"
             .replace("{bucketId}", bucketId)
@@ -649,4 +656,4 @@ class Storage(client: Client) : Service(client) {
         )
     }
 
-    }
+}

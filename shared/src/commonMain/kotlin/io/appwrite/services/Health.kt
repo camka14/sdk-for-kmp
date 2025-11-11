@@ -2,21 +2,12 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.models.*
-import io.appwrite.enums.*
-import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.*
-import io.appwrite.serializers.*
-import io.appwrite.webInterface.UrlParser
-import kotlinx.serialization.KSerializer
-import kotlin.jvm.JvmOverloads
-import kotlin.reflect.KClass
 
 /**
  * The Health service allows you to both validate and monitor your Appwrite server&#039;s health.
  **/
 class Health(client: Client) : Service(client) {
-        /**
+    /**
      * Get HTTP
      *
      * Check the Appwrite HTTP server is up and responsive.
@@ -45,7 +36,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get antivirus
      *
      * Check the Appwrite Antivirus server is up and connection is successful.
@@ -74,7 +65,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get cache
      *
      * Check the Appwrite in-memory cache servers are up and connection is successful.
@@ -103,7 +94,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get the SSL certificate for a domain
      *
      * Get the SSL certificate for a domain
@@ -137,7 +128,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get DB
      *
      * Check the Appwrite database servers are up and connection is successful.
@@ -166,7 +157,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get pubsub
      *
      * Check the Appwrite pub-sub servers are up and connection is successful.
@@ -195,7 +186,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get builds queue
      *
      * Get the number of builds that are waiting to be processed in the Appwrite internal queue server.
@@ -229,7 +220,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get certificates queue
      *
      * Get the number of certificates that are waiting to be issued against [Letsencrypt](https://letsencrypt.org/) in the Appwrite internal queue server.
@@ -263,7 +254,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get databases queue
      *
      * Get the number of database changes that are waiting to be processed in the Appwrite internal queue server.
@@ -300,7 +291,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get deletes queue
      *
      * Get the number of background destructive changes that are waiting to be processed in the Appwrite internal queue server.
@@ -334,7 +325,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get number of failed queue jobs
      *
      * Returns the amount of failed jobs in a given queue.
@@ -371,7 +362,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get functions queue
      *
      * Get the number of function executions that are waiting to be processed in the Appwrite internal queue server.
@@ -405,7 +396,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get logs queue
      *
      * Get the number of logs that are waiting to be processed in the Appwrite internal queue server.
@@ -439,7 +430,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get mails queue
      *
      * Get the number of mails that are waiting to be processed in the Appwrite internal queue server.
@@ -473,7 +464,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get messaging queue
      *
      * Get the number of messages that are waiting to be processed in the Appwrite internal queue server.
@@ -507,7 +498,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get migrations queue
      *
      * Get the number of migrations that are waiting to be processed in the Appwrite internal queue server.
@@ -541,8 +532,8 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Get stats  resources queue
+    /**
+     * Get stats resources queue
      *
      * Get the number of metrics that are waiting to be processed in the Appwrite stats resources queue.
      *
@@ -575,7 +566,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get stats usage queue
      *
      * Get the number of metrics that are waiting to be processed in the Appwrite internal queue server.
@@ -609,7 +600,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get webhooks queue
      *
      * Get the number of webhooks that are waiting to be processed in the Appwrite internal queue server.
@@ -643,7 +634,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get storage
      *
      * Check the Appwrite storage device is up and connection is successful.
@@ -672,7 +663,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get local storage
      *
      * Check the Appwrite local storage device is up and connection is successful.
@@ -701,7 +692,7 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get time
      *
      * Check the Appwrite server time is synced with Google remote NTP server. We use this technology to smoothly handle leap seconds with no disruptive events. The [Network Time Protocol](https://en.wikipedia.org/wiki/Network_Time_Protocol) (NTP) is used by hundreds of millions of computers and devices to synchronize their clocks over the Internet. If your computer sets its own clock, it likely uses NTP.
@@ -730,4 +721,4 @@ class Health(client: Client) : Service(client) {
         )
     }
 
-    }
+}

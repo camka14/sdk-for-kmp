@@ -1,24 +1,9 @@
 package io.appwrite.models
 
-import io.appwrite.extensions.jsonCast
-import io.appwrite.extensions.json
+import io.appwrite.enums.ExecutionStatus
+import io.appwrite.enums.ExecutionTrigger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 
 /**
  * Execution
@@ -38,7 +23,7 @@ data class Execution(
     val createdAt: String,
 
     /**
-     * Execution upate date in ISO 8601 format.
+     * Execution update date in ISO 8601 format.
      */
     @SerialName("\$updatedAt")
     val updatedAt: String,
@@ -56,16 +41,22 @@ data class Execution(
     val functionId: String,
 
     /**
+     * Function&#039;s deployment ID used to create the execution.
+     */
+    @SerialName("deploymentId")
+    val deploymentId: String,
+
+    /**
      * The trigger that caused the function to execute. Possible values can be: `http`, `schedule`, or `event`.
      */
     @SerialName("trigger")
-    val trigger: String,
+    val trigger: ExecutionTrigger,
 
     /**
-     * The status of the function execution. Possible values can be: `waiting`, `processing`, `completed`, or `failed`.
+     * The status of the function execution. Possible values can be: `waiting`, `processing`, `completed`, `failed`, or `scheduled`.
      */
     @SerialName("status")
-    val status: String,
+    val status: ExecutionStatus,
 
     /**
      * HTTP request method type.
@@ -80,7 +71,7 @@ data class Execution(
     val requestPath: String,
 
     /**
-     * HTTP response headers as a key-value object. This will return only whitelisted headers. All headers are returned if execution is created as synchronous.
+     * HTTP request headers as a key-value object. This will return only whitelisted headers. All headers are returned if execution is created as synchronous.
      */
     @SerialName("requestHeaders")
     val requestHeaders: List<Headers>,
@@ -116,7 +107,7 @@ data class Execution(
     val errors: String,
 
     /**
-     * Function execution duration in seconds.
+     * Resource(function/site) execution duration in seconds.
      */
     @SerialName("duration")
     val duration: Double,
@@ -127,5 +118,5 @@ data class Execution(
     @SerialName("scheduledAt")
     var scheduledAt: String?,
 
-)
+    )
 

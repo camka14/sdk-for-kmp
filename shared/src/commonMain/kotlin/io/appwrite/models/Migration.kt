@@ -1,24 +1,8 @@
 package io.appwrite.models
 
-import io.appwrite.extensions.jsonCast
-import io.appwrite.extensions.json
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 
 /**
  * Migration
@@ -44,7 +28,7 @@ data class Migration(
     val updatedAt: String,
 
     /**
-     * Migration status ( pending, processing, failed, completed ) 
+     * Migration status ( pending, processing, failed, completed )
      */
     @SerialName("status")
     val status: String,
@@ -74,6 +58,12 @@ data class Migration(
     val resources: List<String>,
 
     /**
+     * Id of the resource to migrate.
+     */
+    @SerialName("resourceId")
+    val resourceId: String,
+
+    /**
      * A group of counters that represent the total progress of the migration.
      */
     @SerialName("statusCounters")
@@ -93,5 +83,12 @@ data class Migration(
     @SerialName("errors")
     val errors: List<String>,
 
-)
+    /**
+     * Migration options used during the migration process.
+     */
+    @SerialName("options")
+    @Contextual
+    val options: Any,
+
+    )
 

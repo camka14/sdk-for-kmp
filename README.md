@@ -10,8 +10,9 @@
 **This SDK is compatible with Appwrite server version 1.6.x. For older versions, please
 check [previous releases](https://github.com/appwrite/sdk-for-android/releases).**
 
-**This package is not officially supported. Appwrite employees are a bit held up so this is a temporary
-way to get some feedback on my work. When my pull request is completed this package may be deprecated.
+**This package is not officially supported. Appwrite employees are a bit held up so this is a
+temporary way to get some feedback on my work. When my pull request is completed this package may be
+deprecated.
 
 Appwrite is an open-source backend as a service server that abstract and simplify complex and
 repetitive development tasks behind a very simple to use REST API. Appwrite aims to help you develop
@@ -32,8 +33,10 @@ locally.
    ```bash git clone https://github.com/camka14/sdk-for-kmp.git cd sdk-for-kmp ```
 
 2. Clean and publish to local Maven:
-    ```./gradlew clean publishToMavenLocal ```
+   ```./gradlew clean publishToMavenLocal ```
+
 ### Gradle Setup
+
 Add the following to your root level `settings.gradle.kts`:
 
 ```

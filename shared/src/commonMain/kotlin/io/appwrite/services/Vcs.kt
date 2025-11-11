@@ -2,21 +2,57 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.models.*
-import io.appwrite.enums.*
-import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.*
 import io.appwrite.serializers.*
-import io.appwrite.webInterface.UrlParser
-import kotlinx.serialization.KSerializer
-import kotlin.jvm.JvmOverloads
-import kotlin.reflect.KClass
 
 /**
- * 
+ *
  **/
 class Vcs(client: Client) : Service(client) {
-        /**
+    /**
+     * Create repository detection
+     *
+     * Analyze a GitHub repository to automatically detect the programming language and runtime environment. This endpoint scans the repository&#039;s files and language statistics to determine the appropriate runtime settings for your function. The GitHub installation must be properly configured and the repository must be accessible through your installation for this endpoint to work.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param installationId Installation Id
+     * @param providerRepositoryId Repository Id
+     * @param type Detector type. Must be one of the following: runtime, framework
+     * @param providerRootDirectory Path to Root Directory
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun createRepositoryDetection(
+        installationId: String,
+        providerRepositoryId: String,
+        type: io.appwrite.enums.VCSDetectionType,
+        providerRootDirectory: String? = null,
+    ): io.appwrite.models.DetectionFramework {
+        val apiPath = "/vcs/github/installations/{installationId}/detections"
+            .replace("{installationId}", installationId)
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "providerRepositoryId" to providerRepositoryId,
+            "type" to type,
+            "providerRootDirectory" to providerRootDirectory,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "POST",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.DetectionFramework::class,
+            serializer = io.appwrite.models.DetectionFramework.serializer()
+        )
+    }
+
+    /**
      * List repositories
      *
      * Get a list of GitHub repositories available through your installation. This endpoint returns repositories with their basic information, detected runtime environments, and latest push dates. You can optionally filter repositories using a search term. Each repository&#039;s runtime is automatically detected based on its contents and language statistics. The GitHub installation must be properly configured for this endpoint to work.
@@ -24,19 +60,22 @@ class Vcs(client: Client) : Service(client) {
     @JvmOverloads
     @Throws(Throwable::class)
      * @param installationId Installation Id
+     * @param type Detector type. Must be one of the following: runtime, framework
      * @param search Search term to filter your list results. Max length: 256 chars.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listRepositories(
         installationId: String,
+        type: io.appwrite.enums.VCSDetectionType,
         search: String? = null,
-    ): io.appwrite.models.ProviderRepositoryList {
+    ): io.appwrite.models.ProviderRepositoryFrameworkList {
         val apiPath = "/vcs/github/installations/{installationId}/providerRepositories"
             .replace("{installationId}", installationId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
+            "type" to type,
             "search" to search,
         )
         val apiHeaders = mutableMapOf(
@@ -48,12 +87,12 @@ class Vcs(client: Client) : Service(client) {
             apiPath,
             apiHeaders,
             apiParams,
-            responseType = io.appwrite.models.ProviderRepositoryList::class,
-            serializer = io.appwrite.models.ProviderRepositoryList.serializer()
+            responseType = io.appwrite.models.ProviderRepositoryFrameworkList::class,
+            serializer = io.appwrite.models.ProviderRepositoryFrameworkList.serializer()
         )
     }
 
-            /**
+    /**
      * Create repository
      *
      * Create a new GitHub repository through your installation. This endpoint allows you to create either a public or private repository by specifying a name and visibility setting. The repository will be created under your GitHub user account or organization, depending on your installation type. The GitHub installation must be properly configured and have the necessary permissions for repository creation.
@@ -92,7 +131,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get repository
      *
      * Get detailed information about a specific GitHub repository from your installation. This endpoint returns repository details including its ID, name, visibility status, organization, and latest push date. The GitHub installation must be properly configured and have access to the requested repository for this endpoint to work.
@@ -106,9 +145,10 @@ class Vcs(client: Client) : Service(client) {
         installationId: String,
         providerRepositoryId: String,
     ): io.appwrite.models.ProviderRepository {
-        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}"
-            .replace("{installationId}", installationId)
-            .replace("{providerRepositoryId}", providerRepositoryId)
+        val apiPath =
+            "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}"
+                .replace("{installationId}", installationId)
+                .replace("{providerRepositoryId}", providerRepositoryId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -127,7 +167,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List repository branches
      *
      * Get a list of all branches from a GitHub repository in your installation. This endpoint returns the names of all branches in the repository and their total count. The GitHub installation must be properly configured and have access to the requested repository for this endpoint to work.
@@ -141,9 +181,10 @@ class Vcs(client: Client) : Service(client) {
         installationId: String,
         providerRepositoryId: String,
     ): io.appwrite.models.BranchList {
-        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/branches"
-            .replace("{installationId}", installationId)
-            .replace("{providerRepositoryId}", providerRepositoryId)
+        val apiPath =
+            "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/branches"
+                .replace("{installationId}", installationId)
+                .replace("{providerRepositoryId}", providerRepositoryId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -162,7 +203,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get files and directories of a VCS repository
      *
      * Get a list of files and directories from a GitHub repository connected to your project. This endpoint returns the contents of a specified repository path, including file names, sizes, and whether each item is a file or directory. The GitHub installation must be properly configured and the repository must be accessible through your installation for this endpoint to work.
@@ -172,6 +213,7 @@ class Vcs(client: Client) : Service(client) {
      * @param installationId Installation Id
      * @param providerRepositoryId Repository Id
      * @param providerRootDirectory Path to get contents of nested directory
+     * @param providerReference Git reference (branch, tag, commit) to get contents from
      */
     @Throws(Throwable::class)
     @JvmOverloads
@@ -179,14 +221,17 @@ class Vcs(client: Client) : Service(client) {
         installationId: String,
         providerRepositoryId: String,
         providerRootDirectory: String? = null,
+        providerReference: String? = null,
     ): io.appwrite.models.VcsContentList {
-        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/contents"
-            .replace("{installationId}", installationId)
-            .replace("{providerRepositoryId}", providerRepositoryId)
+        val apiPath =
+            "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/contents"
+                .replace("{installationId}", installationId)
+                .replace("{providerRepositoryId}", providerRepositoryId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
             "providerRootDirectory" to providerRootDirectory,
+            "providerReference" to providerReference,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -202,48 +247,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Create runtime settings detection
-     *
-     * Analyze a GitHub repository to automatically detect the programming language and runtime environment. This endpoint scans the repository&#039;s files and language statistics to determine the appropriate runtime settings for your function. The GitHub installation must be properly configured and the repository must be accessible through your installation for this endpoint to work.
-     *
-    @JvmOverloads
-    @Throws(Throwable::class)
-     * @param installationId Installation Id
-     * @param providerRepositoryId Repository Id
-     * @param providerRootDirectory Path to Root Directory
-     */
-    @Throws(Throwable::class)
-    @JvmOverloads
-    suspend fun createRepositoryDetection(
-        installationId: String,
-        providerRepositoryId: String,
-        providerRootDirectory: String? = null,
-    ): io.appwrite.models.Detection {
-        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/detection"
-            .replace("{installationId}", installationId)
-            .replace("{providerRepositoryId}", providerRepositoryId)
-
-
-        val apiParams = mutableMapOf<String, Any?>(
-            "providerRootDirectory" to providerRootDirectory,
-        )
-        val apiHeaders = mutableMapOf(
-            "content-type" to "application/json",
-            "content-type" to "application/json",
-        )
-
-        return client.call(
-            "POST",
-            apiPath,
-            apiHeaders,
-            apiParams,
-            responseType = io.appwrite.models.Detection::class,
-            serializer = io.appwrite.models.Detection.serializer()
-        )
-    }
-
-            /**
+    /**
      * Update external deployment (authorize)
      *
      * Authorize and create deployments for a GitHub pull request in your project. This endpoint allows external contributions by creating deployments from pull requests, enabling preview environments for code review. The pull request must be open and not previously authorized. The GitHub installation must be properly configured and have access to both the repository and pull request for this endpoint to work.
@@ -282,7 +286,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List installations
      *
      * List all VCS installations configured for the current project. This endpoint returns a list of installations including their provider, organization, and other configuration details.
@@ -291,12 +295,14 @@ class Vcs(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: provider, organization
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listInstallations(
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.InstallationList {
         val apiPath = "/vcs/installations"
 
@@ -304,6 +310,7 @@ class Vcs(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -319,10 +326,10 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get installation
      *
-     * Get a VCS installation by its unique ID. This endpoint returns the installation&#039;s details including its provider, organization, and configuration. 
+     * Get a VCS installation by its unique ID. This endpoint returns the installation&#039;s details including its provider, organization, and configuration.
      *
     @Throws(Throwable::class)
      * @param installationId Installation Id
@@ -351,7 +358,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete installation
      *
      * Delete a VCS installation by its unique ID. This endpoint removes the installation and all its associated repositories from the project.
@@ -384,4 +391,4 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    }
+}

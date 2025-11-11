@@ -3,7 +3,6 @@ package io.appwrite.coroutines
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.CoroutineContext
-import kotlin.jvm.JvmOverloads
 
 interface Callback<T> {
     fun onComplete(result: T?, error: Throwable?)

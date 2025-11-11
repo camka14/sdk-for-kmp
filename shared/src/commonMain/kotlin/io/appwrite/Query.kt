@@ -1,5 +1,7 @@
 package io.appwrite
 
+import io.appwrite.Query.Companion.limit
+import io.appwrite.Query.Companion.offset
 import io.appwrite.extensions.json
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

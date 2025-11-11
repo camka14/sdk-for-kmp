@@ -2,21 +2,13 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
-import io.appwrite.models.*
-import io.appwrite.enums.*
-import io.appwrite.exceptions.AppwriteException
-import io.appwrite.extensions.*
 import io.appwrite.serializers.*
-import io.appwrite.webInterface.UrlParser
-import kotlinx.serialization.KSerializer
-import kotlin.jvm.JvmOverloads
-import kotlin.reflect.KClass
 
 /**
  * The Messaging service allows you to send messages to any provider type (SMTP, push notification, SMS, etc.).
  **/
 class Messaging(client: Client) : Service(client) {
-        /**
+    /**
      * List messages
      *
      * Get a list of all messages from the current Appwrite project.
@@ -25,12 +17,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: scheduledAt, deliveredAt, deliveredTotal, status, description, providerType
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listMessages(
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.MessageList {
         val apiPath = "/messaging/messages"
 
@@ -38,6 +32,7 @@ class Messaging(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -53,7 +48,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create email
      *
      * Create a new email message.
@@ -121,7 +116,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update email
      *
      * Update an email message by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
@@ -189,7 +184,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create push notification
      *
      * Create a new push notification.
@@ -278,7 +273,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update push notification
      *
      * Update a push notification by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
@@ -367,8 +362,8 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Create SMS
+    /**
+     * createSms
      *
      * Create a new SMS message.
      *
@@ -420,8 +415,61 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Update SMS
+    /**
+     * createSMS
+     *
+     * Create a new SMS message.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param messageId Message ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
+     * @param content SMS Content.
+     * @param topics List of Topic IDs.
+     * @param users List of User IDs.
+     * @param targets List of Targets IDs.
+     * @param draft Is message a draft
+     * @param scheduledAt Scheduled delivery time for message in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. DateTime value must be in future.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun createSMS(
+        messageId: String,
+        content: String,
+        topics: List<String>? = null,
+        users: List<String>? = null,
+        targets: List<String>? = null,
+        draft: Boolean? = null,
+        scheduledAt: String? = null,
+    ): io.appwrite.models.Message {
+        val apiPath = "/messaging/messages/sms"
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "messageId" to messageId,
+            "content" to content,
+            "topics" to topics,
+            "users" to users,
+            "targets" to targets,
+            "draft" to draft,
+            "scheduledAt" to scheduledAt,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "POST",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Message::class,
+            serializer = io.appwrite.models.Message.serializer()
+        )
+    }
+
+    /**
+     * updateSms
      *
      * Update an SMS message by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
      *
@@ -473,7 +521,60 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
+     * updateSMS
+     *
+     * Update an SMS message by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param messageId Message ID.
+     * @param topics List of Topic IDs.
+     * @param users List of User IDs.
+     * @param targets List of Targets IDs.
+     * @param content Email Content.
+     * @param draft Is message a draft
+     * @param scheduledAt Scheduled delivery time for message in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. DateTime value must be in future.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun updateSMS(
+        messageId: String,
+        topics: List<String>? = null,
+        users: List<String>? = null,
+        targets: List<String>? = null,
+        content: String? = null,
+        draft: Boolean? = null,
+        scheduledAt: String? = null,
+    ): io.appwrite.models.Message {
+        val apiPath = "/messaging/messages/sms/{messageId}"
+            .replace("{messageId}", messageId)
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "topics" to topics,
+            "users" to users,
+            "targets" to targets,
+            "content" to content,
+            "draft" to draft,
+            "scheduledAt" to scheduledAt,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PATCH",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Message::class,
+            serializer = io.appwrite.models.Message.serializer()
+        )
+    }
+
+    /**
      * Get message
      *
      * Get a message by its unique ID.
@@ -505,7 +606,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete message
      *
      * Delete a message. If the message is not a draft or scheduled, but has been sent, this will not recall the message.
@@ -538,7 +639,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List message logs
      *
      * Get the message activity logs listed by its unique ID.
@@ -547,12 +648,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param messageId Message ID.
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Only supported methods are limit and offset
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listMessageLogs(
         messageId: String,
         queries: List<String>? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.LogList {
         val apiPath = "/messaging/messages/{messageId}/logs"
             .replace("{messageId}", messageId)
@@ -560,6 +663,7 @@ class Messaging(client: Client) : Service(client) {
 
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -575,7 +679,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List message targets
      *
      * Get a list of the targets associated with a message.
@@ -584,12 +688,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param messageId Message ID.
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: userId, providerId, identifier, providerType
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listTargets(
         messageId: String,
         queries: List<String>? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.TargetList {
         val apiPath = "/messaging/messages/{messageId}/targets"
             .replace("{messageId}", messageId)
@@ -597,6 +703,7 @@ class Messaging(client: Client) : Service(client) {
 
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -612,7 +719,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List providers
      *
      * Get a list of all providers from the current Appwrite project.
@@ -621,12 +728,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, provider, type, enabled
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listProviders(
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.ProviderList {
         val apiPath = "/messaging/providers"
 
@@ -634,6 +743,7 @@ class Messaging(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -649,8 +759,8 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Create APNS provider
+    /**
+     * createApnsProvider
      *
      * Create a new Apple Push Notification service provider.
      *
@@ -705,8 +815,64 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Update APNS provider
+    /**
+     * createAPNSProvider
+     *
+     * Create a new Apple Push Notification service provider.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
+     * @param name Provider name.
+     * @param authKey APNS authentication key.
+     * @param authKeyId APNS authentication key ID.
+     * @param teamId APNS team ID.
+     * @param bundleId APNS bundle ID.
+     * @param sandbox Use APNS sandbox environment.
+     * @param enabled Set as enabled.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun createAPNSProvider(
+        providerId: String,
+        name: String,
+        authKey: String? = null,
+        authKeyId: String? = null,
+        teamId: String? = null,
+        bundleId: String? = null,
+        sandbox: Boolean? = null,
+        enabled: Boolean? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/apns"
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "providerId" to providerId,
+            "name" to name,
+            "authKey" to authKey,
+            "authKeyId" to authKeyId,
+            "teamId" to teamId,
+            "bundleId" to bundleId,
+            "sandbox" to sandbox,
+            "enabled" to enabled,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "POST",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
+     * updateApnsProvider
      *
      * Update a Apple Push Notification service provider by its unique ID.
      *
@@ -761,8 +927,64 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Create FCM provider
+    /**
+     * updateAPNSProvider
+     *
+     * Update a Apple Push Notification service provider by its unique ID.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID.
+     * @param name Provider name.
+     * @param enabled Set as enabled.
+     * @param authKey APNS authentication key.
+     * @param authKeyId APNS authentication key ID.
+     * @param teamId APNS team ID.
+     * @param bundleId APNS bundle ID.
+     * @param sandbox Use APNS sandbox environment.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun updateAPNSProvider(
+        providerId: String,
+        name: String? = null,
+        enabled: Boolean? = null,
+        authKey: String? = null,
+        authKeyId: String? = null,
+        teamId: String? = null,
+        bundleId: String? = null,
+        sandbox: Boolean? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/apns/{providerId}"
+            .replace("{providerId}", providerId)
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "name" to name,
+            "enabled" to enabled,
+            "authKey" to authKey,
+            "authKeyId" to authKeyId,
+            "teamId" to teamId,
+            "bundleId" to bundleId,
+            "sandbox" to sandbox,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PATCH",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
+     * createFcmProvider
      *
      * Create a new Firebase Cloud Messaging provider.
      *
@@ -805,8 +1027,52 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Update FCM provider
+    /**
+     * createFCMProvider
+     *
+     * Create a new Firebase Cloud Messaging provider.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
+     * @param name Provider name.
+     * @param serviceAccountJSON FCM service account JSON.
+     * @param enabled Set as enabled.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun createFCMProvider(
+        providerId: String,
+        name: String,
+        serviceAccountJSON: Any? = null,
+        enabled: Boolean? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/fcm"
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "providerId" to providerId,
+            "name" to name,
+            "serviceAccountJSON" to serviceAccountJSON,
+            "enabled" to enabled,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "POST",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
+     * updateFcmProvider
      *
      * Update a Firebase Cloud Messaging provider by its unique ID.
      *
@@ -849,7 +1115,51 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
+     * updateFCMProvider
+     *
+     * Update a Firebase Cloud Messaging provider by its unique ID.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID.
+     * @param name Provider name.
+     * @param enabled Set as enabled.
+     * @param serviceAccountJSON FCM service account JSON.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun updateFCMProvider(
+        providerId: String,
+        name: String? = null,
+        enabled: Boolean? = null,
+        serviceAccountJSON: Any? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/fcm/{providerId}"
+            .replace("{providerId}", providerId)
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "name" to name,
+            "enabled" to enabled,
+            "serviceAccountJSON" to serviceAccountJSON,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PATCH",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
      * Create Mailgun provider
      *
      * Create a new Mailgun provider.
@@ -911,7 +1221,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Mailgun provider
      *
      * Update a Mailgun provider by its unique ID.
@@ -973,7 +1283,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create Msg91 provider
      *
      * Create a new MSG91 provider.
@@ -1023,7 +1333,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Msg91 provider
      *
      * Update a MSG91 provider by its unique ID.
@@ -1073,7 +1383,119 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
+     * Create Resend provider
+     *
+     * Create a new Resend provider.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
+     * @param name Provider name.
+     * @param apiKey Resend API key.
+     * @param fromName Sender Name.
+     * @param fromEmail Sender email address.
+     * @param replyToName Name set in the reply to field for the mail. Default value is sender name.
+     * @param replyToEmail Email set in the reply to field for the mail. Default value is sender email.
+     * @param enabled Set as enabled.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun createResendProvider(
+        providerId: String,
+        name: String,
+        apiKey: String? = null,
+        fromName: String? = null,
+        fromEmail: String? = null,
+        replyToName: String? = null,
+        replyToEmail: String? = null,
+        enabled: Boolean? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/resend"
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "providerId" to providerId,
+            "name" to name,
+            "apiKey" to apiKey,
+            "fromName" to fromName,
+            "fromEmail" to fromEmail,
+            "replyToName" to replyToName,
+            "replyToEmail" to replyToEmail,
+            "enabled" to enabled,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "POST",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
+     * Update Resend provider
+     *
+     * Update a Resend provider by its unique ID.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID.
+     * @param name Provider name.
+     * @param enabled Set as enabled.
+     * @param apiKey Resend API key.
+     * @param fromName Sender Name.
+     * @param fromEmail Sender email address.
+     * @param replyToName Name set in the Reply To field for the mail. Default value is Sender Name.
+     * @param replyToEmail Email set in the Reply To field for the mail. Default value is Sender Email.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun updateResendProvider(
+        providerId: String,
+        name: String? = null,
+        enabled: Boolean? = null,
+        apiKey: String? = null,
+        fromName: String? = null,
+        fromEmail: String? = null,
+        replyToName: String? = null,
+        replyToEmail: String? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/resend/{providerId}"
+            .replace("{providerId}", providerId)
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "name" to name,
+            "enabled" to enabled,
+            "apiKey" to apiKey,
+            "fromName" to fromName,
+            "fromEmail" to fromEmail,
+            "replyToName" to replyToName,
+            "replyToEmail" to replyToEmail,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PATCH",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
      * Create Sendgrid provider
      *
      * Create a new Sendgrid provider.
@@ -1129,7 +1551,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Sendgrid provider
      *
      * Update a Sendgrid provider by its unique ID.
@@ -1185,8 +1607,8 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Create SMTP provider
+    /**
+     * createSmtpProvider
      *
      * Create a new SMTP provider.
      *
@@ -1259,8 +1681,82 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
-     * Update SMTP provider
+    /**
+     * createSMTPProvider
+     *
+     * Create a new SMTP provider.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID. Choose a custom ID or generate a random ID with `ID.unique()`. Valid chars are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char. Max length is 36 chars.
+     * @param name Provider name.
+     * @param host SMTP hosts. Either a single hostname or multiple semicolon-delimited hostnames. You can also specify a different port for each host such as `smtp1.example.com:25;smtp2.example.com`. You can also specify encryption type, for example: `tls://smtp1.example.com:587;ssl://smtp2.example.com:465"`. Hosts will be tried in order.
+     * @param port The default SMTP server port.
+     * @param username Authentication username.
+     * @param password Authentication password.
+     * @param encryption Encryption type. Can be omitted, 'ssl', or 'tls'
+     * @param autoTLS Enable SMTP AutoTLS feature.
+     * @param mailer The value to use for the X-Mailer header.
+     * @param fromName Sender Name.
+     * @param fromEmail Sender email address.
+     * @param replyToName Name set in the reply to field for the mail. Default value is sender name.
+     * @param replyToEmail Email set in the reply to field for the mail. Default value is sender email.
+     * @param enabled Set as enabled.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun createSMTPProvider(
+        providerId: String,
+        name: String,
+        host: String,
+        port: Long? = null,
+        username: String? = null,
+        password: String? = null,
+        encryption: io.appwrite.enums.SmtpEncryption? = null,
+        autoTLS: Boolean? = null,
+        mailer: String? = null,
+        fromName: String? = null,
+        fromEmail: String? = null,
+        replyToName: String? = null,
+        replyToEmail: String? = null,
+        enabled: Boolean? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/smtp"
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "providerId" to providerId,
+            "name" to name,
+            "host" to host,
+            "port" to port,
+            "username" to username,
+            "password" to password,
+            "encryption" to encryption,
+            "autoTLS" to autoTLS,
+            "mailer" to mailer,
+            "fromName" to fromName,
+            "fromEmail" to fromEmail,
+            "replyToName" to replyToName,
+            "replyToEmail" to replyToEmail,
+            "enabled" to enabled,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "POST",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
+     * updateSmtpProvider
      *
      * Update a SMTP provider by its unique ID.
      *
@@ -1333,7 +1829,81 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
+     * updateSMTPProvider
+     *
+     * Update a SMTP provider by its unique ID.
+     *
+    @JvmOverloads
+    @Throws(Throwable::class)
+     * @param providerId Provider ID.
+     * @param name Provider name.
+     * @param host SMTP hosts. Either a single hostname or multiple semicolon-delimited hostnames. You can also specify a different port for each host such as `smtp1.example.com:25;smtp2.example.com`. You can also specify encryption type, for example: `tls://smtp1.example.com:587;ssl://smtp2.example.com:465"`. Hosts will be tried in order.
+     * @param port SMTP port.
+     * @param username Authentication username.
+     * @param password Authentication password.
+     * @param encryption Encryption type. Can be 'ssl' or 'tls'
+     * @param autoTLS Enable SMTP AutoTLS feature.
+     * @param mailer The value to use for the X-Mailer header.
+     * @param fromName Sender Name.
+     * @param fromEmail Sender email address.
+     * @param replyToName Name set in the Reply To field for the mail. Default value is Sender Name.
+     * @param replyToEmail Email set in the Reply To field for the mail. Default value is Sender Email.
+     * @param enabled Set as enabled.
+     */
+    @Throws(Throwable::class)
+    @JvmOverloads
+    suspend fun updateSMTPProvider(
+        providerId: String,
+        name: String? = null,
+        host: String? = null,
+        port: Long? = null,
+        username: String? = null,
+        password: String? = null,
+        encryption: io.appwrite.enums.SmtpEncryption? = null,
+        autoTLS: Boolean? = null,
+        mailer: String? = null,
+        fromName: String? = null,
+        fromEmail: String? = null,
+        replyToName: String? = null,
+        replyToEmail: String? = null,
+        enabled: Boolean? = null,
+    ): io.appwrite.models.Provider {
+        val apiPath = "/messaging/providers/smtp/{providerId}"
+            .replace("{providerId}", providerId)
+
+
+        val apiParams = mutableMapOf<String, Any?>(
+            "name" to name,
+            "host" to host,
+            "port" to port,
+            "username" to username,
+            "password" to password,
+            "encryption" to encryption,
+            "autoTLS" to autoTLS,
+            "mailer" to mailer,
+            "fromName" to fromName,
+            "fromEmail" to fromEmail,
+            "replyToName" to replyToName,
+            "replyToEmail" to replyToEmail,
+            "enabled" to enabled,
+        )
+        val apiHeaders = mutableMapOf(
+            "content-type" to "application/json",
+            "content-type" to "application/json",
+        )
+
+        return client.call(
+            "PATCH",
+            apiPath,
+            apiHeaders,
+            apiParams,
+            responseType = io.appwrite.models.Provider::class,
+            serializer = io.appwrite.models.Provider.serializer()
+        )
+    }
+
+    /**
      * Create Telesign provider
      *
      * Create a new Telesign provider.
@@ -1383,7 +1953,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Telesign provider
      *
      * Update a Telesign provider by its unique ID.
@@ -1433,7 +2003,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create Textmagic provider
      *
      * Create a new Textmagic provider.
@@ -1483,7 +2053,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Textmagic provider
      *
      * Update a Textmagic provider by its unique ID.
@@ -1533,7 +2103,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create Twilio provider
      *
      * Create a new Twilio provider.
@@ -1583,7 +2153,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Twilio provider
      *
      * Update a Twilio provider by its unique ID.
@@ -1633,7 +2203,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create Vonage provider
      *
      * Create a new Vonage provider.
@@ -1683,7 +2253,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update Vonage provider
      *
      * Update a Vonage provider by its unique ID.
@@ -1733,7 +2303,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get provider
      *
      * Get a provider by its unique ID.
@@ -1765,7 +2335,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete provider
      *
      * Delete a provider by its unique ID.
@@ -1798,7 +2368,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List provider logs
      *
      * Get the provider activity logs listed by its unique ID.
@@ -1807,12 +2377,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param providerId Provider ID.
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Only supported methods are limit and offset
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listProviderLogs(
         providerId: String,
         queries: List<String>? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.LogList {
         val apiPath = "/messaging/providers/{providerId}/logs"
             .replace("{providerId}", providerId)
@@ -1820,6 +2392,7 @@ class Messaging(client: Client) : Service(client) {
 
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -1835,7 +2408,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List subscriber logs
      *
      * Get the subscriber activity logs listed by its unique ID.
@@ -1844,12 +2417,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param subscriberId Subscriber ID.
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Only supported methods are limit and offset
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listSubscriberLogs(
         subscriberId: String,
         queries: List<String>? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.LogList {
         val apiPath = "/messaging/subscribers/{subscriberId}/logs"
             .replace("{subscriberId}", subscriberId)
@@ -1857,6 +2432,7 @@ class Messaging(client: Client) : Service(client) {
 
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -1872,7 +2448,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List topics
      *
      * Get a list of all topics from the current Appwrite project.
@@ -1881,12 +2457,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, description, emailTotal, smsTotal, pushTotal
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listTopics(
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.TopicList {
         val apiPath = "/messaging/topics"
 
@@ -1894,6 +2472,7 @@ class Messaging(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -1909,7 +2488,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create topic
      *
      * Create a new topic.
@@ -1950,7 +2529,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get topic
      *
      * Get a topic by its unique ID.
@@ -1982,7 +2561,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Update topic
      *
      * Update a topic by its unique ID.
@@ -2023,7 +2602,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete topic
      *
      * Delete a topic by its unique ID.
@@ -2056,7 +2635,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List topic logs
      *
      * Get the topic activity logs listed by its unique ID.
@@ -2065,12 +2644,14 @@ class Messaging(client: Client) : Service(client) {
     @Throws(Throwable::class)
      * @param topicId Topic ID.
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Only supported methods are limit and offset
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
     suspend fun listTopicLogs(
         topicId: String,
         queries: List<String>? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.LogList {
         val apiPath = "/messaging/topics/{topicId}/logs"
             .replace("{topicId}", topicId)
@@ -2078,6 +2659,7 @@ class Messaging(client: Client) : Service(client) {
 
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -2093,7 +2675,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * List subscribers
      *
      * Get a list of all subscribers from the current Appwrite project.
@@ -2103,6 +2685,7 @@ class Messaging(client: Client) : Service(client) {
      * @param topicId Topic ID. The topic ID subscribed to.
      * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, provider, type, enabled
      * @param search Search term to filter your list results. Max length: 256 chars.
+     * @param total When set to false, the total count returned will be 0 and will not be calculated.
      */
     @Throws(Throwable::class)
     @JvmOverloads
@@ -2110,6 +2693,7 @@ class Messaging(client: Client) : Service(client) {
         topicId: String,
         queries: List<String>? = null,
         search: String? = null,
+        total: Boolean? = null,
     ): io.appwrite.models.SubscriberList {
         val apiPath = "/messaging/topics/{topicId}/subscribers"
             .replace("{topicId}", topicId)
@@ -2118,6 +2702,7 @@ class Messaging(client: Client) : Service(client) {
         val apiParams = mutableMapOf<String, Any?>(
             "queries" to queries,
             "search" to search,
+            "total" to total,
         )
         val apiHeaders = mutableMapOf(
             "content-type" to "application/json",
@@ -2133,7 +2718,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Create subscriber
      *
      * Create a new subscriber.
@@ -2172,7 +2757,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Get subscriber
      *
      * Get a subscriber by its unique ID.
@@ -2207,7 +2792,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-            /**
+    /**
      * Delete subscriber
      *
      * Delete a subscriber by its unique ID.
@@ -2243,4 +2828,4 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    }
+}

@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -32,71 +33,55 @@ ext {
 version = project.ext["PUBLISH_VERSION"].toString()
 group = project.ext["PUBLISH_GROUP_ID"].toString()
 
-
 kotlin {
-    jvm()
-
     androidTarget {
         publishLibraryVariants("release")
         compilations.all {
             compileTaskProvider.configure {
-                compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_17)
+                if (this is KotlinJvmCompile) {
+                    compilerOptions {
+                        jvmTarget.set(JvmTarget.JVM_17)
+                    }
                 }
             }
         }
     }
 
-    metadata {
-        compilations.all {
-            val compilationName = name
-            compileTaskProvider.configure {
-                if (this is KotlinCompileCommon) {
-                    moduleName = "${project.group}:${project.name}_$compilationName"
-                }
+    // Only configure iOS targets on macOS hosts
+    if (HostManager.hostIsMac) {
+        iosX64 {
+            binaries.framework {
+                baseName = "shared"
+                isStatic = true
+                binaryOption("bundleId", "io.github.camka14.appwrite.shared")
             }
+            withSourcesJar(publish = false)
+        }
+        iosArm64 {
+            binaries.framework {
+                baseName = "shared"
+                isStatic = true
+                binaryOption("bundleId", "io.github.camka14.appwrite.shared")
+            }
+            withSourcesJar(publish = false)
+        }
+        iosSimulatorArm64 {
+            binaries.framework {
+                baseName = "shared"
+                isStatic = true
+                binaryOption("bundleId", "io.github.camka14.appwrite.shared")
+            }
+            withSourcesJar(publish = false)
         }
     }
 
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.all {
-            // Configure native binary compilation
-            freeCompilerArgs += listOf(
-                "-Xallocator=mimalloc",
-            )
+            freeCompilerArgs += listOf("-Xallocator=mimalloc")
         }
-    }
-
-    iosX64 {
-        // Create a framework binary with additional options
-        binaries.framework {
-            baseName = "shared"
-            isStatic = true
-            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
-        }
-        withSourcesJar(publish = false)
-    }
-    iosArm64 {
-        binaries.framework {
-            baseName = "shared"
-            isStatic = true
-            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
-        }
-        withSourcesJar(publish = false)
-    }
-    iosSimulatorArm64 {
-        binaries.framework {
-            baseName = "shared"
-            isStatic = true
-            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
-        }
-        withSourcesJar(publish = false)
     }
 
     sourceSets {
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.java)
-        }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
@@ -105,7 +90,6 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.websockets)
             implementation(libs.okio)
-            implementation(libs.kotlin.metadata.jvm)
             api(libs.kotlinx.serialization.json)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.napier)
@@ -191,7 +175,6 @@ mavenPublishing {
         }
     }
 }
-
 
 android {
     namespace = "io.appwrite"

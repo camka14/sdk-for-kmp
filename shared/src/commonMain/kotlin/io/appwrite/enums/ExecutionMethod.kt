@@ -7,16 +7,24 @@ import kotlinx.serialization.Serializable
 enum class ExecutionMethod(val value: String) {
     @SerialName("GET")
     GET("GET"),
+
     @SerialName("POST")
     POST("POST"),
+
     @SerialName("PUT")
     PUT("PUT"),
+
     @SerialName("PATCH")
     PATCH("PATCH"),
+
     @SerialName("DELETE")
     DELETE("DELETE"),
+
     @SerialName("OPTIONS")
-    OPTIONS("OPTIONS");
+    OPTIONS("OPTIONS"),
+
+    @SerialName("HEAD")
+    HEAD("HEAD");
 
     override fun toString() = value
 }

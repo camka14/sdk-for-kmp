@@ -1,24 +1,7 @@
 package io.appwrite.models
 
-import io.appwrite.extensions.jsonCast
-import io.appwrite.extensions.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 
 /**
  * Function
@@ -68,13 +51,13 @@ data class Function(
     val live: Boolean,
 
     /**
-     * Whether executions will be logged. When set to false, executions will not be logged, but will reduce resource used by your Appwrite project.
+     * When disabled, executions will exclude logs and errors, and will be slightly faster.
      */
     @SerialName("logging")
     val logging: Boolean,
 
     /**
-     * Function execution runtime.
+     * Function execution and build runtime.
      */
     @SerialName("runtime")
     val runtime: String,
@@ -82,8 +65,32 @@ data class Function(
     /**
      * Function&#039;s active deployment ID.
      */
-    @SerialName("deployment")
-    val deployment: String,
+    @SerialName("deploymentId")
+    val deploymentId: String,
+
+    /**
+     * Active deployment creation date in ISO 8601 format.
+     */
+    @SerialName("deploymentCreatedAt")
+    val deploymentCreatedAt: String,
+
+    /**
+     * Function&#039;s latest deployment ID.
+     */
+    @SerialName("latestDeploymentId")
+    val latestDeploymentId: String,
+
+    /**
+     * Latest deployment creation date in ISO 8601 format.
+     */
+    @SerialName("latestDeploymentCreatedAt")
+    val latestDeploymentCreatedAt: String,
+
+    /**
+     * Status of latest deployment. Possible values are &quot;waiting&quot;, &quot;processing&quot;, &quot;building&quot;, &quot;ready&quot;, and &quot;failed&quot;.
+     */
+    @SerialName("latestDeploymentStatus")
+    val latestDeploymentStatus: String,
 
     /**
      * Allowed permission scopes.
@@ -169,5 +176,5 @@ data class Function(
     @SerialName("specification")
     val specification: String,
 
-)
+    )
 
