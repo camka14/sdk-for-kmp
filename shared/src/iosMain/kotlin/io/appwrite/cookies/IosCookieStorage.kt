@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
+import platform.Foundation.NSMutableDictionary
 import platform.Foundation.NSHTTPCookie
 import platform.Foundation.NSHTTPCookieAcceptPolicy
 import platform.Foundation.NSHTTPCookieDomain
@@ -16,6 +17,7 @@ import platform.Foundation.NSHTTPCookieName
 import platform.Foundation.NSHTTPCookiePath
 import platform.Foundation.NSHTTPCookieSecure
 import platform.Foundation.NSHTTPCookieStorage
+import platform.Foundation.NSHTTPCookieValue
 import platform.Foundation.NSRecursiveLock
 import platform.Foundation.NSTimeZone
 import platform.Foundation.NSURL
@@ -32,10 +34,12 @@ private data class StoredCookie(
     val value: String,
     val domain: String,
     val path: String,
+    // milliseconds since epoch or null for session cookies
     val expires: Double?,
     val isSecure: Boolean,
     val isHttpOnly: Boolean,
-    val maxAge: Int? = null,
+    // seconds; if present, preferred over Expires
+    val maxAge: Int? = null
 )
 
 class IosCookieStorage : CookiesStorage {
@@ -113,7 +117,7 @@ class IosCookieStorage : CookiesStorage {
         val cookieDomain = if (!domain.startsWith(".") && !domain.equals("localhost", true)) {
             ".$domain"
         } else domain
-        append("; Domain=${cookieDomain}")
+        append("; Domain=$cookieDomain")
         append("; Path=${cookie.path ?: "/"}")
         cookie.expires?.let { gmtDate ->
             append("; Expires=${formatDate(gmtDate.timestamp)}")
@@ -125,7 +129,6 @@ class IosCookieStorage : CookiesStorage {
         if (cookie.httpOnly) append("; HttpOnly")
     }
 
-
     private fun createStoredCookie(cookie: Cookie, domain: String) = StoredCookie(
         name = cookie.name,
         value = cookie.value,
@@ -134,7 +137,7 @@ class IosCookieStorage : CookiesStorage {
         expires = cookie.expires?.timestamp?.toDouble(),
         isSecure = cookie.secure,
         isHttpOnly = cookie.httpOnly,
-        maxAge = cookie.maxAge,
+        maxAge = cookie.maxAge
     )
 
     private fun persistCookie(storedCookie: StoredCookie) {
@@ -162,33 +165,39 @@ class IosCookieStorage : CookiesStorage {
                 } else {
                     userDefaults.removeObjectForKey(key)
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 userDefaults.removeObjectForKey(key)
             }
         }
     }
 
-
     private fun recreateCookie(storedCookie: StoredCookie) {
-        val properties = mutableMapOf<Any?, Any?>(
-            NSHTTPCookieName to storedCookie.name,
-            NSHTTPCookieValue to storedCookie.value,
-            NSHTTPCookiePath to storedCookie.path,
-            NSHTTPCookieDomain to storedCookie.domain,
-            NSHTTPCookieSecure to storedCookie.isSecure,
-            NSHTTPCookieMaximumAge to storedCookie.maxAge,
-            NSHTTPCookieExpires to storedCookie.expires,
-            "HttpOnly" to storedCookie.isHttpOnly
-        )
+        val props = NSMutableDictionary()
 
-        NSHTTPCookie.cookieWithProperties(properties)?.let {
-            cookieStorage.setCookie(it)
+        props.setObject(storedCookie.name as Any, forKey = NSHTTPCookieName as Any)
+        props.setObject(storedCookie.value as Any, forKey = NSHTTPCookieValue as Any)
+        props.setObject(storedCookie.path as Any, forKey = NSHTTPCookiePath as Any)
+        props.setObject(storedCookie.domain as Any, forKey = NSHTTPCookieDomain as Any)
+
+        if (storedCookie.isSecure) {
+            props.setObject(true as Any, forKey = NSHTTPCookieSecure as Any)
         }
+        storedCookie.maxAge?.let { secs ->
+            props.setObject(secs as Any, forKey = NSHTTPCookieMaximumAge as Any)
+        }
+        storedCookie.expires?.let { ms ->
+            val date = NSDate.dateWithTimeIntervalSince1970(ms / 1000.0)
+            props.setObject(date, forKey = NSHTTPCookieExpires as Any)
+        }
+        // HttpOnly is not publicly exposed by Foundation; use raw key which is recognized
+        props.setObject(storedCookie.isHttpOnly as Any, forKey = "HttpOnly" as Any)
+
+        NSHTTPCookie.cookieWithProperties(props)?.let { cookieStorage.setCookie(it) }
     }
 
     private fun cleanupExpiredCookies() {
-        cookieStorage.cookies?.forEach { cookie ->
-            cookie as NSHTTPCookie
+        cookieStorage.cookies?.forEach { c ->
+            val cookie = c as NSHTTPCookie
             if (isExpired(cookie)) {
                 cookieStorage.deleteCookie(cookie)
                 removeFromUserDefaults(cookie)
@@ -220,22 +229,16 @@ class IosCookieStorage : CookiesStorage {
             }
     }
 
+    private fun getCookieKey(domain: String, name: String, path: String): String =
+        "cookie:$domain:$name:$path"
 
-    private fun getCookieKey(domain: String, name: String, path: String): String {
-        return "cookie:$domain:$name:$path"
-    }
-
-    private fun formatDate(timestamp: Long): String {
-        val date = NSDate.dateWithTimeIntervalSince1970(timestamp.toDouble() / 1000)
+    private fun formatDate(timestampMs: Long): String {
+        val date = NSDate.dateWithTimeIntervalSince1970(timestampMs.toDouble() / 1000.0)
         val formatter = NSDateFormatter().apply {
             dateFormat = "EEE, dd MMM yyyy HH:mm:ss 'GMT'"
             timeZone = NSTimeZone.timeZoneWithAbbreviation("GMT")!!
         }
         return formatter.stringFromDate(date)
-    }
-
-    private fun NSDate.toGMTDate(): GMTDate {
-        return GMTDate((this.timeIntervalSince1970 * 1000).toLong())
     }
 
     private fun NSHTTPCookie.toKtorCookie(): Cookie = Cookie(
@@ -245,9 +248,11 @@ class IosCookieStorage : CookiesStorage {
         path = path,
         secure = isSecure(),
         httpOnly = isHTTPOnly(),
+        // Use remaining lifetime in seconds if expiry present; else null to treat as session cookie
         maxAge = expiresDate?.let {
-            (it.timeIntervalSince1970 - NSDate().timeIntervalSince1970).toInt()
-        },
-        expires = expiresDate()?.toGMTDate(),
+            val seconds = (it.timeIntervalSince1970 - NSDate().timeIntervalSince1970).toInt()
+            if (seconds > 0) seconds else null
+        }
+        // omit expires to avoid Ktor GMTDate import on iOS; maxAge is enough
     )
 }
