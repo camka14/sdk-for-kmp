@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
-import platform.Foundation.NSMutableDictionary
 import platform.Foundation.NSHTTPCookie
 import platform.Foundation.NSHTTPCookieAcceptPolicy
 import platform.Foundation.NSHTTPCookieDomain
@@ -34,11 +33,9 @@ private data class StoredCookie(
     val value: String,
     val domain: String,
     val path: String,
-    // milliseconds since epoch or null for session cookies
     val expires: Double?,
     val isSecure: Boolean,
     val isHttpOnly: Boolean,
-    // seconds; if present, preferred over Expires
     val maxAge: Int? = null
 )
 
@@ -172,25 +169,23 @@ class IosCookieStorage : CookiesStorage {
     }
 
     private fun recreateCookie(storedCookie: StoredCookie) {
-        val props = NSMutableDictionary()
-
-        props.setObject(storedCookie.name as Any, forKey = NSHTTPCookieName as Any)
-        props.setObject(storedCookie.value as Any, forKey = NSHTTPCookieValue as Any)
-        props.setObject(storedCookie.path as Any, forKey = NSHTTPCookiePath as Any)
-        props.setObject(storedCookie.domain as Any, forKey = NSHTTPCookieDomain as Any)
-
-        if (storedCookie.isSecure) {
-            props.setObject(true as Any, forKey = NSHTTPCookieSecure as Any)
+        // Build a Map<Any?, Any> using Foundation keys directly (no explicit cast to Any needed)
+        val props = buildMap<Any?, Any> {
+            put(NSHTTPCookieName, storedCookie.name)
+            put(NSHTTPCookieValue, storedCookie.value)
+            put(NSHTTPCookiePath, storedCookie.path)
+            put(NSHTTPCookieDomain, storedCookie.domain)
+            if (storedCookie.isSecure) {
+                put(NSHTTPCookieSecure, true)
+            }
+            storedCookie.maxAge?.let { put(NSHTTPCookieMaximumAge, it) }
+            storedCookie.expires?.let { ms ->
+                val date = NSDate.dateWithTimeIntervalSince1970(ms / 1000.0)
+                put(NSHTTPCookieExpires, date)
+            }
+            // HttpOnly uses raw string key
+            put("HttpOnly", storedCookie.isHttpOnly)
         }
-        storedCookie.maxAge?.let { secs ->
-            props.setObject(secs as Any, forKey = NSHTTPCookieMaximumAge as Any)
-        }
-        storedCookie.expires?.let { ms ->
-            val date = NSDate.dateWithTimeIntervalSince1970(ms / 1000.0)
-            props.setObject(date, forKey = NSHTTPCookieExpires as Any)
-        }
-        // HttpOnly is not publicly exposed by Foundation; use raw key which is recognized
-        props.setObject(storedCookie.isHttpOnly as Any, forKey = "HttpOnly" as Any)
 
         NSHTTPCookie.cookieWithProperties(props)?.let { cookieStorage.setCookie(it) }
     }
@@ -248,11 +243,9 @@ class IosCookieStorage : CookiesStorage {
         path = path,
         secure = isSecure(),
         httpOnly = isHTTPOnly(),
-        // Use remaining lifetime in seconds if expiry present; else null to treat as session cookie
         maxAge = expiresDate?.let {
             val seconds = (it.timeIntervalSince1970 - NSDate().timeIntervalSince1970).toInt()
             if (seconds > 0) seconds else null
         }
-        // omit expires to avoid Ktor GMTDate import on iOS; maxAge is enough
     )
 }
