@@ -1,0 +1,63 @@
+name: Build shared KMP library (Android + iOS)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      sdk_version:
+        description: 'Optional version override (e.g., 0.2.1)'
+        required: false
+
+jobs:
+  build-shared:
+    name: Compile shared library targets
+    runs-on: macOS-latest
+    env:
+      RAW_VERSION: ${{ github.event.inputs.sdk_version }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Process version (optional)
+        if: env.RAW_VERSION != ''
+        run: |
+          SDK_VERSION=$(echo "${{ env.RAW_VERSION }}" | sed -E 's/.*([0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._]+)?)$/\1/')
+          echo "SDK_VERSION=${SDK_VERSION}" >> $GITHUB_ENV
+          echo "version=${SDK_VERSION}" >> gradle.properties
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+
+      # Compile the shared KMP module only, for Android/JVM and iOS klibs/frameworks,
+      # mimicking a publish build but without uploading.
+      - name: Compile shared for Android/JVM
+        run: |
+          ./gradlew :shared:compileReleaseKotlinAndroid \
+                     :shared:compileKotlinJvm \
+                     --no-configuration-cache
+
+      - name: Compile shared for iOS (klibs/frameworks)
+        run: |
+          ./gradlew :shared:linkReleaseFrameworkIosArm64 \
+                     :shared:linkReleaseFrameworkIosX64 \
+                     :shared:linkReleaseFrameworkIosSimulatorArm64 \
+                     --no-configuration-cache
+
+      # Optionally run metadata/common compilation to ensure common source compiles as in publishing
+      - name: Compile common metadata
+        run: ./gradlew :shared:compileCommonMainKotlinMetadata --no-configuration-cache
