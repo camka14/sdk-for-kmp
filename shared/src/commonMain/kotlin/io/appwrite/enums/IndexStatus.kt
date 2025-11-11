@@ -7,16 +7,12 @@ import kotlinx.serialization.Serializable
 enum class IndexStatus(val value: String) {
     @SerialName("available")
     AVAILABLE("available"),
-
     @SerialName("processing")
     PROCESSING("processing"),
-
     @SerialName("deleting")
     DELETING("deleting"),
-
     @SerialName("stuck")
     STUCK("stuck"),
-
     @SerialName("failed")
     FAILED("failed");
 

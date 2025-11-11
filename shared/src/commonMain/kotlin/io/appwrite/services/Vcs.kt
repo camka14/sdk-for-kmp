@@ -2,13 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
- *
+ * 
  **/
 class Vcs(client: Client) : Service(client) {
-    /**
+        /**
      * Create repository detection
      *
      * Analyze a GitHub repository to automatically detect the programming language and runtime environment. This endpoint scans the repository&#039;s files and language statistics to determine the appropriate runtime settings for your function. The GitHub installation must be properly configured and the repository must be accessible through your installation for this endpoint to work.
@@ -52,7 +59,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List repositories
      *
      * Get a list of GitHub repositories available through your installation. This endpoint returns repositories with their basic information, detected runtime environments, and latest push dates. You can optionally filter repositories using a search term. Each repository&#039;s runtime is automatically detected based on its contents and language statistics. The GitHub installation must be properly configured for this endpoint to work.
@@ -92,7 +99,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create repository
      *
      * Create a new GitHub repository through your installation. This endpoint allows you to create either a public or private repository by specifying a name and visibility setting. The repository will be created under your GitHub user account or organization, depending on your installation type. The GitHub installation must be properly configured and have the necessary permissions for repository creation.
@@ -131,7 +138,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get repository
      *
      * Get detailed information about a specific GitHub repository from your installation. This endpoint returns repository details including its ID, name, visibility status, organization, and latest push date. The GitHub installation must be properly configured and have access to the requested repository for this endpoint to work.
@@ -145,10 +152,9 @@ class Vcs(client: Client) : Service(client) {
         installationId: String,
         providerRepositoryId: String,
     ): io.appwrite.models.ProviderRepository {
-        val apiPath =
-            "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}"
-                .replace("{installationId}", installationId)
-                .replace("{providerRepositoryId}", providerRepositoryId)
+        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}"
+            .replace("{installationId}", installationId)
+            .replace("{providerRepositoryId}", providerRepositoryId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -167,7 +173,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List repository branches
      *
      * Get a list of all branches from a GitHub repository in your installation. This endpoint returns the names of all branches in the repository and their total count. The GitHub installation must be properly configured and have access to the requested repository for this endpoint to work.
@@ -181,10 +187,9 @@ class Vcs(client: Client) : Service(client) {
         installationId: String,
         providerRepositoryId: String,
     ): io.appwrite.models.BranchList {
-        val apiPath =
-            "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/branches"
-                .replace("{installationId}", installationId)
-                .replace("{providerRepositoryId}", providerRepositoryId)
+        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/branches"
+            .replace("{installationId}", installationId)
+            .replace("{providerRepositoryId}", providerRepositoryId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -203,7 +208,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get files and directories of a VCS repository
      *
      * Get a list of files and directories from a GitHub repository connected to your project. This endpoint returns the contents of a specified repository path, including file names, sizes, and whether each item is a file or directory. The GitHub installation must be properly configured and the repository must be accessible through your installation for this endpoint to work.
@@ -223,10 +228,9 @@ class Vcs(client: Client) : Service(client) {
         providerRootDirectory: String? = null,
         providerReference: String? = null,
     ): io.appwrite.models.VcsContentList {
-        val apiPath =
-            "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/contents"
-                .replace("{installationId}", installationId)
-                .replace("{providerRepositoryId}", providerRepositoryId)
+        val apiPath = "/vcs/github/installations/{installationId}/providerRepositories/{providerRepositoryId}/contents"
+            .replace("{installationId}", installationId)
+            .replace("{providerRepositoryId}", providerRepositoryId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -247,7 +251,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update external deployment (authorize)
      *
      * Authorize and create deployments for a GitHub pull request in your project. This endpoint allows external contributions by creating deployments from pull requests, enabling preview environments for code review. The pull request must be open and not previously authorized. The GitHub installation must be properly configured and have access to both the repository and pull request for this endpoint to work.
@@ -286,7 +290,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List installations
      *
      * List all VCS installations configured for the current project. This endpoint returns a list of installations including their provider, organization, and other configuration details.
@@ -326,10 +330,10 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get installation
      *
-     * Get a VCS installation by its unique ID. This endpoint returns the installation&#039;s details including its provider, organization, and configuration.
+     * Get a VCS installation by its unique ID. This endpoint returns the installation&#039;s details including its provider, organization, and configuration. 
      *
     @Throws(Throwable::class)
      * @param installationId Installation Id
@@ -358,7 +362,7 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete installation
      *
      * Delete a VCS installation by its unique ID. This endpoint removes the installation and all its associated repositories from the project.
@@ -391,4 +395,4 @@ class Vcs(client: Client) : Service(client) {
         )
     }
 
-}
+    }

@@ -2,13 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The GraphQL API allows you to query and mutate your Appwrite server using GraphQL.
  **/
 class Graphql(client: Client) : Service(client) {
-    /**
+        /**
      * GraphQL endpoint
      *
      * Execute a GraphQL mutation.
@@ -42,7 +49,7 @@ class Graphql(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * GraphQL endpoint
      *
      * Execute a GraphQL mutation.
@@ -76,4 +83,4 @@ class Graphql(client: Client) : Service(client) {
         )
     }
 
-}
+    }

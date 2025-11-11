@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 enum class ExecutionTrigger(val value: String) {
     @SerialName("http")
     HTTP("http"),
-
     @SerialName("schedule")
     SCHEDULE("schedule"),
-
     @SerialName("event")
     EVENT("event");
 

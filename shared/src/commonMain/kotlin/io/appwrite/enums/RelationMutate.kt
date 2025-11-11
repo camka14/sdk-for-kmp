@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 enum class RelationMutate(val value: String) {
     @SerialName("cascade")
     CASCADE("cascade"),
-
     @SerialName("restrict")
     RESTRICT("restrict"),
-
     @SerialName("setNull")
     SETNULL("setNull");
 

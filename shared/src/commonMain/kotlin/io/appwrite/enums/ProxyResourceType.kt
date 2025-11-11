@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class ProxyResourceType(val value: String) {
     @SerialName("site")
     SITE("site"),
-
     @SerialName("function")
     FUNCTION("function");
 

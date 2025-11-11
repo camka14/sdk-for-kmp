@@ -2,13 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The Migrations service allows you to migrate third-party data to your Appwrite project.
  **/
 class Migrations(client: Client) : Service(client) {
-    /**
+        /**
      * List migrations
      *
      * List all migrations in the current project. This endpoint returns a list of all migrations including their status, progress, and any errors that occurred during the migration process.
@@ -48,10 +55,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Appwrite migration
      *
-     * Migrate data from another Appwrite project to your current project. This endpoint allows you to migrate resources like databases, collections, documents, users, and files from an existing Appwrite project.
+     * Migrate data from another Appwrite project to your current project. This endpoint allows you to migrate resources like databases, collections, documents, users, and files from an existing Appwrite project. 
      *
     @Throws(Throwable::class)
      * @param resources List of resources to migrate
@@ -90,7 +97,7 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get Appwrite migration report
      *
      * Generate a report of the data in an Appwrite project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated.
@@ -131,7 +138,7 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Export documents to CSV
      *
      * Export documents to a CSV file from your Appwrite database. This endpoint allows you to export documents to a CSV file stored in an Appwrite Storage bucket.
@@ -193,7 +200,7 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Import documents from a CSV
      *
      * Import documents from a CSV file into your Appwrite database. This endpoint allows you to import documents from a CSV file uploaded to Appwrite Storage bucket.
@@ -237,10 +244,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Firebase migration
      *
-     * Migrate data from a Firebase project to your Appwrite project. This endpoint allows you to migrate resources like authentication and other supported services from a Firebase project.
+     * Migrate data from a Firebase project to your Appwrite project. This endpoint allows you to migrate resources like authentication and other supported services from a Firebase project. 
      *
     @Throws(Throwable::class)
      * @param resources List of resources to migrate
@@ -273,7 +280,7 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get Firebase migration report
      *
      * Generate a report of the data in a Firebase project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated.
@@ -308,10 +315,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create NHost migration
      *
-     * Migrate data from an NHost project to your Appwrite project. This endpoint allows you to migrate resources like authentication, databases, and other supported services from an NHost project.
+     * Migrate data from an NHost project to your Appwrite project. This endpoint allows you to migrate resources like authentication, databases, and other supported services from an NHost project. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -364,10 +371,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get NHost migration report
      *
-     * Generate a detailed report of the data in an NHost project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated.
+     * Generate a detailed report of the data in an NHost project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -419,10 +426,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Supabase migration
      *
-     * Migrate data from a Supabase project to your Appwrite project. This endpoint allows you to migrate resources like authentication, databases, and other supported services from a Supabase project.
+     * Migrate data from a Supabase project to your Appwrite project. This endpoint allows you to migrate resources like authentication, databases, and other supported services from a Supabase project. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -472,10 +479,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get Supabase migration report
      *
-     * Generate a report of the data in a Supabase project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated.
+     * Generate a report of the data in a Supabase project before migrating. This endpoint analyzes the source project and returns information about the resources that can be migrated. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -524,10 +531,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get migration
      *
-     * Get a migration by its unique ID. This endpoint returns detailed information about a specific migration including its current status, progress, and any errors that occurred during the migration process.
+     * Get a migration by its unique ID. This endpoint returns detailed information about a specific migration including its current status, progress, and any errors that occurred during the migration process. 
      *
     @Throws(Throwable::class)
      * @param migrationId Migration unique ID.
@@ -556,7 +563,7 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update retry migration
      *
      * Retry a failed migration. This endpoint allows you to retry a migration that has previously failed.
@@ -589,10 +596,10 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete migration
      *
-     * Delete a migration by its unique ID. This endpoint allows you to remove a migration from your project&#039;s migration history.
+     * Delete a migration by its unique ID. This endpoint allows you to remove a migration from your project&#039;s migration history. 
      *
     @Throws(Throwable::class)
      * @param migrationId Migration ID.
@@ -622,4 +629,4 @@ class Migrations(client: Client) : Service(client) {
         )
     }
 
-}
+    }

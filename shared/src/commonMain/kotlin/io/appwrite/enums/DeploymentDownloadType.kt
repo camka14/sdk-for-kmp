@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class DeploymentDownloadType(val value: String) {
     @SerialName("source")
     SOURCE("source"),
-
     @SerialName("output")
     OUTPUT("output");
 

@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class VCSDetectionType(val value: String) {
     @SerialName("runtime")
     RUNTIME("runtime"),
-
     @SerialName("framework")
     FRAMEWORK("framework");
 

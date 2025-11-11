@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 enum class Api(val value: String) {
     @SerialName("rest")
     REST("rest"),
-
     @SerialName("graphql")
     GRAPHQL("graphql"),
-
     @SerialName("realtime")
     REALTIME("realtime");
 

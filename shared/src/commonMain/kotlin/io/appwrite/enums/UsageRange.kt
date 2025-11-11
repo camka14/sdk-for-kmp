@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 enum class UsageRange(val value: String) {
     @SerialName("24h")
     TWENTY_FOUR_HOURS("24h"),
-
     @SerialName("30d")
     THIRTY_DAYS("30d"),
-
     @SerialName("90d")
     NINETY_DAYS("90d");
 

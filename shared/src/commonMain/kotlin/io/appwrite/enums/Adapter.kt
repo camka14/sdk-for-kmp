@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class Adapter(val value: String) {
     @SerialName("static")
     STATIC("static"),
-
     @SerialName("ssr")
     SSR("ssr");
 

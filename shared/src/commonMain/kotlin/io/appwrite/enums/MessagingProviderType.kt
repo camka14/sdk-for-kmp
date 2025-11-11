@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 enum class MessagingProviderType(val value: String) {
     @SerialName("email")
     EMAIL("email"),
-
     @SerialName("sms")
     SMS("sms"),
-
     @SerialName("push")
     PUSH("push");
 

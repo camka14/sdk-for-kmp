@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class MessagePriority(val value: String) {
     @SerialName("normal")
     NORMAL("normal"),
-
     @SerialName("high")
     HIGH("high");
 

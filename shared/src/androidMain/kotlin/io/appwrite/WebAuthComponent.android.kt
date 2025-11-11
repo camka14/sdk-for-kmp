@@ -7,6 +7,11 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.delay
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.forEach
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 /**
  * Used to authenticate with external OAuth2 providers. Launches browser windows and handles

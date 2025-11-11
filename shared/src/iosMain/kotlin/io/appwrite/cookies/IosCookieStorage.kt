@@ -15,6 +15,7 @@ import platform.Foundation.NSHTTPCookieMaximumAge
 import platform.Foundation.NSHTTPCookieName
 import platform.Foundation.NSHTTPCookiePath
 import platform.Foundation.NSHTTPCookieSecure
+import platform.Foundation.NSHTTPCookieStorage
 import platform.Foundation.NSRecursiveLock
 import platform.Foundation.NSTimeZone
 import platform.Foundation.NSURL
@@ -34,7 +35,6 @@ private data class StoredCookie(
     val expires: Double?,
     val isSecure: Boolean,
     val isHttpOnly: Boolean,
-    val maxAge: Int? = null,
     val maxAge: Int? = null,
 )
 

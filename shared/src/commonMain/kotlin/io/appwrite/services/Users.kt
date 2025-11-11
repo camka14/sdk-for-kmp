@@ -2,16 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
 import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
 /**
  * The Users service allows you to manage your project users.
  **/
 class Users(client: Client) : Service(client) {
-    /**
+        /**
      * List users
      *
      * Get a list of all the project&#039;s users. You can use the query params to filter your results.
@@ -75,8 +79,7 @@ class Users(client: Client) : Service(client) {
         total,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user
      *
      * Create a new user.
@@ -153,8 +156,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user with Argon2 password
      *
      * Create a new user. Password provided must be hashed with the [Argon2](https://en.wikipedia.org/wiki/Argon2) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -225,8 +227,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user with bcrypt password
      *
      * Create a new user. Password provided must be hashed with the [Bcrypt](https://en.wikipedia.org/wiki/Bcrypt) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -297,8 +298,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * List identities
      *
      * Get identities for all users.
@@ -338,7 +338,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete identity
      *
      * Delete an identity by its unique ID.
@@ -371,7 +371,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create user with MD5 password
      *
      * Create a new user. Password provided must be hashed with the [MD5](https://en.wikipedia.org/wiki/MD5) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -442,8 +442,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user with PHPass password
      *
      * Create a new user. Password provided must be hashed with the [PHPass](https://www.openwall.com/phpass/) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -514,8 +513,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user with Scrypt password
      *
      * Create a new user. Password provided must be hashed with the [Scrypt](https://github.com/Tarsnap/scrypt) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -616,8 +614,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user with Scrypt modified password
      *
      * Create a new user. Password provided must be hashed with the [Scrypt Modified](https://gist.github.com/Meldiron/eecf84a0225eccb5a378d45bb27462cc) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -706,8 +703,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user with SHA password
      *
      * Create a new user. Password provided must be hashed with the [SHA](https://en.wikipedia.org/wiki/Secure_Hash_Algorithm) algorithm. Use the [POST /users](https://appwrite.io/docs/server/users#usersCreate) endpoint to create users with a plain text password.
@@ -784,8 +780,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Get users usage stats
      *
      * Get usage metrics and statistics for all users in the project. You can view the total number of users and sessions. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -819,7 +814,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get user
      *
      * Get a user by its unique ID.
@@ -868,8 +863,7 @@ class Users(client: Client) : Service(client) {
         userId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Delete user
      *
      * Delete a user by its unique ID, thereby releasing it&#039;s ID. Since ID is released and can be reused, all user-related resources like documents or storage files should be deleted before user deletion. If you want to keep ID reserved, use the [updateStatus](https://appwrite.io/docs/server/users#usersUpdateStatus) endpoint instead.
@@ -902,7 +896,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update email
      *
      * Update the user email by its unique ID.
@@ -958,8 +952,7 @@ class Users(client: Client) : Service(client) {
         email,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Create user JWT
      *
      * Use this endpoint to create a JSON Web Token for user by its unique ID. You can use the resulting JWT to authenticate on behalf of the user. The JWT secret will become invalid if the session it uses gets deleted.
@@ -1000,7 +993,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update user labels
      *
      * Update the user labels by its unique ID. Labels can be used to grant access to resources. While teams are a way for user&#039;s to share access to a resource, labels can be defined by the developer to grant access without an invitation. See the [Permissions docs](https://appwrite.io/docs/permissions) for more info.
@@ -1056,8 +1049,7 @@ class Users(client: Client) : Service(client) {
         labels,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * List user logs
      *
      * Get the user activity logs list by its unique ID.
@@ -1097,7 +1089,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List user memberships
      *
      * Get the user membership list by its unique ID.
@@ -1140,7 +1132,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateMfa
      *
      * Enable or disable MFA on a user account.
@@ -1196,8 +1188,7 @@ class Users(client: Client) : Service(client) {
         mfa,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * updateMFA
      *
      * Enable or disable MFA on a user account.
@@ -1253,8 +1244,7 @@ class Users(client: Client) : Service(client) {
         mfa,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * deleteMfaAuthenticator
      *
      * Delete an authenticator app.
@@ -1290,7 +1280,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * deleteMFAAuthenticator
      *
      * Delete an authenticator app.
@@ -1326,7 +1316,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * listMfaFactors
      *
      * List the factors available on the account to be used as a MFA challange.
@@ -1358,7 +1348,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * listMFAFactors
      *
      * List the factors available on the account to be used as a MFA challange.
@@ -1390,7 +1380,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * getMfaRecoveryCodes
      *
      * Get recovery codes that can be used as backup for MFA flow by User ID. Before getting codes, they must be generated using [createMfaRecoveryCodes](/docs/references/cloud/client-web/account#createMfaRecoveryCodes) method.
@@ -1422,7 +1412,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * getMFARecoveryCodes
      *
      * Get recovery codes that can be used as backup for MFA flow by User ID. Before getting codes, they must be generated using [createMfaRecoveryCodes](/docs/references/cloud/client-web/account#createMfaRecoveryCodes) method.
@@ -1454,7 +1444,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateMfaRecoveryCodes
      *
      * Regenerate recovery codes that can be used as backup for MFA flow by User ID. Before regenerating codes, they must be first generated using [createMfaRecoveryCodes](/docs/references/cloud/client-web/account#createMfaRecoveryCodes) method.
@@ -1487,7 +1477,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateMFARecoveryCodes
      *
      * Regenerate recovery codes that can be used as backup for MFA flow by User ID. Before regenerating codes, they must be first generated using [createMfaRecoveryCodes](/docs/references/cloud/client-web/account#createMfaRecoveryCodes) method.
@@ -1520,7 +1510,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createMfaRecoveryCodes
      *
      * Generate recovery codes used as backup for MFA flow for User ID. Recovery codes can be used as a MFA verification type in [createMfaChallenge](/docs/references/cloud/client-web/account#createMfaChallenge) method by client SDK.
@@ -1553,7 +1543,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createMFARecoveryCodes
      *
      * Generate recovery codes used as backup for MFA flow for User ID. Recovery codes can be used as a MFA verification type in [createMfaChallenge](/docs/references/cloud/client-web/account#createMfaChallenge) method by client SDK.
@@ -1586,7 +1576,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update name
      *
      * Update the user name by its unique ID.
@@ -1642,8 +1632,7 @@ class Users(client: Client) : Service(client) {
         name,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update password
      *
      * Update the user password by its unique ID.
@@ -1699,8 +1688,7 @@ class Users(client: Client) : Service(client) {
         password,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update phone
      *
      * Update the user phone by its unique ID.
@@ -1756,8 +1744,7 @@ class Users(client: Client) : Service(client) {
         number,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Get user preferences
      *
      * Get the user preferences by its unique ID.
@@ -1806,8 +1793,7 @@ class Users(client: Client) : Service(client) {
         userId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update user preferences
      *
      * Update the user preferences by its unique ID. The object you pass is stored as is, and replaces any previous value. The maximum allowed prefs size is 64kB and throws error if exceeded.
@@ -1863,8 +1849,7 @@ class Users(client: Client) : Service(client) {
         prefs,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * List user sessions
      *
      * Get the user sessions list by its unique ID.
@@ -1901,7 +1886,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create session
      *
      * Creates a session for a user. Returns an immediately usable session object.If you want to generate a token for a custom authentication flow, use the [POST /users/{userId}/tokens](https://appwrite.io/docs/server/users#createToken) endpoint.
@@ -1934,7 +1919,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete user sessions
      *
      * Delete all user&#039;s sessions by using the user&#039;s unique ID.
@@ -1967,7 +1952,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete user session
      *
      * Delete a user sessions by its unique ID.
@@ -2003,7 +1988,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update user status
      *
      * Update the user status by its unique ID. Use this endpoint as an alternative to deleting a user if you want to keep user&#039;s ID reserved.
@@ -2059,8 +2044,7 @@ class Users(client: Client) : Service(client) {
         status,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * List user targets
      *
      * List the messaging targets that are associated with a user.
@@ -2100,7 +2084,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create user target
      *
      * Create a messaging target.
@@ -2150,7 +2134,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get user target
      *
      * Get a user&#039;s push notification target by ID.
@@ -2185,7 +2169,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update user target
      *
      * Update a messaging target.
@@ -2232,7 +2216,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete user target
      *
      * Delete a messaging target.
@@ -2268,7 +2252,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create token
      *
      * Returns a token with a secret key for creating a session. Use the user ID and secret and submit a request to the [PUT /account/sessions/token](https://appwrite.io/docs/references/cloud/client-web/account#createSession) endpoint to complete the login process.
@@ -2309,7 +2293,7 @@ class Users(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update email verification
      *
      * Update the user email verification status by its unique ID.
@@ -2365,8 +2349,7 @@ class Users(client: Client) : Service(client) {
         emailVerification,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update phone verification
      *
      * Update the user phone verification status by its unique ID.
@@ -2422,4 +2405,4 @@ class Users(client: Client) : Service(client) {
         phoneVerification,
         nestedType = classOf(),
     )
-}
+    }

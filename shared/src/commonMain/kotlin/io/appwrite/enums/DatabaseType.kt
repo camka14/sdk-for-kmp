@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class DatabaseType(val value: String) {
     @SerialName("legacy")
     LEGACY("legacy"),
-
     @SerialName("tablesdb")
     TABLESDB("tablesdb");
 

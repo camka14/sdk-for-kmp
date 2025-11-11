@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class ProxyRuleDeploymentResourceType(val value: String) {
     @SerialName("function")
     FUNCTION("function"),
-
     @SerialName("site")
     SITE("site");
 

@@ -3,13 +3,24 @@ package io.appwrite.services
 import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
+import kotlinx.serialization.serializer
+import io.ktor.client.plugins.cookies.cookies
+import io.ktor.client.request.cookie
+import io.ktor.client.request.get
+import io.ktor.http.Cookie
 
 /**
  * The Functions Service allows you view, create and manage your Cloud Functions.
  **/
 class Functions(client: Client) : Service(client) {
-    /**
+        /**
      * List functions
      *
      * Get a list of all the project&#039;s functions. You can use the query params to filter your results.
@@ -49,7 +60,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create function
      *
      * Create a new function. You can pass a list of [permissions](https://appwrite.io/docs/permissions) to allow different project users or team with access to execute the function using the client API.
@@ -135,7 +146,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List runtimes
      *
      * Get a list of all runtimes that are currently active on your instance.
@@ -164,7 +175,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List specifications
      *
      * List allowed function specifications for this instance.
@@ -193,7 +204,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List templates
      *
      * List available function templates. You can use template details in [createFunction](/docs/references/cloud/server-nodejs/functions#create) method.
@@ -239,7 +250,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get function template
      *
      * Get a function template using ID. You can use template details in [createFunction](/docs/references/cloud/server-nodejs/functions#create) method.
@@ -271,7 +282,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get functions usage
      *
      * Get usage metrics and statistics for all functions in the project. View statistics including total deployments, builds, logs, storage usage, and compute time. The response includes both current totals and historical data for each metric. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, defaults to 30 days.
@@ -305,7 +316,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get function
      *
      * Get a function by its unique ID.
@@ -337,7 +348,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update function
      *
      * Update function by its unique ID.
@@ -423,7 +434,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete function
      *
      * Delete a function by its unique ID.
@@ -456,7 +467,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update function&#039;s deployment
      *
      * Update the function active deployment. Use this endpoint to switch the code deployment that should be used when visitor opens your function.
@@ -492,7 +503,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List deployments
      *
      * Get a list of all the function&#039;s code deployments. You can use the query params to filter your results.
@@ -535,7 +546,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create deployment
      *
      * Create a new function code deployment. Use this endpoint to upload a new version of your code function. To execute your newly uploaded code, you&#039;ll need to update the function&#039;s deployment to use your new deployment UID.This endpoint accepts a tar.gz file compressed with your code. Make sure to include any dependencies your code has within the compressed file. You can learn more about code packaging in the [Appwrite Cloud Functions tutorial](https://appwrite.io/docs/functions).Use the &quot;command&quot; param to set the entrypoint used to execute your code.
@@ -573,7 +584,7 @@ class Functions(client: Client) : Service(client) {
             "content-type" to "multipart/form-data",
         )
 
-        val idParamName: String? = null
+        val idParamName: String? =null
         val paramName = "code"
 
         return client.chunkedUpload(
@@ -589,7 +600,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create duplicate deployment
      *
      * Create a new build for an existing function deployment. This endpoint allows you to rebuild a deployment with the updated function configuration, including its entrypoint and build commands if they have been modified. The build process will be queued and executed asynchronously. The original deployment&#039;s code will be preserved and used for the new build.
@@ -630,7 +641,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create template deployment
      *
      * Create a deployment based on a template.Use this endpoint with combination of [listTemplates](https://appwrite.io/docs/products/functions/templates) to find the template details.
@@ -680,7 +691,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create VCS deployment
      *
      * Create a deployment when a function is connected to VCS.This endpoint lets you create deployment from a branch, commit, or a tag.
@@ -724,7 +735,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get deployment
      *
      * Get a function deployment by its unique ID.
@@ -759,7 +770,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete deployment
      *
      * Delete a code deployment by its unique ID.
@@ -795,7 +806,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get deployment download
      *
      * Get a function deployment content by its unique ID. The endpoint response return with a &#039;Content-Disposition: attachment&#039; header that tells the browser to start downloading the file to user downloads directory.
@@ -830,7 +841,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update deployment status
      *
      * Cancel an ongoing function deployment build. If the build is already in progress, it will be stopped and marked as canceled. If the build hasn&#039;t started yet, it will be marked as canceled without executing. You cannot cancel builds that have already completed (status &#039;ready&#039;) or failed. The response includes the final build status and details.
@@ -866,7 +877,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List executions
      *
      * Get a list of all the current user function execution logs. You can use the query params to filter your results.
@@ -906,7 +917,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create execution
      *
      * Trigger a function execution. The returned object will return you the current execution status. You can ping the `Get Execution` endpoint to get updates on the current execution status. Once this endpoint is called, your function execution process will start asynchronously.
@@ -959,7 +970,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get execution
      *
      * Get a function execution log by its unique ID.
@@ -994,7 +1005,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete execution
      *
      * Delete a function execution by its unique ID.
@@ -1030,7 +1041,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get function usage
      *
      * Get usage metrics and statistics for a for a specific function. View statistics including total deployments, builds, executions, storage usage, and compute time. The response includes both current totals and historical data for each metric. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, defaults to 30 days.
@@ -1067,7 +1078,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List variables
      *
      * Get a list of all variables of a specific function.
@@ -1099,7 +1110,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create variable
      *
      * Create a new function environment variable. These variables can be accessed in the function at runtime as environment variables.
@@ -1143,7 +1154,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get variable
      *
      * Get a variable by its unique ID.
@@ -1178,7 +1189,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update variable
      *
      * Update variable by its unique ID.
@@ -1225,7 +1236,7 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete variable
      *
      * Delete a variable by its unique ID.
@@ -1261,4 +1272,4 @@ class Functions(client: Client) : Service(client) {
         )
     }
 
-}
+    }

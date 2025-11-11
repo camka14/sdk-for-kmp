@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class HealthCheckStatus(val value: String) {
     @SerialName("pass")
     PASS("pass"),
-
     @SerialName("fail")
     FAIL("fail");
 

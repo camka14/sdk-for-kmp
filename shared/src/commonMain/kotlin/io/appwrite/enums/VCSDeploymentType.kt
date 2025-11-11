@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 enum class VCSDeploymentType(val value: String) {
     @SerialName("branch")
     BRANCH("branch"),
-
     @SerialName("commit")
     COMMIT("commit"),
-
     @SerialName("tag")
     TAG("tag");
 

@@ -24,6 +24,7 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.http.quote
 import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.io.Buffer
@@ -235,7 +236,7 @@ abstract class BaseClient<This : BaseClient<This>>(
         }
     }
 
-    /**
+     /**
      * Handle large file uploads by splitting into chunks
      *
      * @param path The upload endpoint path

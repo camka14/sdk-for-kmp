@@ -2,13 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The Console service allows you to interact with console relevant informations.
  **/
 class Console(client: Client) : Service(client) {
-    /**
+        /**
      * Check resource ID availability
      *
      * Check if a resource ID is available.
@@ -43,7 +50,7 @@ class Console(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get variables
      *
      * Get all Environment Variables that are relevant for the console.
@@ -72,4 +79,4 @@ class Console(client: Client) : Service(client) {
         )
     }
 
-}
+    }

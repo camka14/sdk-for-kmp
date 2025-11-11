@@ -7,13 +7,10 @@ import kotlinx.serialization.Serializable
 enum class IndexType(val value: String) {
     @SerialName("key")
     KEY("key"),
-
     @SerialName("fulltext")
     FULLTEXT("fulltext"),
-
     @SerialName("unique")
     UNIQUE("unique"),
-
     @SerialName("spatial")
     SPATIAL("spatial");
 

@@ -2,16 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
 import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
 /**
  * The Databases service allows you to create structured collections of documents, query and filter lists of documents
  **/
 class Databases(client: Client) : Service(client) {
-    /**
+        /**
      * list
      *
      * Get a list of all databases from the current Appwrite project. You can use the search parameter to filter your results.
@@ -51,7 +55,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * create
      *
      * Create a new Database.
@@ -92,7 +96,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List transactions
      *
      * List transactions across all databases.
@@ -126,7 +130,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create transaction
      *
      * Create a new transaction.
@@ -161,7 +165,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get transaction
      *
      * Get a transaction by its unique ID.
@@ -193,7 +197,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update transaction
      *
      * Update a transaction, to either commit or roll back its operations.
@@ -234,7 +238,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete transaction
      *
      * Delete a transaction by its unique ID.
@@ -267,7 +271,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create operations
      *
      * Create multiple operations in a single transaction.
@@ -305,7 +309,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * listUsage
      *
      * List usage metrics and statistics for all databases in the project. You can view the total number of databases, collections, documents, and storage usage. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -339,7 +343,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * get
      *
      * Get a database by its unique ID. This endpoint response returns a JSON object with the database metadata.
@@ -371,7 +375,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * update
      *
      * Update a database by its unique ID.
@@ -412,7 +416,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * delete
      *
      * Delete a database by its unique ID. Only API keys with with databases.write scope can delete a database.
@@ -445,7 +449,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List collections
      *
      * Get a list of all collections that belong to the provided databaseId. You can use the search parameter to filter your results.
@@ -488,7 +492,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create collections
      *
      * Create a new Collection. Before using this route, you should create a new database resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
@@ -538,7 +542,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get collection
      *
      * Get a collection by its unique ID. This endpoint response returns a JSON object with the collection metadata.
@@ -573,7 +577,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update collection
      *
      * Update a collection by its unique ID.
@@ -623,7 +627,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete collection
      *
      * Delete a collection by its unique ID. Only users with write permissions have access to delete this resource.
@@ -659,7 +663,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List attributes
      *
      * List attributes in the collection.
@@ -702,7 +706,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create boolean attribute
      *
      * Create a boolean attribute.
@@ -752,7 +756,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update boolean attribute
      *
      * Update a boolean attribute. Changing the `default` value will not update already existing documents.
@@ -802,7 +806,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create datetime attribute
      *
      * Create a date time attribute according to the ISO 8601 standard.
@@ -852,7 +856,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update datetime attribute
      *
      * Update a date time attribute. Changing the `default` value will not update already existing documents.
@@ -902,7 +906,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create email attribute
      *
      * Create an email attribute.
@@ -952,7 +956,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update email attribute
      *
      * Update an email attribute. Changing the `default` value will not update already existing documents.
@@ -1002,10 +1006,10 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create enum attribute
      *
-     * Create an enum attribute. The `elements` param acts as a white-list of accepted values for this attribute.
+     * Create an enum attribute. The `elements` param acts as a white-list of accepted values for this attribute. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1055,7 +1059,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update enum attribute
      *
      * Update an enum attribute. Changing the `default` value will not update already existing documents.
@@ -1108,7 +1112,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create float attribute
      *
      * Create a float attribute. Optionally, minimum and maximum values can be provided.
@@ -1164,7 +1168,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update float attribute
      *
      * Update a float attribute. Changing the `default` value will not update already existing documents.
@@ -1220,7 +1224,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create integer attribute
      *
      * Create an integer attribute. Optionally, minimum and maximum values can be provided.
@@ -1276,7 +1280,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update integer attribute
      *
      * Update an integer attribute. Changing the `default` value will not update already existing documents.
@@ -1332,7 +1336,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create IP address attribute
      *
      * Create IP address attribute.
@@ -1382,7 +1386,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update IP address attribute
      *
      * Update an ip attribute. Changing the `default` value will not update already existing documents.
@@ -1432,7 +1436,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create line attribute
      *
      * Create a geometric line attribute.
@@ -1479,7 +1483,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update line attribute
      *
      * Update a line attribute. Changing the `default` value will not update already existing documents.
@@ -1529,7 +1533,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create point attribute
      *
      * Create a geometric point attribute.
@@ -1576,7 +1580,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update point attribute
      *
      * Update a point attribute. Changing the `default` value will not update already existing documents.
@@ -1626,7 +1630,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create polygon attribute
      *
      * Create a geometric polygon attribute.
@@ -1673,7 +1677,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update polygon attribute
      *
      * Update a polygon attribute. Changing the `default` value will not update already existing documents.
@@ -1723,7 +1727,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create relationship attribute
      *
      * Create relationship attribute. [Learn more about relationship attributes](https://appwrite.io/docs/databases-relationships#relationship-attributes).
@@ -1779,7 +1783,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create string attribute
      *
      * Create a string attribute.
@@ -1835,7 +1839,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update string attribute
      *
      * Update a string attribute. Changing the `default` value will not update already existing documents.
@@ -1888,7 +1892,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create URL attribute
      *
      * Create a URL attribute.
@@ -1938,7 +1942,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update URL attribute
      *
      * Update an url attribute. Changing the `default` value will not update already existing documents.
@@ -1988,7 +1992,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get attribute
      *
      * Get attribute by ID.
@@ -2026,7 +2030,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete attribute
      *
      * Deletes an attribute.
@@ -2065,7 +2069,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update relationship attribute
      *
      * Update relationship attribute. [Learn more about relationship attributes](https://appwrite.io/docs/databases-relationships#relationship-attributes).
@@ -2087,11 +2091,10 @@ class Databases(client: Client) : Service(client) {
         onDelete: io.appwrite.enums.RelationMutate? = null,
         newKey: String? = null,
     ): io.appwrite.models.AttributeRelationship {
-        val apiPath =
-            "/databases/{databaseId}/collections/{collectionId}/attributes/{key}/relationship"
-                .replace("{databaseId}", databaseId)
-                .replace("{collectionId}", collectionId)
-                .replace("{key}", key)
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/attributes/{key}/relationship"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+            .replace("{key}", key)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -2113,7 +2116,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List documents
      *
      * Get a list of all the user&#039;s documents in a given collection. You can use the query params to filter your results.
@@ -2189,8 +2192,7 @@ class Databases(client: Client) : Service(client) {
         total,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * createDocument
      *
      * Create a new Document. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
@@ -2273,8 +2275,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * createDocuments
      *
      * Create new Documents. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
@@ -2345,8 +2346,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * upsertDocuments
      *
      * Create or update Documents. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
@@ -2417,8 +2417,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update documents
      *
      * Update all documents that match your queries, if no queries are submitted then all documents are updated. You can pass only specific fields to be updated.
@@ -2495,8 +2494,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Delete documents
      *
      * Bulk delete documents using queries, if no queries are passed then all documents are deleted.
@@ -2567,8 +2565,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Get document
      *
      * Get a document by its unique ID. This endpoint response returns a JSON object with the document data.
@@ -2644,8 +2641,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * upsertDocument
      *
      * Create or update a Document. Before using this route, you should create a new collection resource using either a [server integration](https://appwrite.io/docs/server/databases#databasesCreateCollection) API or directly from your database console.
@@ -2728,8 +2724,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update document
      *
      * Update a document by its unique ID. Using the patch method you can pass only specific fields that will get updated.
@@ -2812,8 +2807,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Delete document
      *
      * Delete a document by its unique ID.
@@ -2857,7 +2851,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List document logs
      *
      * Get the document activity logs list by its unique ID.
@@ -2877,11 +2871,10 @@ class Databases(client: Client) : Service(client) {
         documentId: String,
         queries: List<String>? = null,
     ): io.appwrite.models.LogList {
-        val apiPath =
-            "/databases/{databaseId}/collections/{collectionId}/documents/{documentId}/logs"
-                .replace("{databaseId}", databaseId)
-                .replace("{collectionId}", collectionId)
-                .replace("{documentId}", documentId)
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/documents/{documentId}/logs"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+            .replace("{documentId}", documentId)
 
 
         val apiParams = mutableMapOf<String, Any?>(
@@ -2901,7 +2894,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Decrement document attribute
      *
      * Decrement a specific attribute of a document by a given value.
@@ -2929,12 +2922,11 @@ class Databases(client: Client) : Service(client) {
         nestedType: KClass<T>?,
         genericSerializer: KSerializer<T>? = null,
     ): io.appwrite.models.Document<T> {
-        val apiPath =
-            "/databases/{databaseId}/collections/{collectionId}/documents/{documentId}/{attribute}/decrement"
-                .replace("{databaseId}", databaseId)
-                .replace("{collectionId}", collectionId)
-                .replace("{documentId}", documentId)
-                .replace("{attribute}", attribute)
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/documents/{documentId}/{attribute}/decrement"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+            .replace("{documentId}", documentId)
+            .replace("{attribute}", attribute)
 
         val actualSerializer = genericSerializer ?: getSerializer(T::class)
 
@@ -2991,8 +2983,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Increment document attribute
      *
      * Increment a specific attribute of a document by a given value.
@@ -3020,12 +3011,11 @@ class Databases(client: Client) : Service(client) {
         nestedType: KClass<T>?,
         genericSerializer: KSerializer<T>? = null,
     ): io.appwrite.models.Document<T> {
-        val apiPath =
-            "/databases/{databaseId}/collections/{collectionId}/documents/{documentId}/{attribute}/increment"
-                .replace("{databaseId}", databaseId)
-                .replace("{collectionId}", collectionId)
-                .replace("{documentId}", documentId)
-                .replace("{attribute}", attribute)
+        val apiPath = "/databases/{databaseId}/collections/{collectionId}/documents/{documentId}/{attribute}/increment"
+            .replace("{databaseId}", databaseId)
+            .replace("{collectionId}", collectionId)
+            .replace("{documentId}", documentId)
+            .replace("{attribute}", attribute)
 
         val actualSerializer = genericSerializer ?: getSerializer(T::class)
 
@@ -3082,8 +3072,7 @@ class Databases(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * List indexes
      *
      * List indexes in the collection.
@@ -3126,7 +3115,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create index
      *
      * Creates an index on the attributes listed. Your index should include all the attributes you will query in a single request.Attributes can be `key`, `fulltext`, and `unique`.
@@ -3179,7 +3168,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get index
      *
      * Get an index by its unique ID.
@@ -3217,7 +3206,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete index
      *
      * Delete an index.
@@ -3256,7 +3245,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List collection logs
      *
      * Get the collection activity logs list by its unique ID.
@@ -3296,7 +3285,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get collection usage stats
      *
      * Get usage metrics and statistics for a collection. Returning the total number of documents. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -3336,7 +3325,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * listLogs
      *
      * Get the database activity logs list by its unique ID.
@@ -3373,7 +3362,7 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * getUsage
      *
      * Get usage metrics and statistics for a database. You can view the total number of collections, documents, and storage usage. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -3410,4 +3399,4 @@ class Databases(client: Client) : Service(client) {
         )
     }
 
-}
+    }

@@ -7,13 +7,10 @@ import kotlinx.serialization.Serializable
 enum class ProxyRuleStatus(val value: String) {
     @SerialName("created")
     CREATED("created"),
-
     @SerialName("verifying")
     VERIFYING("verifying"),
-
     @SerialName("verified")
     VERIFIED("verified"),
-
     @SerialName("unverified")
     UNVERIFIED("unverified");
 

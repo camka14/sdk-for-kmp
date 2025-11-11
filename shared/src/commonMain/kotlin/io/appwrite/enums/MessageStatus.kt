@@ -7,16 +7,12 @@ import kotlinx.serialization.Serializable
 enum class MessageStatus(val value: String) {
     @SerialName("draft")
     DRAFT("draft"),
-
     @SerialName("processing")
     PROCESSING("processing"),
-
     @SerialName("scheduled")
     SCHEDULED("scheduled"),
-
     @SerialName("sent")
     SENT("sent"),
-
     @SerialName("failed")
     FAILED("failed");
 

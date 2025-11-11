@@ -2,16 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
 import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
 import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
 import kotlin.reflect.KClass
 
 /**
- *
+ * 
  **/
 class TablesDB(client: Client) : Service(client) {
-    /**
+        /**
      * List databases
      *
      * Get a list of all databases from the current Appwrite project. You can use the search parameter to filter your results.
@@ -51,7 +55,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create database
      *
      * Create a new Database.
@@ -92,7 +96,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List transactions
      *
      * List transactions across all databases.
@@ -126,7 +130,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create transaction
      *
      * Create a new transaction.
@@ -161,7 +165,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get transaction
      *
      * Get a transaction by its unique ID.
@@ -193,7 +197,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update transaction
      *
      * Update a transaction, to either commit or roll back its operations.
@@ -234,7 +238,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete transaction
      *
      * Delete a transaction by its unique ID.
@@ -267,7 +271,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create operations
      *
      * Create multiple operations in a single transaction.
@@ -305,7 +309,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * listUsage
      *
      * List usage metrics and statistics for all databases in the project. You can view the total number of databases, tables, rows, and storage usage. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -339,7 +343,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get database
      *
      * Get a database by its unique ID. This endpoint response returns a JSON object with the database metadata.
@@ -371,7 +375,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update database
      *
      * Update a database by its unique ID.
@@ -412,7 +416,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete database
      *
      * Delete a database by its unique ID. Only API keys with with databases.write scope can delete a database.
@@ -445,7 +449,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List tables
      *
      * Get a list of all tables that belong to the provided databaseId. You can use the search parameter to filter your results.
@@ -488,7 +492,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create table
      *
      * Create a new Table. Before using this route, you should create a new database resource using either a [server integration](https://appwrite.io/docs/references/cloud/server-dart/tablesDB#createTable) API or directly from your database console.
@@ -538,7 +542,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get table
      *
      * Get a table by its unique ID. This endpoint response returns a JSON object with the table metadata.
@@ -573,7 +577,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update table
      *
      * Update a table by its unique ID.
@@ -623,7 +627,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete table
      *
      * Delete a table by its unique ID. Only users with write permissions have access to delete this resource.
@@ -659,7 +663,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List columns
      *
      * List columns in the table.
@@ -702,7 +706,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create boolean column
      *
      * Create a boolean column.
@@ -752,7 +756,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update boolean column
      *
      * Update a boolean column. Changing the `default` value will not update already existing rows.
@@ -802,7 +806,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create datetime column
      *
      * Create a date time column according to the ISO 8601 standard.
@@ -852,7 +856,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update dateTime column
      *
      * Update a date time column. Changing the `default` value will not update already existing rows.
@@ -902,7 +906,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create email column
      *
      * Create an email column.
@@ -952,7 +956,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update email column
      *
      * Update an email column. Changing the `default` value will not update already existing rows.
@@ -1002,7 +1006,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create enum column
      *
      * Create an enumeration column. The `elements` param acts as a white-list of accepted values for this column.
@@ -1055,7 +1059,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update enum column
      *
      * Update an enum column. Changing the `default` value will not update already existing rows.
@@ -1108,7 +1112,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create float column
      *
      * Create a float column. Optionally, minimum and maximum values can be provided.
@@ -1164,7 +1168,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update float column
      *
      * Update a float column. Changing the `default` value will not update already existing rows.
@@ -1220,7 +1224,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create integer column
      *
      * Create an integer column. Optionally, minimum and maximum values can be provided.
@@ -1276,7 +1280,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update integer column
      *
      * Update an integer column. Changing the `default` value will not update already existing rows.
@@ -1332,7 +1336,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create IP address column
      *
      * Create IP address column.
@@ -1382,7 +1386,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update IP address column
      *
      * Update an ip column. Changing the `default` value will not update already existing rows.
@@ -1432,7 +1436,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create line column
      *
      * Create a geometric line column.
@@ -1479,7 +1483,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update line column
      *
      * Update a line column. Changing the `default` value will not update already existing rows.
@@ -1529,7 +1533,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create point column
      *
      * Create a geometric point column.
@@ -1576,7 +1580,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update point column
      *
      * Update a point column. Changing the `default` value will not update already existing rows.
@@ -1626,7 +1630,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create polygon column
      *
      * Create a geometric polygon column.
@@ -1673,7 +1677,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update polygon column
      *
      * Update a polygon column. Changing the `default` value will not update already existing rows.
@@ -1723,7 +1727,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create relationship column
      *
      * Create relationship column. [Learn more about relationship columns](https://appwrite.io/docs/databases-relationships#relationship-columns).
@@ -1779,7 +1783,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create string column
      *
      * Create a string column.
@@ -1835,7 +1839,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update string column
      *
      * Update a string column. Changing the `default` value will not update already existing rows.
@@ -1888,7 +1892,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create URL column
      *
      * Create a URL column.
@@ -1938,7 +1942,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update URL column
      *
      * Update an url column. Changing the `default` value will not update already existing rows.
@@ -1988,7 +1992,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get column
      *
      * Get column by ID.
@@ -2026,7 +2030,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete column
      *
      * Deletes a column.
@@ -2065,7 +2069,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update relationship column
      *
      * Update relationship column. [Learn more about relationship columns](https://appwrite.io/docs/databases-relationships#relationship-columns).
@@ -2112,7 +2116,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List indexes
      *
      * List indexes on the table.
@@ -2155,7 +2159,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create index
      *
      * Creates an index on the columns listed. Your index should include all the columns you will query in a single request.Type can be `key`, `fulltext`, or `unique`.
@@ -2208,7 +2212,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get index
      *
      * Get index by ID.
@@ -2246,7 +2250,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete index
      *
      * Delete an index.
@@ -2285,7 +2289,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List table logs
      *
      * Get the table activity logs list by its unique ID.
@@ -2325,7 +2329,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List rows
      *
      * Get a list of all the user&#039;s rows in a given table. You can use the query params to filter your results.
@@ -2401,8 +2405,7 @@ class TablesDB(client: Client) : Service(client) {
         total,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * createRow
      *
      * Create a new Row. Before using this route, you should create a new table resource using either a [server integration](https://appwrite.io/docs/references/cloud/server-dart/tablesDB#createTable) API or directly from your database console.
@@ -2485,8 +2488,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * createRows
      *
      * Create new Rows. Before using this route, you should create a new table resource using either a [server integration](https://appwrite.io/docs/references/cloud/server-dart/tablesDB#createTable) API or directly from your database console.
@@ -2557,8 +2559,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * upsertRows
      *
      * Create or update Rows. Before using this route, you should create a new table resource using either a [server integration](https://appwrite.io/docs/references/cloud/server-dart/tablesDB#createTable) API or directly from your database console.
@@ -2629,8 +2630,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update rows
      *
      * Update all rows that match your queries, if no queries are submitted then all rows are updated. You can pass only specific fields to be updated.
@@ -2707,8 +2707,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Delete rows
      *
      * Bulk delete rows using queries, if no queries are passed then all rows are deleted.
@@ -2779,8 +2778,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Get row
      *
      * Get a row by its unique ID. This endpoint response returns a JSON object with the row data.
@@ -2856,8 +2854,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * upsertRow
      *
      * Create or update a Row. Before using this route, you should create a new table resource using either a [server integration](https://appwrite.io/docs/references/cloud/server-dart/tablesDB#createTable) API or directly from your database console.
@@ -2940,8 +2937,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Update row
      *
      * Update a row by its unique ID. Using the patch method you can pass only specific fields that will get updated.
@@ -3024,8 +3020,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Delete row
      *
      * Delete a row by its unique ID.
@@ -3069,7 +3064,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List row logs
      *
      * Get the row activity logs list by its unique ID.
@@ -3112,7 +3107,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Decrement row column
      *
      * Decrement a specific column of a row by a given value.
@@ -3201,8 +3196,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Increment row column
      *
      * Increment a specific column of a row by a given value.
@@ -3291,8 +3285,7 @@ class TablesDB(client: Client) : Service(client) {
         transactionId,
         nestedType = classOf(),
     )
-
-    /**
+            /**
      * Get table usage stats
      *
      * Get usage metrics and statistics for a table. Returning the total number of rows. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -3332,7 +3325,7 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * getUsage
      *
      * Get usage metrics and statistics for a database. You can view the total number of tables, rows, and storage usage. The response includes both current totals and historical data over time. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, range defaults to 30 days.
@@ -3369,4 +3362,4 @@ class TablesDB(client: Client) : Service(client) {
         )
     }
 
-}
+    }

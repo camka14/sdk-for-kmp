@@ -2,13 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The Messaging service allows you to send messages to any provider type (SMTP, push notification, SMS, etc.).
  **/
 class Messaging(client: Client) : Service(client) {
-    /**
+        /**
      * List messages
      *
      * Get a list of all messages from the current Appwrite project.
@@ -48,7 +55,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create email
      *
      * Create a new email message.
@@ -116,7 +123,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update email
      *
      * Update an email message by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
@@ -184,7 +191,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create push notification
      *
      * Create a new push notification.
@@ -273,7 +280,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update push notification
      *
      * Update a push notification by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
@@ -362,7 +369,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createSms
      *
      * Create a new SMS message.
@@ -415,7 +422,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createSMS
      *
      * Create a new SMS message.
@@ -468,7 +475,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSms
      *
      * Update an SMS message by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
@@ -521,7 +528,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSMS
      *
      * Update an SMS message by its unique ID. This endpoint only works on messages that are in draft status. Messages that are already processing, sent, or failed cannot be updated.
@@ -574,7 +581,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get message
      *
      * Get a message by its unique ID.
@@ -606,7 +613,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete message
      *
      * Delete a message. If the message is not a draft or scheduled, but has been sent, this will not recall the message.
@@ -639,7 +646,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List message logs
      *
      * Get the message activity logs listed by its unique ID.
@@ -679,7 +686,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List message targets
      *
      * Get a list of the targets associated with a message.
@@ -719,7 +726,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List providers
      *
      * Get a list of all providers from the current Appwrite project.
@@ -759,7 +766,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createApnsProvider
      *
      * Create a new Apple Push Notification service provider.
@@ -815,7 +822,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createAPNSProvider
      *
      * Create a new Apple Push Notification service provider.
@@ -871,7 +878,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateApnsProvider
      *
      * Update a Apple Push Notification service provider by its unique ID.
@@ -927,7 +934,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateAPNSProvider
      *
      * Update a Apple Push Notification service provider by its unique ID.
@@ -983,7 +990,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createFcmProvider
      *
      * Create a new Firebase Cloud Messaging provider.
@@ -1027,7 +1034,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createFCMProvider
      *
      * Create a new Firebase Cloud Messaging provider.
@@ -1071,7 +1078,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateFcmProvider
      *
      * Update a Firebase Cloud Messaging provider by its unique ID.
@@ -1115,7 +1122,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateFCMProvider
      *
      * Update a Firebase Cloud Messaging provider by its unique ID.
@@ -1159,7 +1166,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Mailgun provider
      *
      * Create a new Mailgun provider.
@@ -1221,7 +1228,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Mailgun provider
      *
      * Update a Mailgun provider by its unique ID.
@@ -1283,7 +1290,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Msg91 provider
      *
      * Create a new MSG91 provider.
@@ -1333,7 +1340,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Msg91 provider
      *
      * Update a MSG91 provider by its unique ID.
@@ -1383,7 +1390,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Resend provider
      *
      * Create a new Resend provider.
@@ -1439,7 +1446,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Resend provider
      *
      * Update a Resend provider by its unique ID.
@@ -1495,7 +1502,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Sendgrid provider
      *
      * Create a new Sendgrid provider.
@@ -1551,7 +1558,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Sendgrid provider
      *
      * Update a Sendgrid provider by its unique ID.
@@ -1607,7 +1614,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createSmtpProvider
      *
      * Create a new SMTP provider.
@@ -1681,7 +1688,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createSMTPProvider
      *
      * Create a new SMTP provider.
@@ -1755,7 +1762,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSmtpProvider
      *
      * Update a SMTP provider by its unique ID.
@@ -1829,7 +1836,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSMTPProvider
      *
      * Update a SMTP provider by its unique ID.
@@ -1903,7 +1910,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Telesign provider
      *
      * Create a new Telesign provider.
@@ -1953,7 +1960,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Telesign provider
      *
      * Update a Telesign provider by its unique ID.
@@ -2003,7 +2010,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Textmagic provider
      *
      * Create a new Textmagic provider.
@@ -2053,7 +2060,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Textmagic provider
      *
      * Update a Textmagic provider by its unique ID.
@@ -2103,7 +2110,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Twilio provider
      *
      * Create a new Twilio provider.
@@ -2153,7 +2160,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Twilio provider
      *
      * Update a Twilio provider by its unique ID.
@@ -2203,7 +2210,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Vonage provider
      *
      * Create a new Vonage provider.
@@ -2253,7 +2260,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update Vonage provider
      *
      * Update a Vonage provider by its unique ID.
@@ -2303,7 +2310,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get provider
      *
      * Get a provider by its unique ID.
@@ -2335,7 +2342,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete provider
      *
      * Delete a provider by its unique ID.
@@ -2368,7 +2375,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List provider logs
      *
      * Get the provider activity logs listed by its unique ID.
@@ -2408,7 +2415,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List subscriber logs
      *
      * Get the subscriber activity logs listed by its unique ID.
@@ -2448,7 +2455,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List topics
      *
      * Get a list of all topics from the current Appwrite project.
@@ -2488,7 +2495,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create topic
      *
      * Create a new topic.
@@ -2529,7 +2536,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get topic
      *
      * Get a topic by its unique ID.
@@ -2561,7 +2568,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update topic
      *
      * Update a topic by its unique ID.
@@ -2602,7 +2609,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete topic
      *
      * Delete a topic by its unique ID.
@@ -2635,7 +2642,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List topic logs
      *
      * Get the topic activity logs listed by its unique ID.
@@ -2675,7 +2682,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List subscribers
      *
      * Get a list of all subscribers from the current Appwrite project.
@@ -2718,7 +2725,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create subscriber
      *
      * Create a new subscriber.
@@ -2757,7 +2764,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get subscriber
      *
      * Get a subscriber by its unique ID.
@@ -2792,7 +2799,7 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete subscriber
      *
      * Delete a subscriber by its unique ID.
@@ -2828,4 +2835,4 @@ class Messaging(client: Client) : Service(client) {
         )
     }
 
-}
+    }

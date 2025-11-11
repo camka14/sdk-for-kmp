@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 enum class Theme(val value: String) {
     @SerialName("light")
     LIGHT("light"),
-
     @SerialName("dark")
     DARK("dark");
 

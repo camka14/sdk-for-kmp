@@ -1,6 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -33,52 +31,52 @@ ext {
 version = project.ext["PUBLISH_VERSION"].toString()
 group = project.ext["PUBLISH_GROUP_ID"].toString()
 
+
 kotlin {
     androidTarget {
         publishLibraryVariants("release")
         compilations.all {
             compileTaskProvider.configure {
-                if (this is KotlinJvmCompile) {
-                    compilerOptions {
-                        jvmTarget.set(JvmTarget.JVM_17)
-                    }
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_17)
                 }
             }
         }
     }
 
-    // Only configure iOS targets on macOS hosts
-    if (HostManager.hostIsMac) {
-        iosX64 {
-            binaries.framework {
-                baseName = "shared"
-                isStatic = true
-                binaryOption("bundleId", "io.github.camka14.appwrite.shared")
-            }
-            withSourcesJar(publish = false)
-        }
-        iosArm64 {
-            binaries.framework {
-                baseName = "shared"
-                isStatic = true
-                binaryOption("bundleId", "io.github.camka14.appwrite.shared")
-            }
-            withSourcesJar(publish = false)
-        }
-        iosSimulatorArm64 {
-            binaries.framework {
-                baseName = "shared"
-                isStatic = true
-                binaryOption("bundleId", "io.github.camka14.appwrite.shared")
-            }
-            withSourcesJar(publish = false)
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+        binaries.all {
+            // Configure native binary compilation
+            freeCompilerArgs += listOf(
+                "-Xallocator=mimalloc",
+            )
         }
     }
 
-    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
-        binaries.all {
-            freeCompilerArgs += listOf("-Xallocator=mimalloc")
+    iosX64 {
+        // Create a framework binary with additional options
+        binaries.framework {
+            baseName = "shared"
+            isStatic = true
+            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
         }
+        withSourcesJar(publish = false)
+    }
+    iosArm64 {
+        binaries.framework {
+            baseName = "shared"
+            isStatic = true
+            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
+        }
+        withSourcesJar(publish = false)
+    }
+    iosSimulatorArm64 {
+        binaries.framework {
+            baseName = "shared"
+            isStatic = true
+            binaryOption("bundleId", "io.github.camka14.appwrite.shared")
+        }
+        withSourcesJar(publish = false)
     }
 
     sourceSets {

@@ -1,9 +1,11 @@
 package io.appwrite.models
 
+import io.appwrite.extensions.jsonCast
 import io.appwrite.extensions.json
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -73,7 +75,7 @@ data class Document<T>(
     val data: T
 )
 
-class DocumentSerializer<T>(private val dataSerializer: KSerializer<T>) : KSerializer<Document<T>> {
+class DocumentSerializer<T>(private val dataSerializer: KSerializer<T>): KSerializer<Document<T>> {
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Document") {
         element("\$id", String.serializer().descriptor)
         element("\$sequence", Long.serializer().descriptor)

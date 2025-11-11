@@ -2,16 +2,23 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The Project service allows you to manage all the projects in your Appwrite server.
  **/
 class Projects(client: Client) : Service(client) {
-    /**
+        /**
      * List projects
      *
-     * Get a list of all projects. You can use the query params to filter your results.
+     * Get a list of all projects. You can use the query params to filter your results. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -48,10 +55,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create project
      *
-     * Create a new project. You can create a maximum of 100 projects per account.
+     * Create a new project. You can create a maximum of 100 projects per account. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -119,10 +126,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get project
      *
-     * Get a project by its unique ID. This endpoint allows you to retrieve the project&#039;s details, including its name, description, team, region, and other metadata.
+     * Get a project by its unique ID. This endpoint allows you to retrieve the project&#039;s details, including its name, description, team, region, and other metadata. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -151,7 +158,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project
      *
      * Update a project by its unique ID.
@@ -216,7 +223,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete project
      *
      * Delete a project by its unique ID.
@@ -249,7 +256,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateApiStatus
      *
      * Update the status of a specific API type. Use this endpoint to enable or disable API types such as REST, GraphQL and Realtime.
@@ -288,7 +295,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateAPIStatus
      *
      * Update the status of a specific API type. Use this endpoint to enable or disable API types such as REST, GraphQL and Realtime.
@@ -327,7 +334,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateApiStatusAll
      *
      * Update the status of all API types. Use this endpoint to enable or disable API types such as REST, GraphQL and Realtime all at once.
@@ -363,7 +370,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateAPIStatusAll
      *
      * Update the status of all API types. Use this endpoint to enable or disable API types such as REST, GraphQL and Realtime all at once.
@@ -399,7 +406,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project authentication duration
      *
      * Update how long sessions created within a project should stay active for.
@@ -435,10 +442,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project users limit
      *
-     * Update the maximum number of users allowed in this project. Set to 0 for unlimited users.
+     * Update the maximum number of users allowed in this project. Set to 0 for unlimited users. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -471,7 +478,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project user sessions limit
      *
      * Update the maximum number of sessions allowed per user within the project, if the limit is hit the oldest session will be deleted to make room for new sessions.
@@ -507,10 +514,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project memberships privacy attributes
      *
-     * Update project membership privacy settings. Use this endpoint to control what user information is visible to other team members, such as user name, email, and MFA status.
+     * Update project membership privacy settings. Use this endpoint to control what user information is visible to other team members, such as user name, email, and MFA status. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -549,10 +556,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update the mock numbers for the project
      *
-     * Update the list of mock phone numbers for testing. Use these numbers to bypass SMS verification in development.
+     * Update the list of mock phone numbers for testing. Use these numbers to bypass SMS verification in development. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -585,10 +592,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update authentication password dictionary status. Use this endpoint to enable or disable the dicitonary check for user password
      *
-     * Enable or disable checking user passwords against common passwords dictionary. This helps ensure users don&#039;t use common and insecure passwords.
+     * Enable or disable checking user passwords against common passwords dictionary. This helps ensure users don&#039;t use common and insecure passwords. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -621,7 +628,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update authentication password history. Use this endpoint to set the number of password history to save and 0 to disable password history.
      *
      * Update the authentication password history requirement. Use this endpoint to require new passwords to be different than the last X amount of previously used ones.
@@ -657,10 +664,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update personal data check
      *
-     * Enable or disable checking user passwords against their personal data. This helps prevent users from using personal information in their passwords.
+     * Enable or disable checking user passwords against their personal data. This helps prevent users from using personal information in their passwords. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -693,7 +700,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project sessions emails
      *
      * Enable or disable session email alerts. When enabled, users will receive email notifications when new sessions are created.
@@ -729,7 +736,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update invalidate session option of the project
      *
      * Invalidate all existing sessions. An optional auth security setting for projects, and enabled by default for console project.
@@ -765,10 +772,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project auth method status. Use this endpoint to enable or disable a given auth method for this project.
      *
-     * Update the status of a specific authentication method. Use this endpoint to enable or disable different authentication methods such as email, magic urls or sms in your project.
+     * Update the status of a specific authentication method. Use this endpoint to enable or disable different authentication methods such as email, magic urls or sms in your project. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -804,7 +811,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List dev keys
      *
      * List all the project\&#039;s dev keys. Dev keys are project specific and allow you to bypass rate limits and get better error logging during development.&#039;
@@ -841,7 +848,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create dev key
      *
      * Create a new project dev key. Dev keys are project specific and allow you to bypass rate limits and get better error logging during development. Strictly meant for development purposes only.
@@ -880,7 +887,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get dev key
      *
      * Get a project\&#039;s dev key by its unique ID. Dev keys are project specific and allow you to bypass rate limits and get better error logging during development.
@@ -915,7 +922,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update dev key
      *
      * Update a project\&#039;s dev key by its unique ID. Use this endpoint to update a project\&#039;s dev key name or expiration time.&#039;
@@ -957,7 +964,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete dev key
      *
      * Delete a project\&#039;s dev key by its unique ID. Once deleted, the key will no longer allow bypassing of rate limits and better logging of errors.
@@ -993,10 +1000,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create JWT
      *
-     * Create a new JWT token. This token can be used to authenticate users with custom scopes and expiration time.
+     * Create a new JWT token. This token can be used to authenticate users with custom scopes and expiration time. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1034,10 +1041,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List keys
      *
-     * Get a list of all API keys from the current project.
+     * Get a list of all API keys from the current project. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1071,7 +1078,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create key
      *
      * Create a new API key. It&#039;s recommended to have multiple API keys with strict scopes for separate functions within your project.
@@ -1115,7 +1122,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get key
      *
      * Get a key by its unique ID. This endpoint returns details about a specific API key in your project including it&#039;s scopes.
@@ -1150,10 +1157,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update key
      *
-     * Update a key by its unique ID. Use this endpoint to update the name, scopes, or expiration time of an API key.
+     * Update a key by its unique ID. Use this endpoint to update the name, scopes, or expiration time of an API key. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1197,10 +1204,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete key
      *
-     * Delete a key by its unique ID. Once deleted, the key can no longer be used to authenticate API calls.
+     * Delete a key by its unique ID. Once deleted, the key can no longer be used to authenticate API calls. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1233,10 +1240,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project OAuth2
      *
-     * Update the OAuth2 provider configurations. Use this endpoint to set up or update the OAuth2 provider credentials or enable/disable providers.
+     * Update the OAuth2 provider configurations. Use this endpoint to set up or update the OAuth2 provider credentials or enable/disable providers. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1280,10 +1287,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List platforms
      *
-     * Get a list of all platforms in the project. This endpoint returns an array of all platforms and their configurations.
+     * Get a list of all platforms in the project. This endpoint returns an array of all platforms and their configurations. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1317,7 +1324,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create platform
      *
      * Create a new platform for your project. Use this endpoint to register a new platform where your users will run your application which will interact with the Appwrite API.
@@ -1367,10 +1374,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get platform
      *
-     * Get a platform by its unique ID. This endpoint returns the platform&#039;s details, including its name, type, and key configurations.
+     * Get a platform by its unique ID. This endpoint returns the platform&#039;s details, including its name, type, and key configurations. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1402,10 +1409,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update platform
      *
-     * Update a platform by its unique ID. Use this endpoint to update the platform&#039;s name, key, platform store ID, or hostname.
+     * Update a platform by its unique ID. Use this endpoint to update the platform&#039;s name, key, platform store ID, or hostname. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1452,10 +1459,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete platform
      *
-     * Delete a platform by its unique ID. This endpoint removes the platform and all its configurations from the project.
+     * Delete a platform by its unique ID. This endpoint removes the platform and all its configurations from the project. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1488,10 +1495,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update service status
      *
-     * Update the status of a specific service. Use this endpoint to enable or disable a service in your project.
+     * Update the status of a specific service. Use this endpoint to enable or disable a service in your project. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1527,10 +1534,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update all service status
      *
-     * Update the status of all services. Use this endpoint to enable or disable all optional services at once.
+     * Update the status of all services. Use this endpoint to enable or disable all optional services at once. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1563,10 +1570,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSmtp
      *
-     * Update the SMTP configuration for your project. Use this endpoint to configure your project&#039;s SMTP provider with your custom settings for sending transactional emails.
+     * Update the SMTP configuration for your project. Use this endpoint to configure your project&#039;s SMTP provider with your custom settings for sending transactional emails. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1625,10 +1632,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSMTP
      *
-     * Update the SMTP configuration for your project. Use this endpoint to configure your project&#039;s SMTP provider with your custom settings for sending transactional emails.
+     * Update the SMTP configuration for your project. Use this endpoint to configure your project&#039;s SMTP provider with your custom settings for sending transactional emails. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1687,10 +1694,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createSmtpTest
      *
-     * Send a test email to verify SMTP configuration.
+     * Send a test email to verify SMTP configuration. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1749,10 +1756,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * createSMTPTest
      *
-     * Send a test email to verify SMTP configuration.
+     * Send a test email to verify SMTP configuration. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -1811,7 +1818,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update project team
      *
      * Update the team ID of a project allowing for it to be transferred to another team.
@@ -1847,10 +1854,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get custom email template
      *
-     * Get a custom email template for the specified locale and type. This endpoint returns the template content, subject, and other configuration details.
+     * Get a custom email template for the specified locale and type. This endpoint returns the template content, subject, and other configuration details. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1885,7 +1892,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update custom email templates
      *
      * Update a custom email template for the specified locale and type. Use this endpoint to modify the content of your email templates.
@@ -1941,10 +1948,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete custom email template
      *
-     * Reset a custom email template to its default value. This endpoint removes any custom content and restores the template to its original state.
+     * Reset a custom email template to its default value. This endpoint removes any custom content and restores the template to its original state. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -1980,7 +1987,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * getSmsTemplate
      *
      * Get a custom SMS template for the specified locale and type returning it&#039;s contents.
@@ -2018,7 +2025,7 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * getSMSTemplate
      *
      * Get a custom SMS template for the specified locale and type returning it&#039;s contents.
@@ -2056,10 +2063,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSmsTemplate
      *
-     * Update a custom SMS template for the specified locale and type. Use this endpoint to modify the content of your SMS templates.
+     * Update a custom SMS template for the specified locale and type. Use this endpoint to modify the content of your SMS templates. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2098,10 +2105,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * updateSMSTemplate
      *
-     * Update a custom SMS template for the specified locale and type. Use this endpoint to modify the content of your SMS templates.
+     * Update a custom SMS template for the specified locale and type. Use this endpoint to modify the content of your SMS templates. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2140,10 +2147,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * deleteSmsTemplate
      *
-     * Reset a custom SMS template to its default value. This endpoint removes any custom message and restores the template to its original state.
+     * Reset a custom SMS template to its default value. This endpoint removes any custom message and restores the template to its original state. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2179,10 +2186,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * deleteSMSTemplate
      *
-     * Reset a custom SMS template to its default value. This endpoint removes any custom message and restores the template to its original state.
+     * Reset a custom SMS template to its default value. This endpoint removes any custom message and restores the template to its original state. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2218,10 +2225,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List webhooks
      *
-     * Get a list of all webhooks belonging to the project. You can use the query params to filter your results.
+     * Get a list of all webhooks belonging to the project. You can use the query params to filter your results. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -2255,10 +2262,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create webhook
      *
-     * Create a new webhook. Use this endpoint to configure a URL that will receive events from Appwrite when specific events occur.
+     * Create a new webhook. Use this endpoint to configure a URL that will receive events from Appwrite when specific events occur. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -2311,10 +2318,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get webhook
      *
-     * Get a webhook by its unique ID. This endpoint returns details about a specific webhook configured for a project.
+     * Get a webhook by its unique ID. This endpoint returns details about a specific webhook configured for a project. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2346,10 +2353,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update webhook
      *
-     * Update a webhook by its unique ID. Use this endpoint to update the URL, events, or status of an existing webhook.
+     * Update a webhook by its unique ID. Use this endpoint to update the URL, events, or status of an existing webhook. 
      *
     @JvmOverloads
     @Throws(Throwable::class)
@@ -2405,10 +2412,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete webhook
      *
-     * Delete a webhook by its unique ID. Once deleted, the webhook will no longer receive project events.
+     * Delete a webhook by its unique ID. Once deleted, the webhook will no longer receive project events. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2441,10 +2448,10 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update webhook signature key
      *
-     * Update the webhook signature key. This endpoint can be used to regenerate the signature key used to sign and validate payload deliveries for a specific webhook.
+     * Update the webhook signature key. This endpoint can be used to regenerate the signature key used to sign and validate payload deliveries for a specific webhook. 
      *
     @Throws(Throwable::class)
      * @param projectId Project unique ID.
@@ -2477,4 +2484,4 @@ class Projects(client: Client) : Service(client) {
         )
     }
 
-}
+    }

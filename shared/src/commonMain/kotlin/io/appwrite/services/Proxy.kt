@@ -2,13 +2,20 @@ package io.appwrite.services
 
 import io.appwrite.Client
 import io.appwrite.Service
+import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
 
 /**
  * The Proxy Service allows you to configure actions for your domains beyond DNS configuration.
  **/
 class Proxy(client: Client) : Service(client) {
-    /**
+        /**
      * List rules
      *
      * Get a list of all the proxy rules. You can use the query params to filter your results.
@@ -48,7 +55,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create API rule
      *
      * Create a new proxy rule for serving Appwrite&#039;s API on custom domain.
@@ -81,7 +88,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create function rule
      *
      * Create a new proxy rule for executing Appwrite Function on custom domain.
@@ -122,7 +129,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create Redirect rule
      *
      * Create a new proxy rule for to redirect from custom domain to another domain.
@@ -167,7 +174,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create site rule
      *
      * Create a new proxy rule for serving Appwrite Site on custom domain.
@@ -208,7 +215,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get rule
      *
      * Get a proxy rule by its unique ID.
@@ -240,7 +247,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete rule
      *
      * Delete a proxy rule by its unique ID.
@@ -273,7 +280,7 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update rule verification status
      *
      * Retry getting verification process of a proxy rule. This endpoint triggers domain verification by checking DNS records (CNAME) against the configured target domain. If verification is successful, a TLS certificate will be automatically provisioned for the domain.
@@ -306,4 +313,4 @@ class Proxy(client: Client) : Service(client) {
         )
     }
 
-}
+    }

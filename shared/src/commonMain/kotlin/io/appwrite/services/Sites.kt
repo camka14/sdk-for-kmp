@@ -3,13 +3,24 @@ package io.appwrite.services
 import io.appwrite.Client
 import io.appwrite.Service
 import io.appwrite.models.*
+import io.appwrite.exceptions.AppwriteException
+import io.appwrite.extensions.*
 import io.appwrite.serializers.*
+import io.appwrite.webInterface.UrlParser
+import kotlinx.serialization.KSerializer
+import kotlin.jvm.JvmOverloads
+import kotlin.reflect.KClass
+import kotlinx.serialization.serializer
+import io.ktor.client.plugins.cookies.cookies
+import io.ktor.client.request.cookie
+import io.ktor.client.request.get
+import io.ktor.http.Cookie
 
 /**
  * The Sites Service allows you view, create and manage your web applications.
  **/
 class Sites(client: Client) : Service(client) {
-    /**
+        /**
      * List sites
      *
      * Get a list of all the project&#039;s sites. You can use the query params to filter your results.
@@ -49,7 +60,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create site
      *
      * Create a new site.
@@ -135,7 +146,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List frameworks
      *
      * Get a list of all frameworks that are currently available on the server instance.
@@ -164,7 +175,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List specifications
      *
      * List allowed site specifications for this instance.
@@ -193,7 +204,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List templates
      *
      * List available site templates. You can use template details in [createSite](/docs/references/cloud/server-nodejs/sites#create) method.
@@ -236,7 +247,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get site template
      *
      * Get a site template using ID. You can use template details in [createSite](/docs/references/cloud/server-nodejs/sites#create) method.
@@ -268,7 +279,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get sites usage
      *
      * Get usage metrics and statistics for all sites in the project. View statistics including total deployments, builds, logs, storage usage, and compute time. The response includes both current totals and historical data for each metric. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, defaults to 30 days.
@@ -302,7 +313,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get site
      *
      * Get a site by its unique ID.
@@ -334,7 +345,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update site
      *
      * Update site by its unique ID.
@@ -420,7 +431,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete site
      *
      * Delete a site by its unique ID.
@@ -453,7 +464,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update site&#039;s deployment
      *
      * Update the site active deployment. Use this endpoint to switch the code deployment that should be used when visitor opens your site.
@@ -489,7 +500,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List deployments
      *
      * Get a list of all the site&#039;s code deployments. You can use the query params to filter your results.
@@ -532,7 +543,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create deployment
      *
      * Create a new site code deployment. Use this endpoint to upload a new version of your site code. To activate your newly uploaded code, you&#039;ll need to update the site&#039;s deployment to use your new deployment ID.
@@ -573,7 +584,7 @@ class Sites(client: Client) : Service(client) {
             "content-type" to "multipart/form-data",
         )
 
-        val idParamName: String? = null
+        val idParamName: String? =null
         val paramName = "code"
 
         return client.chunkedUpload(
@@ -589,7 +600,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create duplicate deployment
      *
      * Create a new build for an existing site deployment. This endpoint allows you to rebuild a deployment with the updated site configuration, including its commands and output directory if they have been modified. The build process will be queued and executed asynchronously. The original deployment&#039;s code will be preserved and used for the new build.
@@ -625,7 +636,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create template deployment
      *
      * Create a deployment based on a template.Use this endpoint with combination of [listTemplates](https://appwrite.io/docs/products/sites/templates) to find the template details.
@@ -675,7 +686,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create VCS deployment
      *
      * Create a deployment when a site is connected to VCS.This endpoint lets you create deployment from a branch, commit, or a tag.
@@ -719,7 +730,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get deployment
      *
      * Get a site deployment by its unique ID.
@@ -754,7 +765,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete deployment
      *
      * Delete a site deployment by its unique ID.
@@ -790,7 +801,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get deployment download
      *
      * Get a site deployment content by its unique ID. The endpoint response return with a &#039;Content-Disposition: attachment&#039; header that tells the browser to start downloading the file to user downloads directory.
@@ -825,7 +836,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update deployment status
      *
      * Cancel an ongoing site deployment build. If the build is already in progress, it will be stopped and marked as canceled. If the build hasn&#039;t started yet, it will be marked as canceled without executing. You cannot cancel builds that have already completed (status &#039;ready&#039;) or failed. The response includes the final build status and details.
@@ -861,7 +872,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List logs
      *
      * Get a list of all site logs. You can use the query params to filter your results.
@@ -901,7 +912,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get log
      *
      * Get a site request log by its unique ID.
@@ -936,7 +947,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete log
      *
      * Delete a site log by its unique ID.
@@ -972,7 +983,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get site usage
      *
      * Get usage metrics and statistics for a for a specific site. View statistics including total deployments, builds, executions, storage usage, and compute time. The response includes both current totals and historical data for each metric. Use the optional range parameter to specify the time window for historical data: 24h (last 24 hours), 30d (last 30 days), or 90d (last 90 days). If not specified, defaults to 30 days.
@@ -1009,7 +1020,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * List variables
      *
      * Get a list of all variables of a specific site.
@@ -1041,7 +1052,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Create variable
      *
      * Create a new site variable. These variables can be accessed during build and runtime (server-side rendering) as environment variables.
@@ -1085,7 +1096,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Get variable
      *
      * Get a variable by its unique ID.
@@ -1120,7 +1131,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Update variable
      *
      * Update variable by its unique ID.
@@ -1167,7 +1178,7 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-    /**
+            /**
      * Delete variable
      *
      * Delete a variable by its unique ID.
@@ -1203,4 +1214,4 @@ class Sites(client: Client) : Service(client) {
         )
     }
 
-}
+    }

@@ -7,16 +7,12 @@ import kotlinx.serialization.Serializable
 enum class ExecutionStatus(val value: String) {
     @SerialName("waiting")
     WAITING("waiting"),
-
     @SerialName("processing")
     PROCESSING("processing"),
-
     @SerialName("completed")
     COMPLETED("completed"),
-
     @SerialName("failed")
     FAILED("failed"),
-
     @SerialName("scheduled")
     SCHEDULED("scheduled");
 

@@ -7,16 +7,12 @@ import kotlinx.serialization.Serializable
 enum class DeploymentStatus(val value: String) {
     @SerialName("waiting")
     WAITING("waiting"),
-
     @SerialName("processing")
     PROCESSING("processing"),
-
     @SerialName("building")
     BUILDING("building"),
-
     @SerialName("ready")
     READY("ready"),
-
     @SerialName("failed")
     FAILED("failed");
 
