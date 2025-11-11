@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-shared:
-    name: Compile shared library targets
+    name: Compile shared for Android & iOS
     runs-on: macOS-latest
     env:
       RAW_VERSION: ${{ github.event.inputs.sdk_version }}
@@ -43,21 +43,14 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x gradlew
 
-      # Compile the shared KMP module only, for Android/JVM and iOS klibs/frameworks,
-      # mimicking a publish build but without uploading.
-      - name: Compile shared for Android/JVM
-        run: |
-          ./gradlew :shared:compileReleaseKotlinAndroid \
-                     :shared:compileKotlinJvm \
-                     --no-configuration-cache
+      # Android artifact(s) from shared module
+      - name: Compile Android target of shared
+        run: ./gradlew :shared:assembleRelease --no-configuration-cache
 
-      - name: Compile shared for iOS (klibs/frameworks)
+      # iOS native artifacts from shared module (release frameworks/klibs)
+      - name: Compile iOS targets of shared
         run: |
           ./gradlew :shared:linkReleaseFrameworkIosArm64 \
                      :shared:linkReleaseFrameworkIosX64 \
                      :shared:linkReleaseFrameworkIosSimulatorArm64 \
                      --no-configuration-cache
-
-      # Optionally run metadata/common compilation to ensure common source compiles as in publishing
-      - name: Compile common metadata
-        run: ./gradlew :shared:compileCommonMainKotlinMetadata --no-configuration-cache
