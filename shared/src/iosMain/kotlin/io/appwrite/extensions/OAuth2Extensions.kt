@@ -68,11 +68,8 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
                 )
             }
         }
-    }.onFailure {
-        throw AppwriteException("it.message")
     }
 }
-
 
 suspend fun io.appwrite.services.Account.createOAuth2Token(
     provider: io.appwrite.enums.OAuthProvider,
@@ -134,9 +131,5 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
                 )
             }
         }
-    }.onFailure {
-        throw AppwriteException("it.message")
     }
 }
-
-
