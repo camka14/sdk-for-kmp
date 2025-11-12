@@ -39,7 +39,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
     val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
     val webAuthScope = CoroutineScope(client.coroutineContext)
 
-    WebAuthComponent.setCookieStorage(client.iosCookieStorage)
+    WebAuthComponent.setCookieStorage(client.iosCookieStorage, webAuthScope)
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
         if (result.isFailure) {
             throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")
@@ -103,7 +103,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
     val callbackUrlScheme = "appwrite-callback-${client.config["project"]}"
     val webAuthScope = CoroutineScope(client.coroutineContext)
 
-    WebAuthComponent.setCookieStorage(client.iosCookieStorage)
+    WebAuthComponent.setCookieStorage(client.iosCookieStorage, webAuthScope)
     WebAuthComponent.authenticate(apiUrl.toString(), callbackUrlScheme) { result ->
         if (result.isFailure) {
             throw AppwriteException("OAuth authentication failed: ${result.exceptionOrNull()?.message}")

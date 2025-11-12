@@ -4,6 +4,8 @@ import io.appwrite.cookies.IosCookieStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.AuthenticationServices.ASPresentationAnchor
@@ -32,12 +34,17 @@ actual class WebAuthComponent {
         )
 
         private val pendingAuth = mutableMapOf<String, PendingAuth>()
-        private val cookieScope = CoroutineScope(client.coroutineContext)
+        private var cookieScope: CoroutineScope = createDefaultCookieScope()
+
+        fun setCookieScope(scope: CoroutineScope?) {
+            cookieScope = scope ?: createDefaultCookieScope()
+        }
 
         private var cookieStorage: IosCookieStorage? = null
 
-        fun setCookieStorage(storage: IosCookieStorage) {
+        fun setCookieStorage(storage: IosCookieStorage, scope: CoroutineScope? = null) {
             cookieStorage = storage
+            scope?.let { setCookieScope(it) }
         }
 
         internal suspend fun authenticate(
@@ -149,9 +156,10 @@ actual class WebAuthComponent {
                 maxAge = cookieParts["maxAge"]?.toIntOrNull()
             )
 
-            if (cookieStorage != null) {
+            val storage = cookieStorage
+            if (storage != null) {
                 cookieScope.launch {
-                    cookieStorage!!.addCookie(
+                    storage.addCookie(
                         requestUrl = Url("https://$domain"),
                         cookie = cookie
                     )
@@ -190,6 +198,8 @@ actual class WebAuthComponent {
             }
             pendingAuth.clear()
         }
+
+        private fun createDefaultCookieScope() = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }
 }
 
