@@ -6,9 +6,15 @@ import java.net.URLConnection
 import java.nio.file.Files
 import java.io.File
 
-@RequiresApi(Build.VERSION_CODES.O)
 actual fun guessMimeType(input: String): String {
     val file = File(input)
-    return Files.probeContentType(file.toPath()) ?:
-    URLConnection.guessContentTypeFromName(file.name) ?: ""
+    actual fun guessMimeType(input: String): String {
+        val file = File(input)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Files.probeContentType(file.toPath()) ?: 
+                URLConnection.guessContentTypeFromName(file.name) ?: ""
+        } else {
+            URLConnection.guessContentTypeFromName(file.name) ?: ""
+        }
+    }
 }

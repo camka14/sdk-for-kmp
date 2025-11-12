@@ -3,6 +3,8 @@ package io.appwrite
 import io.appwrite.cookies.IosCookieStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.AuthenticationServices.ASPresentationAnchor
 import platform.AuthenticationServices.ASWebAuthenticationPresentationContextProvidingProtocol
@@ -30,13 +32,12 @@ actual class WebAuthComponent {
         )
 
         private val pendingAuth = mutableMapOf<String, PendingAuth>()
+        private val cookieScope = CoroutineScope(client.coroutineContext)
 
         private var cookieStorage: IosCookieStorage? = null
 
         fun setCookieStorage(storage: IosCookieStorage) {
-            if (cookieStorage != null) {
-                cookieStorage = storage
-            }
+            cookieStorage = storage
         }
 
         internal suspend fun authenticate(
@@ -149,7 +150,7 @@ actual class WebAuthComponent {
             )
 
             if (cookieStorage != null) {
-                kotlinx.coroutines.runBlocking {
+                cookieScope.launch {
                     cookieStorage!!.addCookie(
                         requestUrl = Url("https://$domain"),
                         cookie = cookie

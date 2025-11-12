@@ -79,7 +79,7 @@ data class AttributePolygon(
      * Default value for attribute when not provided. Cannot be set when attribute is required.
      */
     @SerialName("default")
-    var default: List<@Contextual Any>,
+    var default: List<@Contextual Any>?,
 
 )
 

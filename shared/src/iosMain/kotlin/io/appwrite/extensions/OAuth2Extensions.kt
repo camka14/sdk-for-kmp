@@ -50,12 +50,12 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
-                if (key == null && secret == null) {
+                if (key == null || secret == null) {
                     throw AppwriteException("Authentication cookie missing!")
                 }
                 val cookie = Cookie(
-                    name = key!!,
-                    value = secret!!,
+                    name = key,
+                    value = secret,
                     domain = urlParser.getHost(client.endpoint),
                     path = "/",
                     httpOnly = true,
@@ -70,6 +70,7 @@ suspend fun io.appwrite.services.Account.createOAuth2Session(
         }
     }
 }
+
 
 suspend fun io.appwrite.services.Account.createOAuth2Token(
     provider: io.appwrite.enums.OAuthProvider,
@@ -113,12 +114,12 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
                 val key = urlParser.getQueryParameter(callbackUrl, "key")
                 val secret = urlParser.getQueryParameter(callbackUrl, "secret")
 
-                if (key == null && secret == null) {
+                if (key == null || secret == null) {
                     throw AppwriteException("Authentication cookie missing!")
                 }
                 val cookie = Cookie(
-                    name = key!!,
-                    value = secret!!,
+                    name = key,
+                    value = secret,
                     domain = urlParser.getHost(client.endpoint),
                     path = "/",
                     httpOnly = true,
@@ -133,3 +134,5 @@ suspend fun io.appwrite.services.Account.createOAuth2Token(
         }
     }
 }
+
+

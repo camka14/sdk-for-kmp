@@ -79,7 +79,7 @@ data class ColumnPolygon(
      * Default value for column when not provided. Cannot be set when column is required.
      */
     @SerialName("default")
-    var default: List<@Contextual Any>,
+    var default: List<@Contextual Any>?,
 
 )
 
