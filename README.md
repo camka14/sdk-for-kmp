@@ -54,7 +54,7 @@ kotlin {
    sourceSets {
       commonMain {
          dependencies {
-            implementation("io.github.camka14.appwrite:sdk-for-kmp:0.3.0")
+            implementation("io.github.camka14.appwrite:sdk-for-kmp:0.3.1")
          }
       }
    }
