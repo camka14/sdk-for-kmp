@@ -3,8 +3,20 @@ name: Build shared KMP library (Android + iOS)
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch:
     inputs:
       sdk_version:
@@ -43,11 +55,9 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x gradlew
 
-      # Android artifact(s) from shared module
       - name: Compile Android target of shared
         run: ./gradlew :shared:assembleRelease --no-configuration-cache
 
-      # iOS native artifacts from shared module (release frameworks/klibs)
       - name: Compile iOS targets of shared
         run: |
           ./gradlew :shared:linkReleaseFrameworkIosArm64 \
