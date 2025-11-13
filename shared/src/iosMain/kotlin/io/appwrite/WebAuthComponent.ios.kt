@@ -6,6 +6,8 @@ import io.ktor.http.Url
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import platform.AuthenticationServices.ASPresentationAnchor
 import platform.AuthenticationServices.ASWebAuthenticationPresentationContextProvidingProtocol
 import platform.AuthenticationServices.ASWebAuthenticationSession
@@ -37,6 +39,9 @@ actual class WebAuthComponent {
         fun setCookieScope(scope: CoroutineScope?) {
             cookieScope = scope ?: createDefaultCookieScope()
         }
+
+        private fun createDefaultCookieScope(): CoroutineScope =
+            CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
         private var cookieStorage: IosCookieStorage? = null
 
