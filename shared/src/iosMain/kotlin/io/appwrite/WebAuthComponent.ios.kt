@@ -4,8 +4,6 @@ import io.appwrite.cookies.IosCookieStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.AuthenticationServices.ASPresentationAnchor
@@ -156,10 +154,9 @@ actual class WebAuthComponent {
                 maxAge = cookieParts["maxAge"]?.toIntOrNull()
             )
 
-            val storage = cookieStorage
-            if (storage != null) {
+            if (cookieStorage != null) {
                 cookieScope.launch {
-                    storage.addCookie(
+                    cookieStorage!!.addCookie(
                         requestUrl = Url("https://$domain"),
                         cookie = cookie
                     )
@@ -198,8 +195,6 @@ actual class WebAuthComponent {
             }
             pendingAuth.clear()
         }
-
-        private fun createDefaultCookieScope() = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }
 }
 
