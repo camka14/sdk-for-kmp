@@ -26,8 +26,8 @@ actual class Client(
     init {
         httpClient = createHttpClient(selfSigned, iosCookieStorage)
         val appName =
-        NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleDisplayName") as String?
-            ?: NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleName") as? String
+            NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleDisplayName") as String?
+                ?: NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleName") as? String
                 ?: ""
         val version =
             NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as String?
@@ -41,8 +41,8 @@ actual class Client(
             "x-sdk-version" to "0.0.0",
             "user-agent" to "${appName}/${version} ios",
             "origin" to "appwrite-ios://${appName}",
-            "x-appwrite-response-format" to "1.6.0"
-          )
+            "x-appwrite-response-format" to "1.8.0"
+        )
     }
 
     actual fun setSelfSigned(value: Boolean): Client {
