@@ -40,8 +40,8 @@ actual class Client(
             "content-type" to "application/json",
             "origin" to "appwrite-android://${appContext.packageName}",
             "user-agent" to "${appContext.packageName}/${appVersion}, ${System.getProperty("http.agent")}",
-            "x-sdk-name" to "NAME",
-            "x-sdk-platform" to "",
+            "x-sdk-name" to "KMP",
+            "x-sdk-platform" to "client",
             "x-sdk-language" to "kmp",
             "x-sdk-version" to "0.0.0",
             "x-appwrite-response-format" to "1.8.0"

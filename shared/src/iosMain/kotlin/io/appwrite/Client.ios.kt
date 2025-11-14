@@ -35,8 +35,8 @@ actual class Client(
 
         headers = mutableMapOf(
             "content-type" to "application/json",
-            "x-sdk-name" to "NAME",
-            "x-sdk-platform" to "",
+            "x-sdk-name" to "Apple",
+            "x-sdk-platform" to "client",
             "x-sdk-language" to "kmp",
             "x-sdk-version" to "0.0.0",
             "user-agent" to "${appName}/${version} ios",
